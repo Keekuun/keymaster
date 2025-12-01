@@ -4,7 +4,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter keymaster-docs run docs:build",
+  "buildCommand": "pnpm run build && pnpm --filter keymaster-docs run docs:build",
   "outputDirectory": "apps/keymaster-docs/docs/.vitepress/dist"
 }
 
