@@ -49,3 +49,11 @@ useKeyBindingVue("ctrl+z", onUndo);
 useKeyBindingVue("ctrl+shift+z", onRedo);
 ```
 
+## 交互 Demo
+
+在文档站点中可以直接体验快捷键效果：
+
+<VueShortcutDemo />
+
+将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上面的 Demo 会实时展示最近捕获到的快捷键。这样你无需单独创建工程，也能快速确认 `@keekuun/keymaster-vue` 的行为是否符合预期。
+

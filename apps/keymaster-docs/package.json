@@ -2,6 +2,7 @@
   "name": "keymaster-docs",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "keymaster React/Vue 库的 VitePress 文档与示例站点。",
   "scripts": {
     "docs:dev": "vitepress dev docs",
@@ -9,7 +10,11 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
-    "vitepress": "^1.3.0"
+    "vitepress": "^1.3.0",
+    "@keekuun/keymaster-vue": "workspace:*",
+    "@keekuun/keymaster-react": "workspace:*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }
 

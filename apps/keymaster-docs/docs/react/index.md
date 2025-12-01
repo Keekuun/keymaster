@@ -46,3 +46,11 @@ useKeyBinding("ctrl+z", onUndo);
 useKeyBinding("ctrl+shift+z", onRedo);
 ```
 
+## 交互 Demo
+
+如果你只是想快速体验效果，而不想立刻创建 React 工程，可以在文档站点中直接试一试：
+
+<ReactShortcutDemo />
+
+将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上方 Demo 会实时展示最近捕获到的快捷键，逻辑底层使用的就是 `@keekuun/keymaster-react` 的 `registerKeyBinding`。这样可以帮助你确认库的行为是否符合预期，再决定如何在自己的 React 项目中集成。
+
