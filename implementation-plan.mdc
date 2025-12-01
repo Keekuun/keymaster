@@ -1,0 +1,60 @@
+## keymaster monorepo 实施计划
+
+> 说明：本文件用于分步骤规划和记录实现过程。每个步骤完成后，需要在该步骤后追加 `Done` 标记，并用两行文字简要说明完成情况。
+
+### 步骤 1：阅读规则并创建基础文档
+
+- 内容：阅读 `cursor_project_rules/README.md`，在项目根目录创建 `README.md` 和 `implementation-plan.mdc`，写明项目目标与初步规划。  
+- 状态：Done  
+- 总结 1：已阅读规则文件，明确 monorepo 目标与三个子项目（React、Vue、Docs）的大致职责。  
+- 总结 2：已在根目录创建 README 与实施计划文件，为后续实现提供统一说明与记录位置。  
+
+### 步骤 2：搭建 pnpm workspace 与 monorepo 结构
+
+- 内容：在根目录创建 `pnpm-workspace.yaml` 与基础 `package.json`，规划 `packages/keymaster-react`、`packages/keymaster-vue`、`apps/keymaster-docs` 目录结构。  
+- 状态：Done  
+- 总结 1：已在根目录创建 pnpm-workspace.yaml 并配置 packages 与 apps 作为工作空间范围。  
+- 总结 2：已初始化根 package.json，预留构建、lint 与测试的跨包脚本入口。  
+
+### 步骤 3：初始化 keymaster-react 包
+
+- 内容：在 `packages/keymaster-react` 中使用 Vite（lib 模式）与 TypeScript，完成基础入口文件与构建配置。  
+- 状态：Done  
+- 总结 1：已在 packages/keymaster-react 中创建 package.json、tsconfig.json 与 Vite lib 模式配置。  
+- 总结 2：已提供初步的 TypeScript 导出结构与占位 API，为后续接入原始 keymaster 逻辑预留扩展点。  
+
+### 步骤 4：初始化 keymaster-vue 包
+
+- 内容：在 `packages/keymaster-vue` 中使用 Vite（lib 模式）与 TypeScript，完成基础入口文件与构建配置。  
+- 状态：Done  
+- 总结 1：已在 packages/keymaster-vue 中创建 package.json、tsconfig.json 与 Vite lib 模式配置。  
+- 总结 2：已提供初步的 TypeScript 导出结构与占位 API，为后续接入原始 keymaster 逻辑预留扩展点。  
+
+### 步骤 5：初始化 keymaster-docs 文档站点
+
+- 内容：在 `apps/keymaster-docs` 中使用 VitePress，搭建文档结构与基础示例页面，并预留与两个库联动的方案。  
+- 状态：Done  
+- 总结 1：已在 apps/keymaster-docs 中创建基于 VitePress 的文档站点结构与基础页面。  
+- 总结 2：为 React 与 Vue 版本分别预留了独立文档入口，后续可接入具体 API 与示例。  
+
+### 步骤 6：共享 ESLint / Prettier 配置与 Husky 工作流
+
+- 内容：在根目录创建统一的 ESLint、Prettier 配置和 Husky git hooks，支持跨包代码质量与提交流程。  
+- 状态：Done  
+- 总结 1：已在根目录配置统一的 ESLint 与 Prettier，并在 package.json 中补充相关脚本。  
+- 总结 2：已集成 Husky pre-commit 钩子，在提交前统一执行 pnpm lint，保障 monorepo 内各包的基础代码质量。  
+
+### 步骤 7：发布流程与版本管理
+
+- 内容：引入 `bumpp` 或 `standard-version`，设计并实现自动版本管理、CHANGELOG 生成和 npm 发布脚本。  
+- 状态：Done  
+- 总结 1：在根 package.json 中集成 standard-version，配置了 release 脚本与 CHANGELOG.md，以支持规范化的版本与日志管理。  
+- 总结 2：为 React/Vue 两个包补充了独立的 npm 发布脚本，为后续实际发布到 npm 做好准备。  
+
+### 步骤 8：文档与发布集成
+
+- 内容：文档站点自动同步最近发布版本信息，配置 Vercel 部署，完成从库发布到文档更新的闭环流程。  
+- 状态：Done  
+- 总结 1：VitePress 配置中已自动从 React/Vue 包的 package.json 读取版本号，确保文档展示的版本与发布保持同步。  
+- 总结 2：在 docs 应用中补充了 Vercel 部署配置文件，为后续一键部署文档站点提供基础。  
+

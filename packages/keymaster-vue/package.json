@@ -1,0 +1,31 @@
+{
+  "name": "@keekuun/keymaster-vue",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Vue 版 keymaster 键盘快捷键库（基于 Vite 与 TypeScript 的库模式构建）。",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "echo \"lint for keymaster-vue\"",
+    "test": "echo \"test for keymaster-vue\""
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vue": "^3.4.0"
+  }
+}
+
+
