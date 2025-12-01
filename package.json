@@ -16,6 +16,8 @@
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
+    "release:react:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-react/package.json --bumpFiles packages/keymaster-react/package.json",
+    "release:vue:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-vue/package.json --bumpFiles packages/keymaster-vue/package.json",
     "publish:react": "pnpm --filter @keekuun/keymaster-react publish --access public",
     "publish:vue": "pnpm --filter @keekuun/keymaster-vue publish --access public"
   },

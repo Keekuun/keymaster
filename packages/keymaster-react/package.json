@@ -1,6 +1,6 @@
 {
   "name": "@keekuun/keymaster-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "React 版 keymaster 键盘快捷键库（基于 Vite 与 TypeScript 的库模式构建）。",
   "license": "MIT",
@@ -46,5 +46,3 @@
     "vite": "^5.0.0"
   }
 }
-
-
