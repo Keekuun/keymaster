@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-   "framework": null,
+  "framework": "VitePress",
   "cleanUrls": true,
   "trailingSlash": false,
   "builds": [
@@ -12,6 +12,7 @@
       }
     }
   ],
+  "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter keymaster-docs run docs:build",
   "outputDirectory": "docs/.vitepress/dist"
 }
