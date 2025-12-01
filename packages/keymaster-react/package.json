@@ -7,6 +7,23 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "keywords": [
+    "keymaster",
+    "keyboard",
+    "shortcut",
+    "hotkey",
+    "react",
+    "react-hooks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keekuun/keymaster.git",
+    "directory": "packages/keymaster-react"
+  },
+  "homepage": "https://keymaster-docs.vercel.app/react/",
+  "bugs": {
+    "url": "https://github.com/Keekuun/keymaster/issues"
+  },
   "files": [
     "dist"
   ],
