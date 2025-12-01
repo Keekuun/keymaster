@@ -1,7 +1,6 @@
 node_modules
 
 # pnpm 存储
-pnpm-lock.yaml
 .pnpm-store
 
 # 构建产物
