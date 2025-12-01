@@ -1,5 +1,8 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+   "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "builds": [
     {
       "src": "docs/package.json",

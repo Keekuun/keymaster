@@ -15,6 +15,7 @@ export default defineConfig({
       { text: "指南", link: "/" },
       { text: `React 版 v${reactVersion}`, link: "/react/" },
       { text: `Vue 版 v${vueVersion}`, link: "/vue/" },
+      { text: "部署", link: "/deploy" },
       { text: "GitHub", link: "https://github.com/Keekuun/keymaster" }
     ],
     sidebar: {
