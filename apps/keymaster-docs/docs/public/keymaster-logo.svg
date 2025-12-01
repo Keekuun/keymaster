@@ -1,0 +1,21 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="km-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="24" fill="#020617"/>
+  <rect x="20" y="24" width="80" height="40" rx="10" fill="#020617" stroke="url(#km-grad)" stroke-width="2.5"/>
+  <rect x="28" y="32" width="18" height="24" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="49" y="32" width="18" height="24" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="70" y="32" width="18" height="24" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <path d="M40 86 L60 64 L80 86" stroke="url(#km-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="60" cy="92" r="5" fill="#e5e7eb"/>
+  <text x="60" y="23" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#e5e7eb" letter-spacing="2">
+    KEYMASTER
+  </text>
+</svg>
+
+
