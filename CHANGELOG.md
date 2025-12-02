@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/Keekuun/keymaster/compare/v0.4.0...v0.4.1) (2025-12-02)
+
+### Features
+
+- **docs:** enhance documentation site with interactive demos and visual effects ([91dbc90](https://github.com/Keekuun/keymaster/commit/91dbc90ff47f2b5b000cf60fce377843a45e6265))
+
 ## [0.4.0](https://github.com/Keekuun/keymaster/compare/v0.3.0...v0.4.0) (2025-12-02)
 
 ### Features
