@@ -45,7 +45,8 @@
     "build": "vite build",
     "lint": "eslint src --max-warnings=0",
     "lint:fix": "eslint src --fix",
-    "test": "echo \"test for keymaster-core\""
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
