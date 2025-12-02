@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress';
 import path from 'node:path';
-import reactPkg from '@keekuun/keymaster-react/package.json';
-import vuePkg from '@keekuun/keymaster-vue/package.json';
-import corePkg from '@keekuun/keymaster-core/package.json';
+import reactPkg from '@keekuun/keymaster-react/package.json' with { type: 'json' };
+import vuePkg from '@keekuun/keymaster-vue/package.json' with { type: 'json' };
+import corePkg from '@keekuun/keymaster-core/package.json' with { type: 'json' };
 
 const reactVersion = reactPkg.version;
 const vueVersion = vuePkg.version;

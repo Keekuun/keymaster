@@ -13,7 +13,7 @@
     "format:write": "prettier --write .",
     "prepare": "husky install",
     "docs:dev": "pnpm --filter keymaster-docs run docs:dev",
-    "docs:build": "pnpm --filter keymaster-docs run docs:build",
+    "docs:build": "pnpm build && pnpm --filter keymaster-docs run docs:build",
     "docs:preview": "pnpm --filter keymaster-docs run docs:preview",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
