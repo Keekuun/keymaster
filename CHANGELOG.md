@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/Keekuun/keymaster/compare/v0.2.0...v0.3.0) (2025-12-02)
+
+### Features
+
+- **docs:** add multi-language support and browser language redirection ([615c416](https://github.com/Keekuun/keymaster/commit/615c4165fcb184f2a883a749d71aa57ad4cb42dd))
+- **docs:** enhance version display with dynamic components and update README ([7564c93](https://github.com/Keekuun/keymaster/commit/7564c93aebce269d4c318e8f98414a67bee6ae6f))
+
 ## [0.2.0](https://github.com/Keekuun/keymaster/compare/v0.1.2...v0.2.0) (2025-12-02)
 
 ### Features

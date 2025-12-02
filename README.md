@@ -164,9 +164,9 @@ The current monorepo contains the following sub-packages:
 
 #### Currently Published Versions
 
-- `@keekuun/keymaster-core`: **v0.2.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-core)
-- `@keekuun/keymaster-react`: **v0.2.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-react)
-- `@keekuun/keymaster-vue`: **v0.2.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-vue)
+- `@keekuun/keymaster-core`: **v0.3.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-core)
+- `@keekuun/keymaster-react`: **v0.3.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-react)
+- `@keekuun/keymaster-vue`: **v0.3.0** - [npm](https://www.npmjs.com/package/@keekuun/keymaster-vue)
 
 #### Documentation Site
 
