@@ -8,12 +8,18 @@
  */
 
 import { onMounted, onBeforeUnmount } from 'vue';
-import type { KeymasterHandler, KeymasterBindingOptionsBase } from '@keekuun/keymaster-core';
+import type {
+  KeymasterHandler,
+  KeymasterBindingOptionsBase,
+  ElectronHookContext,
+} from '@keekuun/keymaster-core';
 import {
   parseShortcut,
   isMatchingShortcut,
   isEventInScope,
   isElectronEnvironment,
+  getElectronProcessInfo,
+  getElectronVersions,
 } from '@keekuun/keymaster-core';
 
 /**
@@ -39,7 +45,7 @@ export function registerVueKeyBinding(
   }
 
   const parsed = parseShortcut(shortcut);
-  const { scopedElement, editorMode, electronMode } = options;
+  const { scopedElement, editorMode, electronMode, electronHook } = options;
 
   // 编辑器模式默认阻止默认行为
   const shouldPreventDefault =
@@ -54,10 +60,18 @@ export function registerVueKeyBinding(
         }
       }
 
-      // Electron 模式：检查是否在 Electron 环境中
+      // Electron 模式：检查是否在 Electron 环境中，并触发可选钩子
       if (electronMode && isElectronEnvironment()) {
-        // 在 Electron 渲染进程中，某些快捷键可能需要特殊处理
-        // 这里预留扩展点，后续可以接入 Electron 的 globalShortcut API
+        const context: ElectronHookContext = {
+          event,
+          parsed,
+          processInfo: getElectronProcessInfo(),
+          versions: getElectronVersions(),
+        };
+        const hookResult = electronHook?.(context);
+        if (hookResult === false) {
+          return;
+        }
       }
 
       if (!isMatchingShortcut(event, parsed)) {

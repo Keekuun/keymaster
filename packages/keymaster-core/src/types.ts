@@ -39,6 +39,37 @@ export interface KeymasterBindingOptionsBase {
    * 启用后会处理主进程与渲染进程的快捷键协调。
    */
   electronMode?: boolean;
+
+  /**
+   * Electron 钩子：当在 Electron 环境下并启用了 electronMode 时调用。
+   *
+   * - 可以用于上报日志 / 采集环境信息（process type、versions 等）
+   * - 可以决定是否继续执行后续的快捷键处理逻辑（返回 false 则中断）
+   */
+  electronHook?: (context: ElectronHookContext) => void | boolean;
+}
+
+/**
+ * Electron 钩子上下文
+ */
+export interface ElectronHookContext {
+  event: KeyboardEvent;
+  /**
+   * 解析后的快捷键
+   */
+  parsed: ParsedShortcut;
+  /**
+   * Electron 进程信息（仅在 Electron 渲染进程中可用）
+   */
+  processInfo: ElectronWindow['process'] | null;
+  /**
+   * Electron / Node / Chrome 版本信息
+   */
+  versions: {
+    electron?: string;
+    node?: string;
+    chrome?: string;
+  } | null;
 }
 
 /**

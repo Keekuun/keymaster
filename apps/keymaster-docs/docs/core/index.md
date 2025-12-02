@@ -153,6 +153,18 @@ if (isElectronEnvironment()) {
 }
 ```
 
+#### `isElectronRenderer(): boolean`
+
+Alias of `isElectronEnvironment` with clearer naming:
+
+```typescript
+import { isElectronRenderer } from '@keekuun/keymaster-core';
+
+if (isElectronRenderer()) {
+  // Safe to run renderer-specific Electron logic here
+}
+```
+
 #### `getElectronProcessInfo(): ElectronWindow["process"] | null`
 
 Get Electron process information (if available):
@@ -165,6 +177,17 @@ if (processInfo) {
   console.log('Process type:', processInfo.type); // "renderer" or "main"
   console.log('Electron version:', processInfo.versions?.electron);
 }
+```
+
+#### `getElectronVersions(): { electron?: string; node?: string; chrome?: string } | null`
+
+Get version information from `process.versions`:
+
+```typescript
+import { getElectronVersions } from '@keekuun/keymaster-core';
+
+const versions = getElectronVersions();
+// { electron: '30.0.0', node: '20.0.0', chrome: '124.0.0' }
 ```
 
 ## Usage Examples

@@ -174,12 +174,32 @@ In Electron applications, you can use `useElectronKeyBindingVue` to adapt shortc
 <script setup lang="ts">
 import { useElectronKeyBindingVue } from '@keekuun/keymaster-vue';
 
-// Electron mode automatically handles special behavior in renderer process
-useElectronKeyBindingVue('ctrl+alt+r', () => {
-  // Reload window
-  window.location.reload();
-});
+useElectronKeyBindingVue(
+  'ctrl+alt+r',
+  () => {
+    window.electron?.ipcRenderer?.send('shortcut:reload');
+  },
+  {
+    electronHook: ({ parsed, processInfo, versions }) => {
+      console.log('[vue electron shortcut]', parsed, processInfo, versions);
+      return true;
+    },
+  },
+);
 </script>
+```
+
+#### Electron Hook (`electronHook`)
+
+You can also use `electronHook` in Vue to intercept or extend Electron behavior:
+
+```ts
+useElectronKeyBindingVue('ctrl+alt+r', handler, {
+  electronHook: ({ event, parsed, processInfo, versions }) => {
+    // custom logging / monitoring
+    return true;
+  },
+});
 ```
 
 ### Shortcut Combination Management

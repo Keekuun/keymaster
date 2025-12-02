@@ -158,12 +158,32 @@ useEditorKeyBindingVue(
 <script setup lang="ts">
 import { useElectronKeyBindingVue } from '@keekuun/keymaster-vue';
 
-// Electron 模式会自动处理渲染进程的特殊行为
-useElectronKeyBindingVue('ctrl+alt+r', () => {
-  // 重新加载窗口
-  window.location.reload();
-});
+useElectronKeyBindingVue(
+  'ctrl+alt+r',
+  () => {
+    window.electron?.ipcRenderer?.send('shortcut:reload');
+  },
+  {
+    electronHook: ({ parsed, processInfo, versions }) => {
+      console.log('[vue electron shortcut]', parsed, processInfo, versions);
+      return true;
+    },
+  },
+);
 </script>
+```
+
+#### Electron 钩子（`electronHook`）
+
+同样可以在 Vue 中通过 `electronHook` 做扩展或兜底：
+
+```ts
+useElectronKeyBindingVue('ctrl+alt+r', handler, {
+  electronHook: ({ event, parsed, processInfo, versions }) => {
+    // 统一日志 / 监控
+    return true;
+  },
+});
 ```
 
 ### 快捷键组合管理

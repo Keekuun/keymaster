@@ -166,14 +166,37 @@ In Electron applications, you can use `useElectronKeyBinding` to adapt shortcut 
 import { useElectronKeyBinding } from '@keekuun/keymaster-react';
 
 function ElectronApp() {
-  // Electron mode automatically handles special behavior in renderer process
-  useElectronKeyBinding('ctrl+alt+r', () => {
-    // Reload window
-    window.location.reload();
-  });
+  useElectronKeyBinding(
+    'ctrl+alt+r',
+    () => {
+      // Your Electron logic here, e.g. via bridge / ipc
+      window.electron?.ipcRenderer?.send('shortcut:reload');
+    },
+    {
+      electronHook: ({ parsed, processInfo, versions }) => {
+        console.log('[electron shortcut]', parsed, processInfo, versions);
+        // return false here if you want to stop further handling
+        return true;
+      },
+    },
+  );
 
   return <div>Electron App</div>;
 }
+```
+
+#### Electron Hook (`electronHook`)
+
+When using Electron mode, you can optionally provide an `electronHook` to collect environment information or intercept handling:
+
+```ts
+useElectronKeyBinding('ctrl+alt+r', handler, {
+  electronHook: ({ event, parsed, processInfo, versions }) => {
+    // custom logging / monitoring
+    if (!versions?.electron) return false; // cancel handling if environment is unexpected
+    return true;
+  },
+});
 ```
 
 ### Shortcut Combination Management

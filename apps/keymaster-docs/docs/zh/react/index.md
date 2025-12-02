@@ -147,14 +147,37 @@ function CodeEditor() {
 import { useElectronKeyBinding } from '@keekuun/keymaster-react';
 
 function ElectronApp() {
-  // Electron 模式会自动处理渲染进程的特殊行为
-  useElectronKeyBinding('ctrl+alt+r', () => {
-    // 重新加载窗口
-    window.location.reload();
-  });
+  useElectronKeyBinding(
+    'ctrl+alt+r',
+    () => {
+      // 通过 bridge / ipc 通知主进程
+      window.electron?.ipcRenderer?.send('shortcut:reload');
+    },
+    {
+      electronHook: ({ parsed, processInfo, versions }) => {
+        console.log('[electron shortcut]', parsed, processInfo, versions);
+        // 返回 false 可以中断后续处理
+        return true;
+      },
+    },
+  );
 
   return <div>Electron App</div>;
 }
+```
+
+#### Electron 钩子（`electronHook`）
+
+在 Electron 模式下，你可以通过 `electronHook` 收集环境信息或做统一拦截：
+
+```ts
+useElectronKeyBinding('ctrl+alt+r', handler, {
+  electronHook: ({ event, parsed, processInfo, versions }) => {
+    // 统一日志 / 监控
+    if (!versions?.electron) return false; // 环境异常时直接中断
+    return true;
+  },
+});
 ```
 
 ### 快捷键组合管理
