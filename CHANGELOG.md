@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/Keekuun/keymaster/compare/v0.3.0...v0.4.0) (2025-12-02)
+
+### Features
+
+- **electron:** add electronHook for enhanced shortcut handling ([37d6533](https://github.com/Keekuun/keymaster/commit/37d6533e067e6fccf062478816c2e4980db0eed1))
+
 ## [0.3.0](https://github.com/Keekuun/keymaster/compare/v0.2.0...v0.3.0) (2025-12-02)
 
 ### Features
