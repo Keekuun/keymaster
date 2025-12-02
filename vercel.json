@@ -7,5 +7,3 @@
   "buildCommand": "pnpm run build && pnpm --filter keymaster-docs run docs:build",
   "outputDirectory": "apps/keymaster-docs/docs/.vitepress/dist"
 }
-
-

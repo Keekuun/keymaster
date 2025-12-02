@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@vue/*": ["src/*"]
+      "@core/*": ["src/*"]
     }
   },
   "include": ["src"],

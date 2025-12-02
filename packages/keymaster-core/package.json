@@ -1,8 +1,8 @@
 {
-  "name": "@keekuun/keymaster-vue",
-  "version": "0.1.2",
+  "name": "@keekuun/keymaster-core",
+  "version": "0.1.0",
   "private": false,
-  "description": "Vue 版 keymaster 键盘快捷键库（基于 Vite 与 TypeScript 的库模式构建）。",
+  "description": "keymaster 核心模块（React 和 Vue 共享的类型、解析器和工具函数）",
   "license": "MIT",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -13,16 +13,15 @@
     "keyboard",
     "shortcut",
     "hotkey",
-    "vue",
-    "vue3",
-    "composition-api"
+    "core",
+    "typescript"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Keekuun/keymaster.git",
-    "directory": "packages/keymaster-vue"
+    "directory": "packages/keymaster-core"
   },
-  "homepage": "https://keymaster-docs.vercel.app/vue/",
+  "homepage": "https://keymaster-docs.vercel.app/core/",
   "bugs": {
     "url": "https://github.com/Keekuun/keymaster/issues"
   },
@@ -30,23 +29,13 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
     "lint:fix": "eslint src --fix",
-    "test": "echo \"test for keymaster-vue\""
-  },
-  "peerDependencies": {
-    "vue": "^3.4.0"
-  },
-  "dependencies": {
-    "@keekuun/keymaster-core": "workspace:*"
+    "test": "echo \"test for keymaster-core\""
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.0",
     "typescript": "^5.0.0",
-    "vite": "^5.0.0",
-    "vue": "^3.4.0"
+    "vite": "^5.0.0"
   }
 }

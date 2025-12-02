@@ -6,7 +6,7 @@
     </p>
     <p class="shortcut-demo__status">
       最近触发：
-      <strong>{{ lastAction || "暂无" }}</strong>
+      <strong>{{ lastAction || '暂无' }}</strong>
     </p>
     <p v-if="message" class="shortcut-demo__message">
       {{ message }}
@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from "vue";
-import { registerKeyBinding } from "@keekuun/keymaster-react";
+import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { registerKeyBinding } from '@keekuun/keymaster-react';
 
-const lastAction = ref("");
-const message = ref("");
+const lastAction = ref('');
+const message = ref('');
 
 let cleanupSave: (() => void) | null = null;
 let cleanupUndo: (() => void) | null = null;
@@ -27,28 +27,28 @@ let timer: number | null = null;
 
 function showAction(text: string) {
   lastAction.value = text;
-  message.value = "（React 示例）已捕获快捷键：" + text;
+  message.value = '（React 示例）已捕获快捷键：' + text;
 
   if (timer !== null) {
     window.clearTimeout(timer);
   }
 
   timer = window.setTimeout(() => {
-    message.value = "";
+    message.value = '';
   }, 2000);
 }
 
 onMounted(() => {
   cleanupSave = registerKeyBinding(
-    "ctrl+s",
+    'ctrl+s',
     () => {
-      showAction("保存（Ctrl+S）");
+      showAction('保存（Ctrl+S）');
     },
-    { preventDefault: true }
+    { preventDefault: true },
   );
 
-  cleanupUndo = registerKeyBinding("ctrl+z", () => {
-    showAction("撤销（Ctrl+Z）");
+  cleanupUndo = registerKeyBinding('ctrl+z', () => {
+    showAction('撤销（Ctrl+Z）');
   });
 });
 
@@ -96,5 +96,3 @@ kbd {
   font-size: 12px;
 }
 </style>
-
-

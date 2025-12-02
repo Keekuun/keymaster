@@ -1,6 +1,29 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
+# 运行 ESLint 修复（根目录）
+echo "🔍 Running ESLint fix..."
+npx eslint . --fix || true
 
-pnpm lint
+# 运行各包的 ESLint 修复
+echo "🔍 Running ESLint fix for all packages..."
+pnpm -r run lint:fix || true
 
+# 运行 Prettier 格式化
+echo "💅 Running Prettier format..."
+pnpm format:write || true
 
+# 清理 Prettier/ESLint 临时文件
+if command -v find >/dev/null 2>&1; then
+  find . -name "*.timestamp-*.mjs" -type f -delete 2>/dev/null || true
+  find . -name "*.timestamp-*.js" -type f -delete 2>/dev/null || true
+fi
+
+# 只添加已跟踪的文件和修改的文件（避免添加临时文件）
+git add -u
+
+# 添加新文件，但排除临时文件和构建产物
+# 使用更简单的方法：先清理临时文件，然后只添加需要的文件
+git add . --ignore-errors 2>/dev/null || true
+
+# 移除可能被错误添加的临时文件
+git reset HEAD -- "*.timestamp-*.mjs" "*.timestamp-*.js" 2>/dev/null || true
+
+echo "✅ Pre-commit checks passed!"

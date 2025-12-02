@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
-    "lint": "pnpm -r run lint",
+    "lint": "pnpm -r run lint && pnpm lint:root",
+    "lint:root": "eslint .",
+    "lint:fix": "pnpm -r run lint:fix && pnpm lint:fix:root",
+    "lint:fix:root": "eslint . --fix",
     "test": "pnpm -r run test",
-    "lint:root": "eslint . --ext .ts,.tsx,.js,.jsx,.vue --ignore-path .gitignore",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "prepare": "husky install",
@@ -16,17 +18,24 @@
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
+    "release:core:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-core/package.json --bumpFiles packages/keymaster-core/package.json",
     "release:react:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-react/package.json --bumpFiles packages/keymaster-react/package.json",
     "release:vue:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-vue/package.json --bumpFiles packages/keymaster-vue/package.json",
+    "publish:core": "pnpm --filter @keekuun/keymaster-core publish --access public",
     "publish:react": "pnpm --filter @keekuun/keymaster-react publish --access public",
-    "publish:vue": "pnpm --filter @keekuun/keymaster-vue publish --access public"
+    "publish:vue": "pnpm --filter @keekuun/keymaster-vue publish --access public",
+    "publish:all": "pnpm run publish:core && pnpm run publish:react && pnpm run publish:vue"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@eslint/js": "^9.39.1",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^9.0.0",
+    "globals": "^16.5.0",
     "husky": "^9.0.0",
     "prettier": "^3.0.0",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "typescript-eslint": "^8.48.0",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

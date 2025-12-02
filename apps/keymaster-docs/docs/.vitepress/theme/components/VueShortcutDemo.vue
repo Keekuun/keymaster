@@ -6,7 +6,7 @@
     </p>
     <p class="shortcut-demo__status">
       最近触发：
-      <strong>{{ lastAction || "暂无" }}</strong>
+      <strong>{{ lastAction || '暂无' }}</strong>
     </p>
     <p v-if="message" class="shortcut-demo__message">
       {{ message }}
@@ -15,36 +15,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useKeyBindingVue } from "@keekuun/keymaster-vue";
+import { ref } from 'vue';
+import { useKeyBindingVue } from '@keekuun/keymaster-vue';
 
-const lastAction = ref("");
-const message = ref("");
+const lastAction = ref('');
+const message = ref('');
 let timer: number | null = null;
 
 function showAction(text: string) {
   lastAction.value = text;
-  message.value = "已捕获快捷键：" + text;
+  message.value = '已捕获快捷键：' + text;
 
   if (timer !== null) {
     window.clearTimeout(timer);
   }
 
   timer = window.setTimeout(() => {
-    message.value = "";
+    message.value = '';
   }, 2000);
 }
 
 useKeyBindingVue(
-  "ctrl+s",
+  'ctrl+s',
   () => {
-    showAction("保存（Ctrl+S）");
+    showAction('保存（Ctrl+S）');
   },
-  { preventDefault: true }
+  { preventDefault: true },
 );
 
-useKeyBindingVue("ctrl+z", () => {
-  showAction("撤销（Ctrl+Z）");
+useKeyBindingVue('ctrl+z', () => {
+  showAction('撤销（Ctrl+Z）');
 });
 </script>
 
@@ -80,5 +80,3 @@ kbd {
   font-size: 12px;
 }
 </style>
-
-

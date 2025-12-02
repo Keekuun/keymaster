@@ -4,138 +4,68 @@
  * 设计目标：
  * - 提供简单易用的 Hook：在组件中一行代码绑定快捷键。
  * - 默认监听 window 的 keydown 事件，避免用户手动管理事件。
- * - 仅依赖浏览器原生 KeyboardEvent，后续可平滑替换为原始 keymaster 库。
+ * - 使用共享的 core 模块，确保类型一致性和代码复用。
  */
 
-import { useEffect } from "react";
-
-export type KeymasterHandler = (event: KeyboardEvent) => void;
-
-export interface KeymasterBindingOptions {
-  /**
-   * 是否在事件被处理后阻止默认行为。
-   */
-  preventDefault?: boolean;
-
-  /**
-   * 是否在事件被处理后阻止事件冒泡。
-   */
-  stopPropagation?: boolean;
-
-  /**
-   * 是否只在元素聚焦时生效（默认全局 window）。
-   * 当前实现中暂未使用，预留未来扩展。
-   */
-  scopedElement?: HTMLElement | null;
-}
-
-interface ParsedShortcut {
-  key: string;
-  ctrl: boolean;
-  alt: boolean;
-  shift: boolean;
-  meta: boolean;
-}
-
-const MODIFIER_CTRL = "ctrl";
-const MODIFIER_ALT = "alt";
-const MODIFIER_SHIFT = "shift";
-const MODIFIER_META = "meta";
-const PLUS_SEPARATOR = "+";
+import { useEffect } from 'react';
+import type { RefObject } from 'react';
+import type { KeymasterHandler, KeymasterBindingOptionsBase } from '@keekuun/keymaster-core';
+import {
+  parseShortcut,
+  isMatchingShortcut,
+  isEventInScope,
+  isElectronEnvironment,
+} from '@keekuun/keymaster-core';
 
 /**
- * 将类似 "ctrl+s"、"shift+alt+k" 的字符串解析成结构化对象。
- * 解析过程中全部转为小写，避免大小写差异带来的问题。
+ * React 版本的绑定选项（继承自核心选项）
  */
-function parseShortcut(shortcut: string): ParsedShortcut {
-  if (!shortcut) {
-    throw new Error("快捷键字符串不能为空。");
-  }
-
-  const parts = shortcut
-    .split(PLUS_SEPARATOR)
-    .map((part) => part.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (parts.length === 0) {
-    throw new Error("快捷键字符串格式不正确。");
-  }
-
-  const modifiers = {
-    ctrl: false,
-    alt: false,
-    shift: false,
-    meta: false
-  };
-
-  let key: string | null = null;
-
-  for (const part of parts) {
-    if (part === MODIFIER_CTRL) {
-      modifiers.ctrl = true;
-    } else if (part === MODIFIER_ALT) {
-      modifiers.alt = true;
-    } else if (part === MODIFIER_SHIFT) {
-      modifiers.shift = true;
-    } else if (part === MODIFIER_META || part === "cmd") {
-      modifiers.meta = true;
-    } else {
-      // 非修饰键视为主键，如 s、k、enter 等
-      key = part;
-    }
-  }
-
-  if (!key) {
-    throw new Error("快捷键必须包含一个主键（例如：ctrl+s 中的 s）。");
-  }
-
-  return {
-    key,
-    ctrl: modifiers.ctrl,
-    alt: modifiers.alt,
-    shift: modifiers.shift,
-    meta: modifiers.meta
-  };
-}
+export type KeymasterBindingOptions = KeymasterBindingOptionsBase;
 
 /**
- * 判断某次键盘事件是否匹配预期的快捷键。
+ * 导出核心类型，保持向后兼容
  */
-function isMatchingShortcut(event: KeyboardEvent, parsed: ParsedShortcut): boolean {
-  const eventKey = (event.key || "").toLowerCase();
-
-  // 校验修饰键状态
-  if (event.ctrlKey !== parsed.ctrl) return false;
-  if (event.altKey !== parsed.alt) return false;
-  if (event.shiftKey !== parsed.shift) return false;
-  if (event.metaKey !== parsed.meta) return false;
-
-  // 校验主键（支持常见按键名称）
-  return eventKey === parsed.key;
-}
+export type { KeymasterHandler };
 
 /**
- * 通用快捷键注册函数，后续可在此接入原始 keymaster。
- * 当前实现直接在 window 上监听 keydown 事件。
+ * 通用快捷键注册函数，支持作用域元素、编辑器模式和 Electron 模式。
  */
 export function registerKeyBinding(
   shortcut: string,
   handler: KeymasterHandler,
-  options: KeymasterBindingOptions = {}
+  options: KeymasterBindingOptions = {},
 ): () => void {
-  if (!shortcut || typeof handler !== "function") {
-    throw new Error("registerKeyBinding 需要合法的快捷键字符串和处理函数。");
+  if (!shortcut || typeof handler !== 'function') {
+    throw new Error('registerKeyBinding 需要合法的快捷键字符串和处理函数。');
   }
 
   const parsed = parseShortcut(shortcut);
+  const { scopedElement, editorMode, electronMode } = options;
+
+  // 编辑器模式默认阻止默认行为
+  const shouldPreventDefault =
+    options.preventDefault !== undefined ? options.preventDefault : editorMode || false;
 
   const listener = (event: KeyboardEvent) => {
     try {
+      // 作用域检查：如果指定了 scopedElement，只处理作用域内的事件
+      if (scopedElement) {
+        if (!isEventInScope(event, scopedElement)) {
+          return;
+        }
+      }
+
+      // Electron 模式：检查是否在 Electron 环境中
+      if (electronMode && isElectronEnvironment()) {
+        // 在 Electron 渲染进程中，某些快捷键可能需要特殊处理
+        // 这里预留扩展点，后续可以接入 Electron 的 globalShortcut API
+      }
+
       if (!isMatchingShortcut(event, parsed)) {
         return;
       }
 
-      if (options.preventDefault) {
+      if (shouldPreventDefault) {
         event.preventDefault();
       }
       if (options.stopPropagation) {
@@ -146,16 +76,18 @@ export function registerKeyBinding(
     } catch (error) {
       // 这里不向外抛出异常，避免监听器错误导致全局崩溃
       // 后续可在此接入日志上报系统
-      console.error("keymaster-react: 在处理快捷键时出现错误", error);
+      // eslint-disable-next-line no-console
+      console.error('keymaster-react: 在处理快捷键时出现错误', error);
     }
   };
 
-  // 当前版本仅支持全局 window 监听
-  window.addEventListener("keydown", listener);
+  // 根据是否有作用域元素决定监听目标
+  const target = scopedElement || window;
+  target.addEventListener('keydown', listener as EventListener);
 
   // 返回取消绑定的函数
   return () => {
-    window.removeEventListener("keydown", listener);
+    target.removeEventListener('keydown', listener as EventListener);
   };
 }
 
@@ -170,13 +102,82 @@ export function registerKeyBinding(
 export function useKeyBinding(
   shortcut: string,
   handler: KeymasterHandler,
-  options: KeymasterBindingOptions = {}
+  options: KeymasterBindingOptions = {},
 ): void {
   useEffect(() => {
     const cleanup = registerKeyBinding(shortcut, handler, options);
     return () => cleanup();
-  }, [shortcut, handler, options.preventDefault, options.stopPropagation, options.scopedElement]);
+  }, [
+    shortcut,
+    handler,
+    options.preventDefault,
+    options.stopPropagation,
+    options.scopedElement,
+    options.editorMode,
+    options.electronMode,
+  ]);
 }
 
+/**
+ * React Hook：在编辑器场景中绑定快捷键（自动阻止默认行为）。
+ *
+ * 使用示例：
+ * const editorRef = useRef<HTMLTextAreaElement>(null);
+ * useEditorKeyBinding("ctrl+s", (event) => {
+ *   // 保存编辑器内容
+ * }, editorRef.current);
+ */
+export function useEditorKeyBinding(
+  shortcut: string,
+  handler: KeymasterHandler,
+  editorElement?: HTMLElement | null,
+): void {
+  useKeyBinding(shortcut, handler, {
+    scopedElement: editorElement || undefined,
+    editorMode: true,
+    preventDefault: true,
+  });
+}
 
+/**
+ * React Hook：在 Electron 应用中绑定快捷键。
+ *
+ * 使用示例：
+ * useElectronKeyBinding("ctrl+alt+r", (event) => {
+ *   // 重新加载窗口
+ * });
+ */
+export function useElectronKeyBinding(
+  shortcut: string,
+  handler: KeymasterHandler,
+  options: Omit<KeymasterBindingOptions, 'electronMode'> = {},
+): void {
+  useKeyBinding(shortcut, handler, {
+    ...options,
+    electronMode: true,
+  });
+}
 
+/**
+ * React Hook：使用 ref 绑定作用域快捷键。
+ *
+ * 使用示例：
+ * const containerRef = useRef<HTMLDivElement>(null);
+ * useScopedKeyBinding("ctrl+k", (event) => {
+ *   // 只在 containerRef 内生效
+ * }, containerRef);
+ */
+export function useScopedKeyBinding(
+  shortcut: string,
+  handler: KeymasterHandler,
+  elementRef: RefObject<HTMLElement>,
+  options: Omit<KeymasterBindingOptions, 'scopedElement'> = {},
+): void {
+  useKeyBinding(shortcut, handler, {
+    ...options,
+    scopedElement: elementRef.current || undefined,
+  });
+}
+
+// 导出工具函数
+export * from '@react/utils';

@@ -32,7 +32,7 @@
   </div>
 </div>
 
-## 你可以在这里获得什么？
+## 功能概览
 
 <div class="km-feature-grid">
   <div class="km-feature-card">
@@ -55,10 +55,36 @@
     </p>
   </div>
   <div class="km-feature-card">
+    <h3>核心模块架构</h3>
+    <p>
+      <code>@keekuun/keymaster-core</code> 提供共享的类型定义和解析器，确保 React 和 Vue 版本的类型一致性和代码复用。
+    </p>
+  </div>
+  <div class="km-feature-card">
     <h3>搜索与源码入口</h3>
     <p>
       右上角内置本地搜索与 GitHub 链接，方便你快速查找 API、跳转到源码深入阅读或贡献代码。
     </p>
   </div>
+  <div class="km-feature-card">
+    <h3>多版本管理</h3>
+    <p>
+      文档站点始终显示最新版本。如果你使用的是旧版本，可以查看 <a href="/versions">版本管理文档</a> 了解如何查看对应版本的文档和 API。
+    </p>
+  </div>
 </div>
 
+## 版本提示
+
+> 💡 **重要**：文档站点始终显示最新版本的文档（当前：React v0.1.2 / Vue v0.1.2 / Core v0.1.2）。如果你使用的是其他版本，请：
+>
+> - 查看 [版本管理文档](/versions) 了解版本兼容性和升级指南
+> - 访问 [npm 包页面](https://www.npmjs.com/org/keekuun) 查看所有已发布的版本
+> - 查看 [GitHub Releases](https://github.com/Keekuun/keymaster/releases) 获取详细的版本发布说明
+
+## 快速开始
+
+- [React 版快速开始](/react/)
+- [Vue 版快速开始](/vue/)
+- [Core 模块 API](/core/)
+- [版本管理指南](/versions)

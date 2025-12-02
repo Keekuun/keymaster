@@ -1,46 +1,67 @@
-import { defineConfig } from "vitepress";
-import reactPkg from "../../../../packages/keymaster-react/package.json";
-import vuePkg from "../../../../packages/keymaster-vue/package.json";
+import { defineConfig } from 'vitepress';
+import path from 'node:path';
+import reactPkg from '@keekuun/keymaster-react/package.json';
+import vuePkg from '@keekuun/keymaster-vue/package.json';
+import corePkg from '@keekuun/keymaster-core/package.json';
 
-const reactVersion = (reactPkg as any).version as string;
-const vueVersion = (vuePkg as any).version as string;
+const reactVersion = reactPkg.version;
+const vueVersion = vuePkg.version;
+const coreVersion = corePkg.version;
 
 // keymaster 文档站点基础配置（自动从包中读取版本号）
 export default defineConfig({
-  title: "keymaster",
-  description: "基于 keymaster 的 React/Vue 键盘快捷键库文档与示例",
+  vite: {
+    resolve: {
+      alias: {
+        '@packages': path.resolve(__dirname, '../../../../packages'),
+        '@packages/*': path.resolve(__dirname, '../../../../packages/*'),
+        '@theme': path.resolve(__dirname, '../.vitepress/theme'),
+        '@theme/*': path.resolve(__dirname, '../.vitepress/theme/*'),
+        '@docs': path.resolve(__dirname, '..'),
+        '@docs/*': path.resolve(__dirname, '../*'),
+      },
+    },
+  },
+  title: 'keymaster',
+  description: '基于 keymaster 的 React/Vue 键盘快捷键库文档与示例',
   themeConfig: {
-    logo: "/keymaster-logo.svg",
+    logo: '/keymaster-logo.svg',
     nav: [
-      { text: "指南", link: "/" },
-      { text: `React 版 v${reactVersion}`, link: "/react/" },
-      { text: `Vue 版 v${vueVersion}`, link: "/vue/" },
-      { text: "部署", link: "/deploy" },
-      { text: "GitHub", link: "https://github.com/Keekuun/keymaster" }
+      { text: '指南', link: '/' },
+      { text: `React 版 v${reactVersion}`, link: '/react/' },
+      { text: `Vue 版 v${vueVersion}`, link: '/vue/' },
+      { text: `Core 模块 v${coreVersion}`, link: '/core/' },
+      { text: '版本管理', link: '/versions' },
+      { text: '发布', link: '/publish' },
+      { text: '部署', link: '/deploy' },
+      { text: 'GitHub', link: 'https://github.com/Keekuun/keymaster' },
     ],
     sidebar: {
-      "/react/": [
+      '/react/': [
         {
           text: `React（当前版本 v${reactVersion}）`,
-          items: [{ text: "快速开始", link: "/react/" }]
-        }
+          items: [{ text: '快速开始', link: '/react/' }],
+        },
       ],
-      "/vue/": [
+      '/vue/': [
         {
           text: `Vue（当前版本 v${vueVersion}）`,
-          items: [{ text: "快速开始", link: "/vue/" }]
-        }
-      ]
+          items: [{ text: '快速开始', link: '/vue/' }],
+        },
+      ],
+      '/core/': [
+        {
+          text: `Core 模块（当前版本 v${coreVersion}）`,
+          items: [{ text: '核心 API', link: '/core/' }],
+        },
+      ],
     },
-    socialLinks: [
-      { icon: "github", link: "https://github.com/Keekuun/keymaster" }
-    ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/Keekuun/keymaster' }],
     search: {
-      provider: "local"
+      provider: 'local',
     },
     footer: {
-      message: `当前文档同步版本：React v${reactVersion} / Vue v${vueVersion}`
-    }
-  }
+      message: `当前文档同步版本：React v${reactVersion} / Vue v${vueVersion} / Core v${coreVersion}`,
+    },
+  },
 });
-

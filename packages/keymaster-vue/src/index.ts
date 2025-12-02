@@ -3,121 +3,68 @@
  *
  * 设计目标：
  * - 提供组合式 API，方便在 setup 中直接绑定快捷键。
- * - 默认监听 window 的 keydown 事件，后续可平滑对接原始 keymaster 库。
+ * - 默认监听 window 的 keydown 事件。
+ * - 使用共享的 core 模块，确保类型一致性和代码复用。
  */
 
-import { onMounted, onBeforeUnmount } from "vue";
-
-export type KeymasterVueHandler = (event: KeyboardEvent) => void;
-
-export interface KeymasterVueBindingOptions {
-  /**
-   * 是否在事件被处理后阻止默认行为。
-   */
-  preventDefault?: boolean;
-
-  /**
-   * 是否在事件被处理后阻止事件冒泡。
-   */
-  stopPropagation?: boolean;
-}
-
-interface ParsedShortcut {
-  key: string;
-  ctrl: boolean;
-  alt: boolean;
-  shift: boolean;
-  meta: boolean;
-}
-
-const MODIFIER_CTRL = "ctrl";
-const MODIFIER_ALT = "alt";
-const MODIFIER_SHIFT = "shift";
-const MODIFIER_META = "meta";
-const PLUS_SEPARATOR = "+";
-
-function parseShortcut(shortcut: string): ParsedShortcut {
-  if (!shortcut) {
-    throw new Error("快捷键字符串不能为空。");
-  }
-
-  const parts = shortcut
-    .split(PLUS_SEPARATOR)
-    .map((part) => part.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (parts.length === 0) {
-    throw new Error("快捷键字符串格式不正确。");
-  }
-
-  const modifiers = {
-    ctrl: false,
-    alt: false,
-    shift: false,
-    meta: false
-  };
-
-  let key: string | null = null;
-
-  for (const part of parts) {
-    if (part === MODIFIER_CTRL) {
-      modifiers.ctrl = true;
-    } else if (part === MODIFIER_ALT) {
-      modifiers.alt = true;
-    } else if (part === MODIFIER_SHIFT) {
-      modifiers.shift = true;
-    } else if (part === MODIFIER_META || part === "cmd") {
-      modifiers.meta = true;
-    } else {
-      key = part;
-    }
-  }
-
-  if (!key) {
-    throw new Error("快捷键必须包含一个主键（例如：ctrl+s 中的 s）。");
-  }
-
-  return {
-    key,
-    ctrl: modifiers.ctrl,
-    alt: modifiers.alt,
-    shift: modifiers.shift,
-    meta: modifiers.meta
-  };
-}
-
-function isMatchingShortcut(event: KeyboardEvent, parsed: ParsedShortcut): boolean {
-  const eventKey = (event.key || "").toLowerCase();
-
-  if (event.ctrlKey !== parsed.ctrl) return false;
-  if (event.altKey !== parsed.alt) return false;
-  if (event.shiftKey !== parsed.shift) return false;
-  if (event.metaKey !== parsed.meta) return false;
-
-  return eventKey === parsed.key;
-}
+import { onMounted, onBeforeUnmount } from 'vue';
+import type { KeymasterHandler, KeymasterBindingOptionsBase } from '@keekuun/keymaster-core';
+import {
+  parseShortcut,
+  isMatchingShortcut,
+  isEventInScope,
+  isElectronEnvironment,
+} from '@keekuun/keymaster-core';
 
 /**
- * 通用快捷键注册函数，直接在 window 上监听 keydown。
+ * Vue 版本的处理器类型（与核心类型保持一致）
+ */
+export type KeymasterVueHandler = KeymasterHandler;
+
+/**
+ * Vue 版本的绑定选项（继承自核心选项）
+ */
+export type KeymasterVueBindingOptions = KeymasterBindingOptionsBase;
+
+/**
+ * 通用快捷键注册函数，支持作用域元素、编辑器模式和 Electron 模式。
  */
 export function registerVueKeyBinding(
   shortcut: string,
   handler: KeymasterVueHandler,
-  options: KeymasterVueBindingOptions = {}
+  options: KeymasterVueBindingOptions = {},
 ): () => void {
-  if (!shortcut || typeof handler !== "function") {
-    throw new Error("registerVueKeyBinding 需要合法的快捷键字符串和处理函数。");
+  if (!shortcut || typeof handler !== 'function') {
+    throw new Error('registerVueKeyBinding 需要合法的快捷键字符串和处理函数。');
   }
 
   const parsed = parseShortcut(shortcut);
+  const { scopedElement, editorMode, electronMode } = options;
+
+  // 编辑器模式默认阻止默认行为
+  const shouldPreventDefault =
+    options.preventDefault !== undefined ? options.preventDefault : editorMode || false;
 
   const listener = (event: KeyboardEvent) => {
     try {
+      // 作用域检查：如果指定了 scopedElement，只处理作用域内的事件
+      if (scopedElement) {
+        if (!isEventInScope(event, scopedElement)) {
+          return;
+        }
+      }
+
+      // Electron 模式：检查是否在 Electron 环境中
+      if (electronMode && isElectronEnvironment()) {
+        // 在 Electron 渲染进程中，某些快捷键可能需要特殊处理
+        // 这里预留扩展点，后续可以接入 Electron 的 globalShortcut API
+      }
+
       if (!isMatchingShortcut(event, parsed)) {
         return;
       }
 
-      if (options.preventDefault) {
+      if (shouldPreventDefault) {
         event.preventDefault();
       }
       if (options.stopPropagation) {
@@ -126,14 +73,17 @@ export function registerVueKeyBinding(
 
       handler(event);
     } catch (error) {
-      console.error("keymaster-vue: 在处理快捷键时出现错误", error);
+      // eslint-disable-next-line no-console
+      console.error('keymaster-vue: 在处理快捷键时出现错误', error);
     }
   };
 
-  window.addEventListener("keydown", listener);
+  // 根据是否有作用域元素决定监听目标
+  const target = scopedElement || window;
+  target.addEventListener('keydown', listener as EventListener);
 
   return () => {
-    window.removeEventListener("keydown", listener);
+    target.removeEventListener('keydown', listener as EventListener);
   };
 }
 
@@ -148,7 +98,7 @@ export function registerVueKeyBinding(
 export function useKeyBindingVue(
   shortcut: string,
   handler: KeymasterVueHandler,
-  options: KeymasterVueBindingOptions = {}
+  options: KeymasterVueBindingOptions = {},
 ): void {
   let cleanup: (() => void) | null = null;
 
@@ -164,3 +114,66 @@ export function useKeyBindingVue(
   });
 }
 
+/**
+ * 组合式 API：在编辑器场景中绑定快捷键（自动阻止默认行为）。
+ *
+ * 使用示例（<script setup>）：
+ * const editorRef = ref<HTMLTextAreaElement | null>(null);
+ * useEditorKeyBindingVue("ctrl+s", (event) => {
+ *   // 保存编辑器内容
+ * }, editorRef.value);
+ */
+export function useEditorKeyBindingVue(
+  shortcut: string,
+  handler: KeymasterVueHandler,
+  editorElement?: HTMLElement | null,
+): void {
+  useKeyBindingVue(shortcut, handler, {
+    scopedElement: editorElement || undefined,
+    editorMode: true,
+    preventDefault: true,
+  });
+}
+
+/**
+ * 组合式 API：在 Electron 应用中绑定快捷键。
+ *
+ * 使用示例（<script setup>）：
+ * useElectronKeyBindingVue("ctrl+alt+r", (event) => {
+ *   // 重新加载窗口
+ * });
+ */
+export function useElectronKeyBindingVue(
+  shortcut: string,
+  handler: KeymasterVueHandler,
+  options: Omit<KeymasterVueBindingOptions, 'electronMode'> = {},
+): void {
+  useKeyBindingVue(shortcut, handler, {
+    ...options,
+    electronMode: true,
+  });
+}
+
+/**
+ * 组合式 API：使用 ref 绑定作用域快捷键。
+ *
+ * 使用示例（<script setup>）：
+ * const containerRef = ref<HTMLDivElement | null>(null);
+ * useScopedKeyBindingVue("ctrl+k", (event) => {
+ *   // 只在 containerRef 内生效
+ * }, containerRef);
+ */
+export function useScopedKeyBindingVue(
+  shortcut: string,
+  handler: KeymasterVueHandler,
+  elementRef: { value: HTMLElement | null },
+  options: Omit<KeymasterVueBindingOptions, 'scopedElement'> = {},
+): void {
+  useKeyBindingVue(shortcut, handler, {
+    ...options,
+    scopedElement: elementRef.value || undefined,
+  });
+}
+
+// 导出工具函数
+export * from '@vue/utils';

@@ -7,6 +7,7 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "type": "module",
   "keywords": [
     "keymaster",
     "keyboard",
@@ -31,12 +32,16 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "echo \"lint for keymaster-react\"",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
     "test": "echo \"test for keymaster-react\""
   },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@keekuun/keymaster-core": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
