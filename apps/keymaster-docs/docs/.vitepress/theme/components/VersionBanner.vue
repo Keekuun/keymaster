@@ -30,9 +30,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vitepress';
+import { versions } from '@theme/utils/versions';
 
 interface Props {
-  currentVersion: string;
+  currentVersion?: string;
   showBanner?: boolean;
 }
 
@@ -52,6 +53,19 @@ const packageName = computed(() => {
     return '@keekuun/keymaster-core';
   }
   return null;
+});
+
+const currentVersion = computed(() => {
+  if (props.currentVersion) return props.currentVersion;
+  const path = route.path;
+  if (path.startsWith('/react')) {
+    return versions.react;
+  } else if (path.startsWith('/vue')) {
+    return versions.vue;
+  } else if (path.startsWith('/core')) {
+    return versions.core;
+  }
+  return '';
 });
 
 const npmLink = computed(() => {

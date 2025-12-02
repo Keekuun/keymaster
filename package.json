@@ -21,6 +21,7 @@
     "release:core:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-core/package.json --bumpFiles packages/keymaster-core/package.json",
     "release:react:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-react/package.json --bumpFiles packages/keymaster-react/package.json",
     "release:vue:only": "standard-version --skip.changelog --skip.tag --skip.commit --packageFiles packages/keymaster-vue/package.json --bumpFiles packages/keymaster-vue/package.json",
+    "update:readme": "node scripts/update-readme-versions.js",
     "publish:core": "pnpm --filter @keekuun/keymaster-core publish --access public",
     "publish:react": "pnpm --filter @keekuun/keymaster-react publish --access public",
     "publish:vue": "pnpm --filter @keekuun/keymaster-vue publish --access public",

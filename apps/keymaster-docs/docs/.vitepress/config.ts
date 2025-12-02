@@ -1,12 +1,10 @@
 import { defineConfig } from 'vitepress';
 import path from 'node:path';
-import reactPkg from '@keekuun/keymaster-react/package.json' with { type: 'json' };
-import vuePkg from '@keekuun/keymaster-vue/package.json' with { type: 'json' };
-import corePkg from '@keekuun/keymaster-core/package.json' with { type: 'json' };
+import { versions } from './theme/utils/versions';
 
-const reactVersion = reactPkg.version;
-const vueVersion = vuePkg.version;
-const coreVersion = corePkg.version;
+const reactVersion = versions.react;
+const vueVersion = versions.vue;
+const coreVersion = versions.core;
 
 // keymaster 文档站点基础配置（自动从包中读取版本号）
 export default defineConfig({

@@ -139,4 +139,4 @@ dispose();
 
 更多交互 Demo、使用场景与设计建议请访问文档站点：
 
-- Vue 文档与 Demo：`https://keymaster-docs.vercel.app/vue/`
+- Vue 文档与 Demo：[https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)

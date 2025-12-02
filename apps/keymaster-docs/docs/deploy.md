@@ -4,7 +4,7 @@
 
 ## 1. 准备工作
 
-- 一个 GitHub 仓库（例如 `https://github.com/Keekuun/keymaster`，仓库中已包含 `apps/keymaster-docs`）
+- 一个 GitHub 仓库（例如 [https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)，仓库中已包含 `apps/keymaster-docs`）
 - 一个 Vercel 账号（使用 GitHub 登录即可）
 
 ## 2. 连接 GitHub 仓库
@@ -40,7 +40,7 @@
 
 ## 6. 验证部署
 
-部署完成后，Vercel 会提供一个访问地址（如 `https://keymaster-docs.vercel.app`）：
+部署完成后，Vercel 会提供一个访问地址（如 [https://keymaster-docs.vercel.app](https://keymaster-docs.vercel.app)）：
 
 - 在浏览器打开该地址。
 - 确认首页样式、React/Vue 快速开始页以及交互 Demo（快捷键 `Ctrl+S` / `Ctrl+Z`）都能正常工作。

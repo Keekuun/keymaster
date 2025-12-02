@@ -1,12 +1,12 @@
 # React 版 keymaster 快速开始
 
-<VersionBanner :current-version="'0.1.2'" />
+<VersionBanner />
 
 这里介绍如何在 React 项目中使用 <code>@keekuun/keymaster-react</code> 注册键盘快捷键，并给出基础示例。
 
 ## 安装
 
-> 💡 **版本提示**：文档显示的是最新版本（v0.1.2）。如果你需要使用特定版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-react?activeTab=versions)。
+> 💡 **版本提示**：文档显示的是最新版本（<VersionText />）。如果你需要使用特定版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-react?activeTab=versions)。
 
 ### 安装最新版本
 

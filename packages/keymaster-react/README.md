@@ -128,4 +128,4 @@ dispose();
 
 更多交互 Demo、使用场景与设计建议请访问文档站点：
 
-- React 文档与 Demo：`https://keymaster-docs.vercel.app/react/`
+- React 文档与 Demo：[https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)

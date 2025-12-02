@@ -1,8 +1,8 @@
 # keymaster-core 核心模块
 
-<VersionBanner :current-version="'0.1.2'" />
+<VersionBanner />
 
-> 💡 **版本提示**：文档显示的是最新版本（v0.1.2）。如果你使用的是其他版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-core?activeTab=versions)。
+> 💡 **版本提示**：文档显示的是最新版本（<VersionText />）。如果你使用的是其他版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-core?activeTab=versions)。
 
 `@keekuun/keymaster-core` 是 keymaster 的核心模块，为 React 和 Vue 版本提供共享的类型定义、解析器和工具函数。
 
@@ -282,7 +282,7 @@ import {
 
 ## 相关链接
 
-- React 版本文档：`/react/`
-- Vue 版本文档：`/vue/`
-- GitHub 仓库：`https://github.com/Keekuun/keymaster`
-- npm 包：`https://www.npmjs.com/package/@keekuun/keymaster-core`
+- React 版本文档：[/react/](https://keymaster-docs.vercel.app/react/)
+- Vue 版本文档：[/vue/](https://keymaster-docs.vercel.app/vue/)
+- GitHub 仓库：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
+- npm 包：[https://www.npmjs.com/package/@keekuun/keymaster-core](https://www.npmjs.com/package/@keekuun/keymaster-core)

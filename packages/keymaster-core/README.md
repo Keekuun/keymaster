@@ -216,5 +216,5 @@ function validateShortcut(shortcut: string): boolean {
 
 - React 版本：`@keekuun/keymaster-react`
 - Vue 版本：`@keekuun/keymaster-vue`
-- 文档站点：`https://keymaster-docs.vercel.app/core/`
-- GitHub 仓库：`https://github.com/Keekuun/keymaster`
+- 文档站点：[https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
+- GitHub 仓库：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
