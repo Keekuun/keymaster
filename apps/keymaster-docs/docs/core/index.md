@@ -305,7 +305,7 @@ import {
 
 ## Related Links
 
-- React Documentation: [/react/](https://keymaster-docs.vercel.app/react/)
-- Vue Documentation: [/vue/](https://keymaster-docs.vercel.app/vue/)
+- React Documentation: [📖](/react/)
+- Vue Documentation: [📖](/vue/)
 - GitHub Repository: [https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
 - npm Package: [https://www.npmjs.com/package/@keekuun/keymaster-core](https://www.npmjs.com/package/@keekuun/keymaster-core)

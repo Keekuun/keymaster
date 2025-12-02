@@ -54,6 +54,10 @@ export default Editor;
 
 To verify the behavior in your application, simply mount the `Editor` component to the page, then press `Ctrl+S` in the browser to observe the console output or whether your actual save logic is triggered.
 
+**Try it out:**
+
+<ReactShortcutDemo />
+
 ## Multiple Shortcuts
 
 You can also call `useKeyBinding` multiple times in the same component to bind different behaviors to different shortcuts:
@@ -82,6 +86,10 @@ function Editor() {
   return <textarea />;
 }
 ```
+
+**Interactive Demo:**
+
+<MultipleShortcutsDemo />
 
 ## Advanced APIs
 
@@ -127,6 +135,10 @@ useScopedKeyBinding(
 );
 ```
 
+**Interactive Demo:**
+
+<ScopedShortcutDemo />
+
 ### Editor Mode
 
 Editor mode automatically handles common shortcut conflicts, especially suitable for code editors, rich text editors, and similar scenarios:
@@ -157,6 +169,10 @@ function CodeEditor() {
   return <textarea ref={editorRef} />;
 }
 ```
+
+**Interactive Demo:**
+
+<EditorModeDemo />
 
 ### Electron Mode
 
@@ -199,6 +215,10 @@ useElectronKeyBinding('ctrl+alt+r', handler, {
 });
 ```
 
+**Interactive Demo:**
+
+<ElectronModeDemo />
+
 ### Shortcut Combination Management
 
 Use `KeyBindingManager` to manage a group of related shortcut bindings:
@@ -230,13 +250,9 @@ Utility functions:
 - `isValidShortcut(shortcut)`: Check if shortcut format is valid
 - `formatShortcut(shortcut)`: Format shortcut string (normalize case)
 
-## Interactive Demo
+**Interactive Demo:**
 
-If you just want to quickly experience the effect without immediately creating a React project, you can try it directly on the documentation site:
-
-<ReactShortcutDemo />
-
-After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`. The demo above will display the recently captured shortcuts in real-time. The underlying logic uses `registerKeyBinding` from `@keekuun/keymaster-react`. This helps you confirm whether the library's behavior meets your expectations before deciding how to integrate it into your React project.
+<KeyBindingManagerDemo />
 
 ## API Overview
 
@@ -250,9 +266,3 @@ After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`
   - `scopedElement?: HTMLElement | null` - Scoped element, shortcut only works within element
   - `editorMode?: boolean` - Editor mode, automatically handles shortcut conflicts
   - `electronMode?: boolean` - Electron mode, adapts for Electron applications
-
-## Documentation & Examples
-
-For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
-
-- React Documentation & Demo: [https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)

@@ -32,12 +32,22 @@ export default defineConfig({
         logo: '/keymaster-logo.svg',
         nav: [
           { text: 'Guide', link: '/' },
-          { text: `React v${reactVersion}`, link: '/react/' },
-          { text: `Vue v${vueVersion}`, link: '/vue/' },
-          { text: `Core v${coreVersion}`, link: '/core/' },
-          { text: 'Versions', link: '/versions' },
-          { text: 'Publish', link: '/publish' },
-          { text: 'Deploy', link: '/deploy' },
+          {
+            text: 'Libraries',
+            items: [
+              { text: `React v${reactVersion}`, link: '/react/' },
+              { text: `Vue v${vueVersion}`, link: '/vue/' },
+              { text: `Core v${coreVersion}`, link: '/core/' },
+            ],
+          },
+          {
+            text: 'More',
+            items: [
+              { text: 'Versions', link: '/versions' },
+              { text: 'Publish', link: '/publish' },
+              { text: 'Deploy', link: '/deploy' },
+            ],
+          },
           { text: 'GitHub', link: 'https://github.com/Keekuun/keymaster' },
         ],
         sidebar: {
@@ -75,12 +85,22 @@ export default defineConfig({
         logo: '/keymaster-logo.svg',
         nav: [
           { text: '指南', link: '/zh/' },
-          { text: `React 版 v${reactVersion}`, link: '/zh/react/' },
-          { text: `Vue 版 v${vueVersion}`, link: '/zh/vue/' },
-          { text: `Core 模块 v${coreVersion}`, link: '/zh/core/' },
-          { text: '版本管理', link: '/zh/versions' },
-          { text: '发布', link: '/zh/publish' },
-          { text: '部署', link: '/zh/deploy' },
+          {
+            text: '库',
+            items: [
+              { text: `React 版 v${reactVersion}`, link: '/zh/react/' },
+              { text: `Vue 版 v${vueVersion}`, link: '/zh/vue/' },
+              { text: `Core 模块 v${coreVersion}`, link: '/zh/core/' },
+            ],
+          },
+          {
+            text: '更多',
+            items: [
+              { text: '版本管理', link: '/zh/versions' },
+              { text: '发布', link: '/zh/publish' },
+              { text: '部署', link: '/zh/deploy' },
+            ],
+          },
           { text: 'GitHub', link: 'https://github.com/Keekuun/keymaster' },
         ],
         sidebar: {

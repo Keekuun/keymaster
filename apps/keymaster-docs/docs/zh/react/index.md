@@ -54,6 +54,10 @@ export default Editor;
 
 要在你的应用中验证行为，只需要把 `Editor` 组件挂载到页面上，然后在浏览器中按下 `Ctrl+S`，观察控制台输出或你的实际保存逻辑是否被触发。
 
+**试试看：**
+
+<ReactShortcutDemo />
+
 ## 多个快捷键示例
 
 你也可以在同一个组件中多次调用 `useKeyBinding`，为不同快捷键绑定不同行为：
@@ -63,6 +67,10 @@ useKeyBinding('ctrl+s', onSave, { preventDefault: true });
 useKeyBinding('ctrl+z', onUndo);
 useKeyBinding('ctrl+shift+z', onRedo);
 ```
+
+**交互演示：**
+
+<MultipleShortcutsDemo />
 
 ## 高级 API
 
@@ -108,6 +116,10 @@ useScopedKeyBinding(
 );
 ```
 
+**交互演示：**
+
+<ScopedShortcutDemo />
+
 ### 编辑器模式
 
 编辑器模式会自动处理常见的快捷键冲突，特别适合代码编辑器、富文本编辑器等场景：
@@ -138,6 +150,10 @@ function CodeEditor() {
   return <textarea ref={editorRef} />;
 }
 ```
+
+**交互演示：**
+
+<EditorModeDemo />
 
 ### Electron 模式
 
@@ -180,6 +196,10 @@ useElectronKeyBinding('ctrl+alt+r', handler, {
 });
 ```
 
+**交互演示：**
+
+<ElectronModeDemo />
+
 ### 快捷键组合管理
 
 使用 `KeyBindingManager` 管理一组相关的快捷键绑定：
@@ -211,10 +231,6 @@ function Editor() {
 - `isValidShortcut(shortcut)`: 检查快捷键格式是否有效
 - `formatShortcut(shortcut)`: 格式化快捷键字符串（统一大小写）
 
-## 交互 Demo
+**交互演示：**
 
-如果你只是想快速体验效果，而不想立刻创建 React 工程，可以在文档站点中直接试一试：
-
-<ReactShortcutDemo />
-
-将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上方 Demo 会实时展示最近捕获到的快捷键，逻辑底层使用的就是 `@keekuun/keymaster-react` 的 `registerKeyBinding`。这样可以帮助你确认库的行为是否符合预期，再决定如何在自己的 React 项目中集成。
+<KeyBindingManagerDemo />

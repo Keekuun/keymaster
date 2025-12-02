@@ -282,7 +282,7 @@ import {
 
 ## 相关链接
 
-- React 版本文档：[/zh/react/](https://keymaster-docs.vercel.app/zh/react/)
-- Vue 版本文档：[/zh/vue/](https://keymaster-docs.vercel.app/zh/vue/)
+- React 版本文档：[📖](/zh/react/)
+- Vue 版本文档：[📖](/zh/vue/)
 - GitHub 仓库：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
 - npm 包：[https://www.npmjs.com/package/@keekuun/keymaster-core](https://www.npmjs.com/package/@keekuun/keymaster-core)

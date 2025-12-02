@@ -57,6 +57,10 @@ useKeyBindingVue(
 
 Place this component in your Vue application, then press `Ctrl+S` in the browser to verify that the `onSave` logic is triggered correctly.
 
+**Try it out:**
+
+<VueShortcutDemo />
+
 ## Multiple Shortcuts
 
 You can also bind multiple shortcuts in the same component:
@@ -82,6 +86,10 @@ useKeyBindingVue('ctrl+shift+z', () => {
 });
 </script>
 ```
+
+**Interactive Demo:**
+
+<MultipleShortcutsDemo />
 
 ## Advanced APIs
 
@@ -132,6 +140,10 @@ useScopedKeyBindingVue(
 </script>
 ```
 
+**Interactive Demo:**
+
+<ScopedShortcutDemo />
+
 ### Editor Mode
 
 Editor mode automatically handles common shortcut conflicts, especially suitable for code editors, rich text editors, and similar scenarios:
@@ -165,6 +177,10 @@ useEditorKeyBindingVue(
 );
 </script>
 ```
+
+**Interactive Demo:**
+
+<EditorModeDemo />
 
 ### Electron Mode
 
@@ -202,6 +218,10 @@ useElectronKeyBindingVue('ctrl+alt+r', handler, {
 });
 ```
 
+**Interactive Demo:**
+
+<ElectronModeDemo />
+
 ### Shortcut Combination Management
 
 Use `KeyBindingManager` to manage a group of related shortcut bindings:
@@ -235,13 +255,9 @@ Utility functions:
 - `isValidShortcut(shortcut)`: Check if shortcut format is valid
 - `formatShortcut(shortcut)`: Format shortcut string (normalize case)
 
-## Interactive Demo
+**Interactive Demo:**
 
-You can directly experience the shortcut effects on the documentation site:
-
-<VueShortcutDemo />
-
-After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`. The demo above will display the recently captured shortcuts in real-time. This way you don't need to create a separate project to quickly confirm whether `@keekuun/keymaster-vue`'s behavior meets your expectations.
+<KeyBindingManagerDemo />
 
 ## API Overview
 
@@ -255,9 +271,3 @@ After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`
   - `scopedElement?: HTMLElement | null` - Scoped element, shortcut only works within element
   - `editorMode?: boolean` - Editor mode, automatically handles shortcut conflicts
   - `electronMode?: boolean` - Electron mode, adapts for Electron applications
-
-## Documentation & Examples
-
-For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
-
-- Vue Documentation & Demo: [https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)

@@ -78,11 +78,14 @@ export function registerVueKeyBinding(
         return;
       }
 
+      // 匹配成功后立即阻止默认行为和事件传播，确保在其他监听器之前处理
       if (shouldPreventDefault) {
         event.preventDefault();
       }
       if (options.stopPropagation) {
         event.stopPropagation();
+        // 如果设置了 stopPropagation，也使用 stopImmediatePropagation 阻止同一阶段的其他监听器
+        event.stopImmediatePropagation();
       }
 
       handler(event);
@@ -94,10 +97,10 @@ export function registerVueKeyBinding(
 
   // 根据是否有作用域元素决定监听目标
   const target = scopedElement || window;
-  target.addEventListener('keydown', listener as EventListener);
+  target.addEventListener('keydown', listener as EventListener, false);
 
   return () => {
-    target.removeEventListener('keydown', listener as EventListener);
+    target.removeEventListener('keydown', listener as EventListener, false);
   };
 }
 

@@ -58,11 +58,11 @@ const packageName = computed(() => {
 const currentVersion = computed(() => {
   if (props.currentVersion) return props.currentVersion;
   const path = route.path;
-  if (path.startsWith('/react')) {
+  if (path.includes('/react/')) {
     return versions.react;
-  } else if (path.startsWith('/vue')) {
+  } else if (path.includes('/vue/')) {
     return versions.vue;
-  } else if (path.startsWith('/core')) {
+  } else if (path.includes('/core/')) {
     return versions.core;
   }
   return '';

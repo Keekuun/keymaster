@@ -57,6 +57,10 @@ useKeyBindingVue(
 
 把该组件放到你的 Vue 应用中，然后在浏览器中按下 `Ctrl+S`，即可验证是否正确触发 `onSave` 逻辑。
 
+**试试看：**
+
+<VueShortcutDemo />
+
 ## 多个快捷键示例
 
 同样可以在一个组件中绑定多个快捷键：
@@ -66,6 +70,10 @@ useKeyBindingVue('ctrl+s', onSave, { preventDefault: true });
 useKeyBindingVue('ctrl+z', onUndo);
 useKeyBindingVue('ctrl+shift+z', onRedo);
 ```
+
+**交互演示：**
+
+<MultipleShortcutsDemo />
 
 ## 高级 API
 
@@ -116,6 +124,10 @@ useScopedKeyBindingVue(
 </script>
 ```
 
+**交互演示：**
+
+<ScopedShortcutDemo />
+
 ### 编辑器模式
 
 编辑器模式会自动处理常见的快捷键冲突，特别适合代码编辑器、富文本编辑器等场景：
@@ -149,6 +161,10 @@ useEditorKeyBindingVue(
 );
 </script>
 ```
+
+**交互演示：**
+
+<EditorModeDemo />
 
 ### Electron 模式
 
@@ -186,6 +202,10 @@ useElectronKeyBindingVue('ctrl+alt+r', handler, {
 });
 ```
 
+**交互演示：**
+
+<ElectronModeDemo />
+
 ### 快捷键组合管理
 
 使用 `KeyBindingManager` 管理一组相关的快捷键绑定：
@@ -219,10 +239,6 @@ onBeforeUnmount(() => {
 - `isValidShortcut(shortcut)`: 检查快捷键格式是否有效
 - `formatShortcut(shortcut)`: 格式化快捷键字符串（统一大小写）
 
-## 交互 Demo
+**交互演示：**
 
-在文档站点中可以直接体验快捷键效果：
-
-<VueShortcutDemo />
-
-将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上面的 Demo 会实时展示最近捕获到的快捷键。这样你无需单独创建工程，也能快速确认 `@keekuun/keymaster-vue` 的行为是否符合预期。
+<KeyBindingManagerDemo />
