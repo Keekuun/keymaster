@@ -1,5 +1,10 @@
 # @keekuun/keymaster-vue
 
+### 🌐 语言
+
+- [English](README.md)
+- [中文](README.zh.md) (当前)
+
 Vue 3 版 keymaster 键盘快捷键库，为常见快捷键场景（保存、撤销、列表操作等）提供组合式 API 封装。
 
 ## 特性
@@ -140,10 +145,3 @@ dispose();
 更多交互 Demo、使用场景与设计建议请访问文档站点：
 
 - Vue 文档与 Demo：[https://keymaster-docs.vercel.app/zh/vue/](https://keymaster-docs.vercel.app/zh/vue/)
-
----
-
-### 🌐 语言
-
-- [English](README.md)
-- [中文](README.zh.md) (当前)

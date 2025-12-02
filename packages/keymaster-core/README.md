@@ -1,5 +1,10 @@
 # @keekuun/keymaster-core
 
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)
+
 keymaster core module, providing shared type definitions, parsers, and utility functions for React and Vue versions.
 
 > **Note**: Usually you don't need to install this package directly. It's automatically installed as a dependency of `@keekuun/keymaster-react` and `@keekuun/keymaster-vue`. If you need to use core functionality in other projects, you can install it separately.
@@ -218,10 +223,3 @@ function validateShortcut(shortcut: string): boolean {
 - Vue Version: `@keekuun/keymaster-vue`
 - Documentation Site: [https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
 - GitHub Repository: [https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
-
----
-
-### 🌐 Language
-
-- [English](README.md) (current)
-- [中文](README.zh.md)

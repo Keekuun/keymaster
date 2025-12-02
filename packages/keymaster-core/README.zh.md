@@ -1,5 +1,10 @@
 # @keekuun/keymaster-core
 
+### 🌐 语言
+
+- [English](README.md)
+- [中文](README.zh.md) (当前)
+
 keymaster 核心模块，提供 React 和 Vue 版本共享的类型定义、解析器和工具函数。
 
 > **注意**：通常你不需要直接安装此包。它作为 `@keekuun/keymaster-react` 和 `@keekuun/keymaster-vue` 的依赖自动安装。如果你需要在其他项目中使用核心功能，可以单独安装。
@@ -218,10 +223,3 @@ function validateShortcut(shortcut: string): boolean {
 - Vue 版本：`@keekuun/keymaster-vue`
 - 文档站点：[https://keymaster-docs.vercel.app/zh/core/](https://keymaster-docs.vercel.app/zh/core/)
 - GitHub 仓库：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
-
----
-
-### 🌐 语言
-
-- [English](README.md)
-- [中文](README.zh.md) (当前)

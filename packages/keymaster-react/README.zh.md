@@ -1,5 +1,10 @@
 # @keekuun/keymaster-react
 
+### 🌐 语言
+
+- [English](README.md)
+- [中文](README.zh.md) (当前)
+
 React 版 keymaster 键盘快捷键库，通过 Hook 帮助你在组件中优雅地绑定键盘快捷键。
 
 ## 特性
@@ -129,10 +134,3 @@ dispose();
 更多交互 Demo、使用场景与设计建议请访问文档站点：
 
 - React 文档与 Demo：[https://keymaster-docs.vercel.app/zh/react/](https://keymaster-docs.vercel.app/zh/react/)
-
----
-
-### 🌐 语言
-
-- [English](README.md)
-- [中文](README.zh.md) (当前)

@@ -1,5 +1,10 @@
 ## keymaster monorepo
 
+### 🌐 语言
+
+- [English](README.md)
+- [中文](README.zh.md) (当前)
+
 <div align="center">
 
 <img src="https://img.shields.io/npm/v/@keekuun/keymaster-react?label=react&style=flat-square" alt="@keekuun/keymaster-react version" />
@@ -235,10 +240,3 @@ useEditorKeyBindingVue(
 - 仓库地址：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
 - 问题反馈 / 新特性建议：在 GitHub Issues 中创建条目
 - 使用问题与 API 细节：优先参考文档站点 [https://keymaster-docs.vercel.app/](https://keymaster-docs.vercel.app/)
-
----
-
-### 🌐 语言
-
-- [English](README.md)
-- [中文](README.zh.md) (当前)

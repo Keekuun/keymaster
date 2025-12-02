@@ -1,5 +1,10 @@
 # @keekuun/keymaster-react
 
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)
+
 React version of keymaster keyboard shortcut library, helping you elegantly bind keyboard shortcuts in components through Hooks.
 
 ## Features
@@ -129,10 +134,3 @@ dispose();
 For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
 
 - React Documentation & Demo: [https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)
-
----
-
-### 🌐 Language
-
-- [English](README.md) (current)
-- [中文](README.zh.md)

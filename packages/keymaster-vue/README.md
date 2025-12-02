@@ -1,5 +1,10 @@
 # @keekuun/keymaster-vue
 
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)
+
 Vue 3 version of keymaster keyboard shortcut library, providing Composition API wrappers for common shortcut scenarios (save, undo, list operations, etc.).
 
 ## Features
@@ -140,10 +145,3 @@ dispose();
 For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
 
 - Vue Documentation & Demo: [https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)
-
----
-
-### 🌐 Language
-
-- [English](README.md) (current)
-- [中文](README.zh.md)

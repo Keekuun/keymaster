@@ -1,5 +1,10 @@
 ## keymaster monorepo
 
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)
+
 <div align="center">
 
 <img src="https://img.shields.io/npm/v/@keekuun/keymaster-react?label=react&style=flat-square" alt="@keekuun/keymaster-react version" />
@@ -235,10 +240,3 @@ For detailed steps, see `PUBLISH.md`. Here's a brief overview:
 - Repository: [https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
 - Issue Reports / Feature Suggestions: Create entries in GitHub Issues
 - Usage Questions & API Details: Refer to documentation site [https://keymaster-docs.vercel.app/](https://keymaster-docs.vercel.app/)
-
----
-
-### 🌐 Language
-
-- [English](README.md) (current)
-- [中文](README.zh.md)
