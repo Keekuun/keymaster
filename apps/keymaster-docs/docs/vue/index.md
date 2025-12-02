@@ -1,48 +1,48 @@
-# Vue 版 keymaster 快速开始
+# Vue Quick Start
 
 <VersionBanner />
 
-这里介绍如何在 Vue 项目中使用 <code>@keekuun/keymaster-vue</code> 注册键盘快捷键，并给出基础示例。
+This guide shows how to use <code>@keekuun/keymaster-vue</code> to register keyboard shortcuts in Vue projects, with basic examples.
 
-## 安装
+## Installation
 
-> 💡 **版本提示**：文档显示的是最新版本（<VersionText />）。如果你需要使用特定版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-vue?activeTab=versions)。
+> 💡 **Version Notice**: The documentation shows the latest version (<VersionText />). If you need a specific version, check the [Version Management](/versions) documentation or [all versions on npm](https://www.npmjs.com/package/@keekuun/keymaster-vue?activeTab=versions).
 
-### 安装最新版本
+### Install Latest Version
 
 ```bash
 npm install @keekuun/keymaster-vue
-# 或者
+# or
 pnpm add @keekuun/keymaster-vue
 ```
 
-### 安装特定版本
+### Install Specific Version
 
-如果你需要使用特定版本（例如 `0.1.0`），可以指定版本号：
+If you need a specific version (e.g., `0.1.0`), specify the version:
 
 ```bash
 npm install @keekuun/keymaster-vue@0.1.0
-# 或者
+# or
 pnpm add @keekuun/keymaster-vue@0.1.0
 ```
 
-> ⚠️ **注意**：如果使用旧版本，文档中的某些 API 可能不可用。建议查看对应版本的 README（在 npm 包页面）或 [版本管理文档](/versions)。
+> ⚠️ **Note**: If using an older version, some APIs in the documentation may not be available. Check the README for that version (on the npm package page) or the [Version Management](/versions) documentation.
 
-## 基础示例：保存快捷键 `Ctrl+S`
+## Basic Example: Save Shortcut `Ctrl+S`
 
-下面示例基于 `<script setup>` 语法，在组件中为 `Ctrl+S` 绑定保存逻辑：
+The following example uses `<script setup>` syntax to bind save logic to `Ctrl+S` in a component:
 
 ```vue
 <template>
-  <textarea placeholder="在这里输入内容，然后按 Ctrl+S 触发保存" />
+  <textarea placeholder="Type here, then press Ctrl+S to save" />
 </template>
 
 <script setup lang="ts">
 import { useKeyBindingVue } from '@keekuun/keymaster-vue';
 
 function onSave() {
-  // 在这里执行保存逻辑，例如：调接口 / 更新本地状态
-  console.log('保存成功');
+  // Execute save logic here, e.g., call API / update local state
+  console.log('Saved successfully');
 }
 
 useKeyBindingVue(
@@ -50,32 +50,48 @@ useKeyBindingVue(
   () => {
     onSave();
   },
-  { preventDefault: true }, // 阻止浏览器默认的保存页面行为
+  { preventDefault: true }, // Prevent browser's default save page behavior
 );
 </script>
 ```
 
-把该组件放到你的 Vue 应用中，然后在浏览器中按下 `Ctrl+S`，即可验证是否正确触发 `onSave` 逻辑。
+Place this component in your Vue application, then press `Ctrl+S` in the browser to verify that the `onSave` logic is triggered correctly.
 
-## 多个快捷键示例
+## Multiple Shortcuts
 
-同样可以在一个组件中绑定多个快捷键：
+You can also bind multiple shortcuts in the same component:
 
-```ts
-useKeyBindingVue('ctrl+s', onSave, { preventDefault: true });
-useKeyBindingVue('ctrl+z', onUndo);
-useKeyBindingVue('ctrl+shift+z', onRedo);
+```vue
+<script setup lang="ts">
+import { useKeyBindingVue } from '@keekuun/keymaster-vue';
+
+useKeyBindingVue(
+  'ctrl+s',
+  () => {
+    saveContent();
+  },
+  { preventDefault: true },
+);
+
+useKeyBindingVue('ctrl+z', () => {
+  undo();
+});
+
+useKeyBindingVue('ctrl+shift+z', () => {
+  redo();
+});
+</script>
 ```
 
-## 高级 API
+## Advanced APIs
 
-### 作用域快捷键（scopedElement）
+### Scoped Shortcuts (scopedElement)
 
-当你需要在特定元素范围内绑定快捷键时（例如编辑器、对话框），可以使用 `scopedElement` 选项：
+When you need to bind shortcuts within a specific element scope (e.g., editors, dialogs), you can use the `scopedElement` option:
 
 ```vue
 <template>
-  <textarea ref="editorRef" placeholder="按 Ctrl+S 保存" />
+  <textarea ref="editorRef" placeholder="Press Ctrl+S to save" />
 </template>
 
 <script setup lang="ts">
@@ -84,11 +100,11 @@ import { useKeyBindingVue } from '@keekuun/keymaster-vue';
 
 const editorRef = ref<HTMLTextAreaElement | null>(null);
 
-// 只在编辑器区域内生效
+// Only works within the editor area
 useKeyBindingVue(
   'ctrl+s',
   () => {
-    console.log('保存编辑器内容');
+    console.log('Save editor content');
   },
   {
     scopedElement: editorRef.value,
@@ -98,7 +114,7 @@ useKeyBindingVue(
 </script>
 ```
 
-或者使用便捷的 `useScopedKeyBindingVue` 组合式 API：
+Or use the convenient `useScopedKeyBindingVue` Composition API:
 
 ```vue
 <script setup lang="ts">
@@ -109,16 +125,16 @@ const containerRef = ref<HTMLDivElement | null>(null);
 useScopedKeyBindingVue(
   'ctrl+k',
   () => {
-    console.log('只在容器内生效');
+    console.log('Only works within container');
   },
   containerRef,
 );
 </script>
 ```
 
-### 编辑器模式
+### Editor Mode
 
-编辑器模式会自动处理常见的快捷键冲突，特别适合代码编辑器、富文本编辑器等场景：
+Editor mode automatically handles common shortcut conflicts, especially suitable for code editors, rich text editors, and similar scenarios:
 
 ```vue
 <template>
@@ -131,7 +147,7 @@ import { useEditorKeyBindingVue } from '@keekuun/keymaster-vue';
 
 const editorRef = ref<HTMLTextAreaElement | null>(null);
 
-// 编辑器模式会自动阻止默认行为
+// Editor mode automatically prevents default behavior
 useEditorKeyBindingVue(
   'ctrl+s',
   () => {
@@ -150,25 +166,25 @@ useEditorKeyBindingVue(
 </script>
 ```
 
-### Electron 模式
+### Electron Mode
 
-在 Electron 应用中，可以使用 `useElectronKeyBindingVue` 来适配主进程与渲染进程的快捷键协调：
+In Electron applications, you can use `useElectronKeyBindingVue` to adapt shortcut coordination between the main process and renderer process:
 
 ```vue
 <script setup lang="ts">
 import { useElectronKeyBindingVue } from '@keekuun/keymaster-vue';
 
-// Electron 模式会自动处理渲染进程的特殊行为
+// Electron mode automatically handles special behavior in renderer process
 useElectronKeyBindingVue('ctrl+alt+r', () => {
-  // 重新加载窗口
+  // Reload window
   window.location.reload();
 });
 </script>
 ```
 
-### 快捷键组合管理
+### Shortcut Combination Management
 
-使用 `KeyBindingManager` 管理一组相关的快捷键绑定：
+Use `KeyBindingManager` to manage a group of related shortcut bindings:
 
 ```vue
 <script setup lang="ts">
@@ -180,7 +196,7 @@ let manager: ReturnType<typeof createKeyBindingManager> | null = null;
 onMounted(() => {
   manager = createKeyBindingManager();
 
-  // 链式注册多个快捷键
+  // Chain register multiple shortcuts
   manager
     .register('ctrl+s', () => save(), { preventDefault: true })
     .register('ctrl+z', () => undo())
@@ -188,21 +204,40 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  // 组件卸载时自动清理所有绑定
+  // Automatically clean up all bindings when component unmounts
   manager?.dispose();
 });
 </script>
 ```
 
-工具函数：
+Utility functions:
 
-- `isValidShortcut(shortcut)`: 检查快捷键格式是否有效
-- `formatShortcut(shortcut)`: 格式化快捷键字符串（统一大小写）
+- `isValidShortcut(shortcut)`: Check if shortcut format is valid
+- `formatShortcut(shortcut)`: Format shortcut string (normalize case)
 
-## 交互 Demo
+## Interactive Demo
 
-在文档站点中可以直接体验快捷键效果：
+You can directly experience the shortcut effects on the documentation site:
 
 <VueShortcutDemo />
 
-将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上面的 Demo 会实时展示最近捕获到的快捷键。这样你无需单独创建工程，也能快速确认 `@keekuun/keymaster-vue` 的行为是否符合预期。
+After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`. The demo above will display the recently captured shortcuts in real-time. This way you don't need to create a separate project to quickly confirm whether `@keekuun/keymaster-vue`'s behavior meets your expectations.
+
+## API Overview
+
+### `useKeyBindingVue(shortcut, handler, options?)`
+
+- **`shortcut`**: `string` - Shortcut string, e.g., `"ctrl+s"`, `"ctrl+shift+z"`
+- **`handler`**: `(event: KeyboardEvent) => void` - Callback triggered when matching shortcut is detected
+- **`options`**: `KeymasterVueBindingOptions` (optional)
+  - `preventDefault?: boolean` - Whether to call `event.preventDefault()` after trigger
+  - `stopPropagation?: boolean` - Whether to call `event.stopPropagation()` after trigger
+  - `scopedElement?: HTMLElement | null` - Scoped element, shortcut only works within element
+  - `editorMode?: boolean` - Editor mode, automatically handles shortcut conflicts
+  - `electronMode?: boolean` - Electron mode, adapts for Electron applications
+
+## Documentation & Examples
+
+For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
+
+- Vue Documentation & Demo: [https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)

@@ -1,36 +1,36 @@
-# React 版 keymaster 快速开始
+# React Quick Start
 
 <VersionBanner />
 
-这里介绍如何在 React 项目中使用 <code>@keekuun/keymaster-react</code> 注册键盘快捷键，并给出基础示例。
+This guide shows how to use <code>@keekuun/keymaster-react</code> to register keyboard shortcuts in React projects, with basic examples.
 
-## 安装
+## Installation
 
-> 💡 **版本提示**：文档显示的是最新版本（<VersionText />）。如果你需要使用特定版本，请查看 [版本管理文档](/versions) 或 [npm 上的所有版本](https://www.npmjs.com/package/@keekuun/keymaster-react?activeTab=versions)。
+> 💡 **Version Notice**: The documentation shows the latest version (<VersionText />). If you need a specific version, check the [Version Management](/versions) documentation or [all versions on npm](https://www.npmjs.com/package/@keekuun/keymaster-react?activeTab=versions).
 
-### 安装最新版本
+### Install Latest Version
 
 ```bash
 npm install @keekuun/keymaster-react
-# 或者
+# or
 pnpm add @keekuun/keymaster-react
 ```
 
-### 安装特定版本
+### Install Specific Version
 
-如果你需要使用特定版本（例如 `0.1.0`），可以指定版本号：
+If you need a specific version (e.g., `0.1.0`), specify the version:
 
 ```bash
 npm install @keekuun/keymaster-react@0.1.0
-# 或者
+# or
 pnpm add @keekuun/keymaster-react@0.1.0
 ```
 
-> ⚠️ **注意**：如果使用旧版本，文档中的某些 API 可能不可用。建议查看对应版本的 README（在 npm 包页面）或 [版本管理文档](/versions)。
+> ⚠️ **Note**: If using an older version, some APIs in the documentation may not be available. Check the README for that version (on the npm package page) or the [Version Management](/versions) documentation.
 
-## 基础示例：保存快捷键 `Ctrl+S`
+## Basic Example: Save Shortcut `Ctrl+S`
 
-下面的示例展示如何在编辑器组件中为 `Ctrl+S` 绑定保存逻辑：
+The following example shows how to bind save logic to `Ctrl+S` in an editor component:
 
 ```tsx
 import React from 'react';
@@ -40,35 +40,54 @@ function Editor() {
   useKeyBinding(
     'ctrl+s',
     () => {
-      // 在这里执行保存逻辑，例如：调接口 / 更新本地状态
-      console.log('保存成功');
+      // Execute save logic here, e.g., call API / update local state
+      console.log('Saved successfully');
     },
-    { preventDefault: true }, // 阻止浏览器默认的保存页面行为
+    { preventDefault: true }, // Prevent browser's default save page behavior
   );
 
-  return <textarea placeholder="在这里输入内容，然后按 Ctrl+S 触发保存"></textarea>;
+  return <textarea placeholder="Type here, then press Ctrl+S to save"></textarea>;
 }
 
 export default Editor;
 ```
 
-要在你的应用中验证行为，只需要把 `Editor` 组件挂载到页面上，然后在浏览器中按下 `Ctrl+S`，观察控制台输出或你的实际保存逻辑是否被触发。
+To verify the behavior in your application, simply mount the `Editor` component to the page, then press `Ctrl+S` in the browser to observe the console output or whether your actual save logic is triggered.
 
-## 多个快捷键示例
+## Multiple Shortcuts
 
-你也可以在同一个组件中多次调用 `useKeyBinding`，为不同快捷键绑定不同行为：
+You can also call `useKeyBinding` multiple times in the same component to bind different behaviors to different shortcuts:
 
 ```tsx
-useKeyBinding('ctrl+s', onSave, { preventDefault: true });
-useKeyBinding('ctrl+z', onUndo);
-useKeyBinding('ctrl+shift+z', onRedo);
+import React from 'react';
+import { useKeyBinding } from '@keekuun/keymaster-react';
+
+function Editor() {
+  useKeyBinding(
+    'ctrl+s',
+    () => {
+      saveContent();
+    },
+    { preventDefault: true },
+  );
+
+  useKeyBinding('ctrl+z', () => {
+    undo();
+  });
+
+  useKeyBinding('ctrl+shift+z', () => {
+    redo();
+  });
+
+  return <textarea />;
+}
 ```
 
-## 高级 API
+## Advanced APIs
 
-### 作用域快捷键（scopedElement）
+### Scoped Shortcuts (scopedElement)
 
-当你需要在特定元素范围内绑定快捷键时（例如编辑器、对话框），可以使用 `scopedElement` 选项：
+When you need to bind shortcuts within a specific element scope (e.g., editors, dialogs), you can use the `scopedElement` option:
 
 ```tsx
 import React, { useRef } from 'react';
@@ -77,11 +96,11 @@ import { useKeyBinding } from '@keekuun/keymaster-react';
 function Editor() {
   const editorRef = useRef<HTMLTextAreaElement>(null);
 
-  // 只在编辑器区域内生效
+  // Only works within the editor area
   useKeyBinding(
     'ctrl+s',
     () => {
-      console.log('保存编辑器内容');
+      console.log('Save editor content');
     },
     {
       scopedElement: editorRef.current,
@@ -89,11 +108,11 @@ function Editor() {
     },
   );
 
-  return <textarea ref={editorRef} placeholder="按 Ctrl+S 保存" />;
+  return <textarea ref={editorRef} placeholder="Press Ctrl+S to save" />;
 }
 ```
 
-或者使用便捷的 `useScopedKeyBinding` Hook：
+Or use the convenient `useScopedKeyBinding` Hook:
 
 ```tsx
 import { useScopedKeyBinding } from '@keekuun/keymaster-react';
@@ -102,15 +121,15 @@ const containerRef = useRef<HTMLDivElement>(null);
 useScopedKeyBinding(
   'ctrl+k',
   () => {
-    console.log('只在容器内生效');
+    console.log('Only works within container');
   },
   containerRef,
 );
 ```
 
-### 编辑器模式
+### Editor Mode
 
-编辑器模式会自动处理常见的快捷键冲突，特别适合代码编辑器、富文本编辑器等场景：
+Editor mode automatically handles common shortcut conflicts, especially suitable for code editors, rich text editors, and similar scenarios:
 
 ```tsx
 import { useEditorKeyBinding } from '@keekuun/keymaster-react';
@@ -118,7 +137,7 @@ import { useEditorKeyBinding } from '@keekuun/keymaster-react';
 function CodeEditor() {
   const editorRef = useRef<HTMLTextAreaElement>(null);
 
-  // 编辑器模式会自动阻止默认行为
+  // Editor mode automatically prevents default behavior
   useEditorKeyBinding(
     'ctrl+s',
     () => {
@@ -139,17 +158,17 @@ function CodeEditor() {
 }
 ```
 
-### Electron 模式
+### Electron Mode
 
-在 Electron 应用中，可以使用 `useElectronKeyBinding` 来适配主进程与渲染进程的快捷键协调：
+In Electron applications, you can use `useElectronKeyBinding` to adapt shortcut coordination between the main process and renderer process:
 
 ```tsx
 import { useElectronKeyBinding } from '@keekuun/keymaster-react';
 
 function ElectronApp() {
-  // Electron 模式会自动处理渲染进程的特殊行为
+  // Electron mode automatically handles special behavior in renderer process
   useElectronKeyBinding('ctrl+alt+r', () => {
-    // 重新加载窗口
+    // Reload window
     window.location.reload();
   });
 
@@ -157,9 +176,9 @@ function ElectronApp() {
 }
 ```
 
-### 快捷键组合管理
+### Shortcut Combination Management
 
-使用 `KeyBindingManager` 管理一组相关的快捷键绑定：
+Use `KeyBindingManager` to manage a group of related shortcut bindings:
 
 ```tsx
 import { useEffect } from 'react';
@@ -169,13 +188,13 @@ function Editor() {
   useEffect(() => {
     const manager = createKeyBindingManager();
 
-    // 链式注册多个快捷键
+    // Chain register multiple shortcuts
     manager
       .register('ctrl+s', () => save(), { preventDefault: true })
       .register('ctrl+z', () => undo())
       .register('ctrl+shift+z', () => redo());
 
-    // 组件卸载时自动清理所有绑定
+    // Automatically clean up all bindings when component unmounts
     return () => manager.dispose();
   }, []);
 
@@ -183,15 +202,34 @@ function Editor() {
 }
 ```
 
-工具函数：
+Utility functions:
 
-- `isValidShortcut(shortcut)`: 检查快捷键格式是否有效
-- `formatShortcut(shortcut)`: 格式化快捷键字符串（统一大小写）
+- `isValidShortcut(shortcut)`: Check if shortcut format is valid
+- `formatShortcut(shortcut)`: Format shortcut string (normalize case)
 
-## 交互 Demo
+## Interactive Demo
 
-如果你只是想快速体验效果，而不想立刻创建 React 工程，可以在文档站点中直接试一试：
+If you just want to quickly experience the effect without immediately creating a React project, you can try it directly on the documentation site:
 
 <ReactShortcutDemo />
 
-将页面聚焦在浏览器窗口内后，尝试按下 `Ctrl+S` 或 `Ctrl+Z`，上方 Demo 会实时展示最近捕获到的快捷键，逻辑底层使用的就是 `@keekuun/keymaster-react` 的 `registerKeyBinding`。这样可以帮助你确认库的行为是否符合预期，再决定如何在自己的 React 项目中集成。
+After focusing the page in the browser window, try pressing `Ctrl+S` or `Ctrl+Z`. The demo above will display the recently captured shortcuts in real-time. The underlying logic uses `registerKeyBinding` from `@keekuun/keymaster-react`. This helps you confirm whether the library's behavior meets your expectations before deciding how to integrate it into your React project.
+
+## API Overview
+
+### `useKeyBinding(shortcut, handler, options?)`
+
+- **`shortcut`**: `string` - Shortcut string, e.g., `"ctrl+s"`, `"ctrl+shift+z"`
+- **`handler`**: `(event: KeyboardEvent) => void` - Callback triggered when matching shortcut is detected
+- **`options`**: `KeymasterBindingOptions` (optional)
+  - `preventDefault?: boolean` - Whether to call `event.preventDefault()` after trigger
+  - `stopPropagation?: boolean` - Whether to call `event.stopPropagation()` after trigger
+  - `scopedElement?: HTMLElement | null` - Scoped element, shortcut only works within element
+  - `editorMode?: boolean` - Editor mode, automatically handles shortcut conflicts
+  - `electronMode?: boolean` - Electron mode, adapts for Electron applications
+
+## Documentation & Examples
+
+For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
+
+- React Documentation & Demo: [https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)

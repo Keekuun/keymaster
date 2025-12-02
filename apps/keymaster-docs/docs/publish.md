@@ -1,136 +1,136 @@
-# 发布到 npm
+# Publishing to npm
 
-本文档说明如何将 keymaster monorepo 中的包发布到 npm。
+This document explains how to publish packages from the keymaster monorepo to npm.
 
-## 📦 包发布顺序
+## 📦 Package Publishing Order
 
-由于包之间存在依赖关系，发布顺序**必须**遵循：
+Due to dependency relationships, packages **must** be published in the following order:
 
-1. **@keekuun/keymaster-core**（必须先发布）
-2. **@keekuun/keymaster-react**（依赖 core）
-3. **@keekuun/keymaster-vue**（依赖 core）
+1. **@keekuun/keymaster-core** (must be published first)
+2. **@keekuun/keymaster-react** (depends on core)
+3. **@keekuun/keymaster-vue** (depends on core)
 
-> ⚠️ **重要**：如果先发布 React 或 Vue 包，会因为找不到 core 包而发布失败。
+> ⚠️ **Important**: If React or Vue packages are published first, publishing will fail because the core package cannot be found.
 
-## 🚀 完整发布流程
+## 🚀 Complete Publishing Process
 
-### 步骤 1：准备工作
+### Step 1: Preparation
 
-#### 1.1 确认 npm 账号
+#### 1.1 Confirm npm Account
 
 ```bash
-# 检查是否已登录
+# Check if logged in
 npm whoami
 
-# 如果未登录，执行登录
+# If not logged in, log in
 npm login
 ```
 
-#### 1.2 确认发布权限
+#### 1.2 Confirm Publishing Permissions
 
-确保你的 npm 账号对 `@keekuun` scope 有发布权限。
+Ensure your npm account has publishing permissions for the `@keekuun` scope.
 
-#### 1.3 提交所有代码
+#### 1.3 Commit All Code
 
 ```bash
 git add .
-git commit -m "feat: 准备发布新版本"
+git commit -m "feat: prepare for new version release"
 git push
 ```
 
-### 步骤 2：更新版本号
+### Step 2: Update Version Numbers
 
-使用 `standard-version` 自动更新所有包的版本号：
+Use `standard-version` to automatically update version numbers for all packages:
 
 ```bash
-# 补丁版本（0.1.0 -> 0.1.1）- 修复 bug
+# Patch version (0.1.0 -> 0.1.1) - bug fixes
 pnpm run release
 
-# 小版本（0.1.0 -> 0.2.0）- 新功能
+# Minor version (0.1.0 -> 0.2.0) - new features
 pnpm run release:minor
 
-# 大版本（0.1.0 -> 1.0.0）- 破坏性变更
+# Major version (0.1.0 -> 1.0.0) - breaking changes
 pnpm run release:major
 ```
 
-**执行后会自动：**
+**After execution, it will automatically:**
 
-- ✅ 更新根目录 `package.json` 版本
-- ✅ 更新 `packages/keymaster-core/package.json` 版本
-- ✅ 更新 `packages/keymaster-react/package.json` 版本
-- ✅ 更新 `packages/keymaster-vue/package.json` 版本
-- ✅ 生成/更新 `CHANGELOG.md`
-- ✅ 创建 git tag 并推送到远程
+- ✅ Update root `package.json` version
+- ✅ Update `packages/keymaster-core/package.json` version
+- ✅ Update `packages/keymaster-react/package.json` version
+- ✅ Update `packages/keymaster-vue/package.json` version
+- ✅ Generate/update `CHANGELOG.md`
+- ✅ Create git tag and push to remote
 
-### 步骤 3：构建所有包
+### Step 3: Build All Packages
 
 ```bash
-# 安装依赖（确保 workspace 依赖正确链接）
+# Install dependencies (ensure workspace dependencies are correctly linked)
 pnpm install
 
-# 构建所有包
+# Build all packages
 pnpm build
 ```
 
-**验证构建结果：**
+**Verify Build Results:**
 
-- 检查 `packages/keymaster-core/dist` 目录是否存在
-- 检查 `packages/keymaster-react/dist` 目录是否存在
-- 检查 `packages/keymaster-vue/dist` 目录是否存在
+- Check if `packages/keymaster-core/dist` directory exists
+- Check if `packages/keymaster-react/dist` directory exists
+- Check if `packages/keymaster-vue/dist` directory exists
 
-### 步骤 4：发布到 npm
+### Step 4: Publish to npm
 
-#### 方式一：一键发布所有包（推荐）
+#### Method 1: Publish All Packages at Once (Recommended)
 
 ```bash
 pnpm run publish:all
 ```
 
-这会按正确顺序自动发布：
+This will automatically publish in the correct order:
 
 1. `@keekuun/keymaster-core`
 2. `@keekuun/keymaster-react`
 3. `@keekuun/keymaster-vue`
 
-#### 方式二：手动按顺序发布
+#### Method 2: Publish Manually in Order
 
-如果一键发布失败，可以手动按顺序发布：
+If one-click publishing fails, you can publish manually in order:
 
 ```bash
-# 1. 先发布 core 包
+# 1. Publish core package first
 pnpm run publish:core
 
-# 等待几秒，确保 npm 同步
+# Wait a few seconds for npm to sync
 
-# 2. 再发布 react 包
+# 2. Then publish react package
 pnpm run publish:react
 
-# 等待几秒，确保 npm 同步
+# Wait a few seconds for npm to sync
 
-# 3. 最后发布 vue 包
+# 3. Finally publish vue package
 pnpm run publish:vue
 ```
 
-### 步骤 5：验证发布
+### Step 5: Verify Publishing
 
-发布后，访问以下链接验证：
+After publishing, visit the following links to verify:
 
 - **Core**: https://www.npmjs.com/package/@keekuun/keymaster-core
 - **React**: https://www.npmjs.com/package/@keekuun/keymaster-react
 - **Vue**: https://www.npmjs.com/package/@keekuun/keymaster-vue
 
-**检查项：**
+**Checklist:**
 
-- [ ] 版本号正确
-- [ ] README 内容显示正常
-- [ ] 依赖关系正确（React/Vue 包显示依赖 core 包）
-- [ ] 可以正常安装：`npm install @keekuun/keymaster-react`
+- [ ] Version numbers are correct
+- [ ] README content displays correctly
+- [ ] Dependency relationships are correct (React/Vue packages show dependency on core package)
+- [ ] Can install normally: `npm install @keekuun/keymaster-react`
 
-## 📋 依赖关系说明
+## 📋 Dependency Relationship Notes
 
-### workspace 协议自动转换
+### Workspace Protocol Auto-Conversion
 
-在 monorepo 开发时，React 和 Vue 包使用 `workspace:*` 引用 core 包：
+During monorepo development, React and Vue packages use `workspace:*` to reference the core package:
 
 ```json
 {
@@ -140,114 +140,114 @@ pnpm run publish:vue
 }
 ```
 
-**pnpm 在发布时会自动处理：**
+**pnpm automatically handles this during publishing:**
 
-- 将 `workspace:*` 转换为已发布的 core 包的实际版本号
-- 例如：如果 core 包版本是 `0.1.0`，发布后会自动变为 `^0.1.0`
+- Converts `workspace:*` to the actual version number of the published core package
+- For example: If core package version is `0.1.0`, it will automatically become `^0.1.0` after publishing
 
-### 用户安装体验
+### User Installation Experience
 
-当用户安装 `@keekuun/keymaster-react` 时：
+When users install `@keekuun/keymaster-react`:
 
 ```bash
 npm install @keekuun/keymaster-react
 ```
 
-npm 会自动：
+npm will automatically:
 
-1. ✅ 安装 `@keekuun/keymaster-react`
-2. ✅ 读取其 `dependencies`，发现需要 `@keekuun/keymaster-core`
-3. ✅ 自动安装 `@keekuun/keymaster-core`（指定版本，如 `^0.1.0`）
-4. ✅ **用户无需手动安装 core 包**
+1. ✅ Install `@keekuun/keymaster-react`
+2. ✅ Read its `dependencies`, find that `@keekuun/keymaster-core` is needed
+3. ✅ Automatically install `@keekuun/keymaster-core` (specified version, e.g., `^0.1.0`)
+4. ✅ **Users don't need to manually install the core package**
 
-## 🔧 单独发布某个包
+## 🔧 Publish a Single Package
 
-如果需要只发布某个包（例如只修复了 React 包的 bug）：
+If you need to publish only a specific package (e.g., only fixed a bug in the React package):
 
 ```bash
-# 1. 只更新 React 包版本（不更新其他包）
-pnpm run release:react:only
+# 1. Only update React package version (don't update other packages)
+# Note: You may need to manually update the version in package.json
 
-# 2. 构建
+# 2. Build
 pnpm build
 
-# 3. 发布（注意：需要先确保 core 包已发布）
+# 3. Publish (Note: Need to ensure core package is already published)
 pnpm run publish:react
 ```
 
-**⚠️ 注意**：即使只发布 React 包，也必须确保 core 包已经在 npm 上存在，否则会发布失败。
+**⚠️ Note**: Even if only publishing the React package, you must ensure the core package already exists on npm, otherwise publishing will fail.
 
-## ❌ 故障排查
+## ❌ Troubleshooting
 
-### 问题 1：发布 React/Vue 包时提示找不到 core 包
+### Issue 1: Cannot find core package when publishing React/Vue package
 
-**错误信息：**
+**Error Message:**
 
 ```
 npm ERR! 404 '@keekuun/keymaster-core@^0.1.0' is not in the npm registry.
 ```
 
-**原因：** core 包还没有发布到 npm。
+**Cause**: The core package hasn't been published to npm yet.
 
-**解决方案：**
+**Solution**:
 
-1. 先发布 core 包：`pnpm run publish:core`
-2. 等待 1-2 分钟让 npm 同步
-3. 再发布 React/Vue 包
+1. Publish core package first: `pnpm run publish:core`
+2. Wait 1-2 minutes for npm to sync
+3. Then publish React/Vue package
 
-### 问题 2：版本号不一致
+### Issue 2: Version Numbers Inconsistent
 
-**原因：** 某个包的版本号没有正确更新。
+**Cause**: A package's version number wasn't updated correctly.
 
-**解决方案：**
+**Solution**:
 
-1. 检查 `.versionrc.json` 是否包含所有包
-2. 重新运行 `pnpm run release`
-3. 手动检查各包的 `package.json` 版本号是否一致
+1. Check if `.versionrc.json` includes all packages
+2. Re-run `pnpm run release`
+3. Manually check if version numbers in each package's `package.json` are consistent
 
-### 问题 3：构建失败
+### Issue 3: Build Failure
 
-**原因：** 依赖未正确安装或构建配置有问题。
+**Cause**: Dependencies not installed correctly or build configuration issues.
 
-**解决方案：**
+**Solution**:
 
 ```bash
-# 清理并重新安装
+# Clean and reinstall
 rm -rf node_modules packages/*/node_modules
 pnpm install
 
-# 重新构建
+# Rebuild
 pnpm build
 ```
 
-### 问题 4：npm 登录失败
+### Issue 4: npm Login Failed
 
-**原因：** npm 账号未登录或 token 过期。
+**Cause**: npm account not logged in or token expired.
 
-**解决方案：**
+**Solution**:
 
 ```bash
-# 重新登录
+# Re-login
 npm login
 
-# 如果使用 2FA，确保 token 有效
+# If using 2FA, ensure token is valid
 npm whoami
 ```
 
-## ✅ 发布检查清单
+## ✅ Publishing Checklist
 
-发布前请确认：
+Before publishing, confirm:
 
-- [ ] 所有代码已提交到 git
-- [ ] 已运行 `pnpm build` 且构建成功
-- [ ] 已运行 `pnpm run release` 更新版本号
-- [ ] 已检查 `CHANGELOG.md` 内容正确
-- [ ] 已确认发布顺序（core -> react -> vue）
-- [ ] npm 账号已登录（`npm whoami`）
-- [ ] 有发布权限（对 `@keekuun` scope）
-- [ ] 已测试本地构建产物可以正常工作
+- [ ] All code has been committed to git
+- [ ] Ran `pnpm build` and build succeeded
+- [ ] Ran `pnpm run release` to update version numbers
+- [ ] Checked `CHANGELOG.md` content is correct
+- [ ] Confirmed publishing order (core -> react -> vue)
+- [ ] npm account is logged in (`npm whoami`)
+- [ ] Has publishing permissions (for `@keekuun` scope)
+- [ ] Tested that locally built artifacts work correctly
 
-## 📚 相关文档
+## 📚 Related Documentation
 
-- [部署文档站点](./deploy.md) - 如何部署文档到 Vercel
-- [GitHub 仓库](https://github.com/Keekuun/keymaster) - 查看源码和提交历史
+- [Deploy Documentation Site](./deploy.md) - How to deploy documentation to Vercel
+- [GitHub Repository](https://github.com/Keekuun/keymaster) - View source code and commit history

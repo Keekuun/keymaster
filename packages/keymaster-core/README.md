@@ -1,47 +1,47 @@
 # @keekuun/keymaster-core
 
-keymaster 核心模块，提供 React 和 Vue 版本共享的类型定义、解析器和工具函数。
+keymaster core module, providing shared type definitions, parsers, and utility functions for React and Vue versions.
 
-> **注意**：通常你不需要直接安装此包。它作为 `@keekuun/keymaster-react` 和 `@keekuun/keymaster-vue` 的依赖自动安装。如果你需要在其他项目中使用核心功能，可以单独安装。
+> **Note**: Usually you don't need to install this package directly. It's automatically installed as a dependency of `@keekuun/keymaster-react` and `@keekuun/keymaster-vue`. If you need to use core functionality in other projects, you can install it separately.
 
-## 概述
+## Overview
 
-`@keekuun/keymaster-core` 是 `@keekuun/keymaster-react` 和 `@keekuun/keymaster-vue` 的底层核心模块，包含：
+`@keekuun/keymaster-core` is the underlying core module of `@keekuun/keymaster-react` and `@keekuun/keymaster-vue`, containing:
 
-- **类型定义**：统一的类型系统，确保 React 和 Vue 版本的类型一致性
-- **快捷键解析器**：将字符串格式的快捷键（如 `"ctrl+s"`）解析为结构化对象
-- **事件匹配器**：判断键盘事件是否匹配预期的快捷键组合
-- **作用域检查**：验证事件是否发生在特定元素范围内
-- **Electron 支持**：检测和处理 Electron 环境的特殊需求
+- **Type Definitions**: Unified type system ensuring type consistency across React and Vue versions
+- **Shortcut Parser**: Parses string-format shortcuts (e.g., `"ctrl+s"`) into structured objects
+- **Event Matcher**: Determines if keyboard events match expected shortcut combinations
+- **Scope Checking**: Verifies if events occur within specific element scopes
+- **Electron Support**: Detects and handles special requirements of Electron environments
 
-## 安装
+## Installation
 
-### 作为依赖自动安装
+### Auto-install as Dependency
 
-当你安装 `@keekuun/keymaster-react` 或 `@keekuun/keymaster-vue` 时，`keymaster-core` 会自动作为依赖安装：
+When you install `@keekuun/keymaster-react` or `@keekuun/keymaster-vue`, `keymaster-core` will be automatically installed as a dependency:
 
 ```bash
 npm install @keekuun/keymaster-react
-# keymaster-core 会自动安装
+# keymaster-core will be automatically installed
 ```
 
-### 单独安装（可选）
+### Standalone Installation (Optional)
 
-如果你需要在其他项目中使用核心功能，可以单独安装：
+If you need to use core functionality in other projects, you can install it separately:
 
 ```bash
 npm install @keekuun/keymaster-core
-# 或者
+# or
 pnpm add @keekuun/keymaster-core
 ```
 
-## API 文档
+## API Documentation
 
-### 类型定义
+### Type Definitions
 
 #### `KeymasterHandler`
 
-键盘事件处理函数类型：
+Keyboard event handler function type:
 
 ```typescript
 type KeymasterHandler = (event: KeyboardEvent) => void;
@@ -49,35 +49,35 @@ type KeymasterHandler = (event: KeyboardEvent) => void;
 
 #### `KeymasterBindingOptionsBase`
 
-快捷键绑定选项的基础接口：
+Base interface for shortcut binding options:
 
 ```typescript
 interface KeymasterBindingOptionsBase {
-  preventDefault?: boolean; // 是否阻止默认行为
-  stopPropagation?: boolean; // 是否阻止事件冒泡
-  scopedElement?: HTMLElement | null; // 作用域元素
-  editorMode?: boolean; // 编辑器模式
-  electronMode?: boolean; // Electron 模式
+  preventDefault?: boolean; // Whether to prevent default behavior
+  stopPropagation?: boolean; // Whether to stop event propagation
+  scopedElement?: HTMLElement | null; // Scoped element
+  editorMode?: boolean; // Editor mode
+  electronMode?: boolean; // Electron mode
 }
 ```
 
 #### `ParsedShortcut`
 
-解析后的快捷键结构：
+Parsed shortcut structure:
 
 ```typescript
 interface ParsedShortcut {
-  key: string; // 主键（如 "s", "enter"）
-  ctrl: boolean; // 是否按下 Ctrl
-  alt: boolean; // 是否按下 Alt
-  shift: boolean; // 是否按下 Shift
-  meta: boolean; // 是否按下 Meta/Cmd
+  key: string; // Main key (e.g., "s", "enter")
+  ctrl: boolean; // Whether Ctrl is pressed
+  alt: boolean; // Whether Alt is pressed
+  shift: boolean; // Whether Shift is pressed
+  meta: boolean; // Whether Meta/Cmd is pressed
 }
 ```
 
 #### `ElectronWindow`
 
-Electron 环境的 Window 类型扩展：
+Electron environment Window type extension:
 
 ```typescript
 interface ElectronWindow extends Window {
@@ -92,11 +92,11 @@ interface ElectronWindow extends Window {
 }
 ```
 
-### 核心函数
+### Core Functions
 
 #### `parseShortcut(shortcut: string): ParsedShortcut`
 
-解析快捷键字符串为结构化对象：
+Parse a shortcut string into a structured object:
 
 ```typescript
 import { parseShortcut } from '@keekuun/keymaster-core';
@@ -107,7 +107,7 @@ const parsed = parseShortcut('ctrl+shift+s');
 
 #### `isMatchingShortcut(event: KeyboardEvent, parsed: ParsedShortcut): boolean`
 
-判断键盘事件是否匹配解析后的快捷键：
+Determine if a keyboard event matches the parsed shortcut:
 
 ```typescript
 import { isMatchingShortcut, parseShortcut } from '@keekuun/keymaster-core';
@@ -118,7 +118,7 @@ const isMatch = isMatchingShortcut(keyboardEvent, parsed);
 
 #### `isEventInScope(event: KeyboardEvent, scopedElement: HTMLElement): boolean`
 
-检查事件是否发生在作用域元素内：
+Check if an event occurred within a scoped element:
 
 ```typescript
 import { isEventInScope } from '@keekuun/keymaster-core';
@@ -128,30 +128,30 @@ const isInScope = isEventInScope(keyboardEvent, editorElement);
 
 #### `isElectronEnvironment(): boolean`
 
-检测当前是否在 Electron 环境中：
+Detect if currently running in an Electron environment:
 
 ```typescript
 import { isElectronEnvironment } from '@keekuun/keymaster-core';
 
 if (isElectronEnvironment()) {
-  // 处理 Electron 特定逻辑
+  // Handle Electron-specific logic
 }
 ```
 
 #### `getElectronProcessInfo(): ElectronWindow["process"] | null`
 
-获取 Electron 进程信息（如果可用）：
+Get Electron process information (if available):
 
 ```typescript
 import { getElectronProcessInfo } from '@keekuun/keymaster-core';
 
 const processInfo = getElectronProcessInfo();
 if (processInfo) {
-  console.log(processInfo.type); // "renderer" 或 "main"
+  console.log(processInfo.type); // "renderer" or "main"
 }
 ```
 
-### 常量
+### Constants
 
 ```typescript
 import {
@@ -165,11 +165,11 @@ import {
 } from '@keekuun/keymaster-core';
 ```
 
-## 使用场景
+## Use Cases
 
-### 自定义快捷键处理
+### Custom Shortcut Handling
 
-如果你需要实现自定义的快捷键处理逻辑，可以直接使用核心模块：
+If you need to implement custom shortcut handling logic, you can directly use the core module:
 
 ```typescript
 import { parseShortcut, isMatchingShortcut, type KeymasterHandler } from '@keekuun/keymaster-core';
@@ -185,7 +185,7 @@ function createCustomKeyHandler(shortcut: string, handler: KeymasterHandler) {
 }
 ```
 
-### 快捷键验证工具
+### Shortcut Validation Tool
 
 ```typescript
 import { parseShortcut } from '@keekuun/keymaster-core';
@@ -200,21 +200,28 @@ function validateShortcut(shortcut: string): boolean {
 }
 ```
 
-## 设计原则
+## Design Principles
 
-1. **类型安全**：所有函数和类型都有完整的 TypeScript 类型定义
-2. **框架无关**：核心模块不依赖任何 UI 框架（React/Vue）
-3. **可扩展性**：为 React 和 Vue 版本提供统一的基础能力
-4. **零依赖**：核心模块仅依赖浏览器原生 API
+1. **Type Safety**: All functions and types have complete TypeScript type definitions
+2. **Framework Agnostic**: Core module doesn't depend on any UI framework (React/Vue)
+3. **Extensibility**: Provides unified base capabilities for React and Vue versions
+4. **Zero Dependencies**: Core module only depends on browser native APIs
 
-## 版本兼容性
+## Version Compatibility
 
 - TypeScript: ^5.0.0
-- 浏览器: 支持所有现代浏览器（ES2020+）
+- Browser: Supports all modern browsers (ES2020+)
 
-## 相关链接
+## Related Links
 
-- React 版本：`@keekuun/keymaster-react`
-- Vue 版本：`@keekuun/keymaster-vue`
-- 文档站点：[https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
-- GitHub 仓库：[https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
+- React Version: `@keekuun/keymaster-react`
+- Vue Version: `@keekuun/keymaster-vue`
+- Documentation Site: [https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
+- GitHub Repository: [https://github.com/Keekuun/keymaster](https://github.com/Keekuun/keymaster)
+
+---
+
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)

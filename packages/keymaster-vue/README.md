@@ -1,38 +1,38 @@
 # @keekuun/keymaster-vue
 
-Vue 3 版 keymaster 键盘快捷键库，为常见快捷键场景（保存、撤销、列表操作等）提供组合式 API 封装。
+Vue 3 version of keymaster keyboard shortcut library, providing Composition API wrappers for common shortcut scenarios (save, undo, list operations, etc.).
 
-## 特性
+## Features
 
-- 基于 Vue 3 组合式 API 的 `useKeyBindingVue`
-- 支持组合快捷键（如 `ctrl+s`、`ctrl+shift+z`）
-- 默认监听 `window` 的 `keydown` 事件
-- **作用域快捷键**：支持在特定元素范围内绑定快捷键（`scopedElement`）
-- **编辑器模式**：自动处理编辑器场景的快捷键冲突
-- **Electron 模式**：适配 Electron 应用的特殊需求
-- TypeScript 完整类型提示
+- `useKeyBindingVue` based on Vue 3 Composition API
+- Support for key combinations (e.g., `ctrl+s`, `ctrl+shift+z`)
+- Default listens to `window`'s `keydown` event
+- **Scoped Shortcuts**: Support binding shortcuts within specific element scopes (`scopedElement`)
+- **Editor Mode**: Automatically handles shortcut conflicts in editor scenarios
+- **Electron Mode**: Adapts to special requirements of Electron applications
+- Complete TypeScript type hints
 
-## 安装
+## Installation
 
 ```bash
 npm install @keekuun/keymaster-vue
-# 或者
+# or
 pnpm add @keekuun/keymaster-vue
 ```
 
-## 快速开始
+## Quick Start
 
 ```vue
 <template>
-  <textarea placeholder="在这里输入内容，然后按 Ctrl+S 触发保存" />
+  <textarea placeholder="Type here, then press Ctrl+S to save" />
 </template>
 
 <script setup lang="ts">
 import { useKeyBindingVue } from '@keekuun/keymaster-vue';
 
 function onSave() {
-  // 在这里执行保存逻辑，例如：调接口 / 更新本地状态
-  console.log('保存成功');
+  // Execute save logic here, e.g., call API / update local state
+  console.log('Saved successfully');
 }
 
 useKeyBindingVue(
@@ -40,16 +40,16 @@ useKeyBindingVue(
   () => {
     onSave();
   },
-  { preventDefault: true }, // 阻止浏览器默认的保存页面行为
+  { preventDefault: true }, // Prevent browser's default save page behavior
 );
 </script>
 ```
 
-## 高级功能
+## Advanced Features
 
-### 作用域快捷键
+### Scoped Shortcuts
 
-在特定元素范围内绑定快捷键，适用于编辑器、对话框等场景：
+Bind shortcuts to specific element scopes, suitable for editors, dialogs, etc.:
 
 ```vue
 <script setup lang="ts">
@@ -67,9 +67,9 @@ useScopedKeyBindingVue(
 </script>
 ```
 
-### 编辑器模式
+### Editor Mode
 
-自动处理编辑器场景的快捷键冲突：
+Automatically handles shortcut conflicts in editor scenarios:
 
 ```vue
 <script setup lang="ts">
@@ -87,9 +87,9 @@ useEditorKeyBindingVue(
 </script>
 ```
 
-### Electron 模式
+### Electron Mode
 
-适配 Electron 应用：
+Adapt for Electron applications:
 
 ```vue
 <script setup lang="ts">
@@ -101,24 +101,24 @@ useElectronKeyBindingVue('ctrl+alt+r', () => {
 </script>
 ```
 
-## API 概览
+## API Overview
 
 ### `useKeyBindingVue(shortcut, handler, options?)`
 
 - **`shortcut`**: `string`  
-  快捷键字符串，例如 `"ctrl+s"`、`"ctrl+shift+z"`。
+  Shortcut string, e.g., `"ctrl+s"`, `"ctrl+shift+z"`.
 - **`handler`**: `(event: KeyboardEvent) => void`  
-  当捕获到匹配的快捷键时触发的回调。
-- **`options`**: `KeymasterVueBindingOptions`（可选）
-  - `preventDefault?: boolean` 是否在触发后调用 `event.preventDefault()`
-  - `stopPropagation?: boolean` 是否在触发后调用 `event.stopPropagation()`
-  - `scopedElement?: HTMLElement | null` 作用域元素，快捷键仅在元素内生效
-  - `editorMode?: boolean` 编辑器模式，自动处理快捷键冲突
-  - `electronMode?: boolean` Electron 模式，适配 Electron 应用
+  Callback triggered when matching shortcut is detected.
+- **`options`**: `KeymasterVueBindingOptions` (optional)
+  - `preventDefault?: boolean` - Whether to call `event.preventDefault()` after trigger
+  - `stopPropagation?: boolean` - Whether to call `event.stopPropagation()` after trigger
+  - `scopedElement?: HTMLElement | null` - Scoped element, shortcut only works within element
+  - `editorMode?: boolean` - Editor mode, automatically handles shortcut conflicts
+  - `electronMode?: boolean` - Electron mode, adapts for Electron applications
 
 ### `registerVueKeyBinding(shortcut, handler, options?)`
 
-底层的通用注册函数（非组合式 API），返回一个取消绑定的函数：
+Low-level general registration function (non-Composition API), returns a function to unbind:
 
 ```ts
 import { registerVueKeyBinding } from '@keekuun/keymaster-vue';
@@ -126,17 +126,24 @@ import { registerVueKeyBinding } from '@keekuun/keymaster-vue';
 const dispose = registerVueKeyBinding(
   'ctrl+s',
   (event) => {
-    console.log('保存成功');
+    console.log('Saved successfully');
   },
   { preventDefault: true },
 );
 
-// 需要时手动解绑
+// Manually unbind when needed
 dispose();
 ```
 
-## 文档与示例
+## Documentation & Examples
 
-更多交互 Demo、使用场景与设计建议请访问文档站点：
+For more interactive demos, usage scenarios, and design recommendations, visit the documentation site:
 
-- Vue 文档与 Demo：[https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)
+- Vue Documentation & Demo: [https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)
+
+---
+
+### 🌐 Language
+
+- [English](README.md) (current)
+- [中文](README.zh.md)

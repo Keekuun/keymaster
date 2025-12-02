@@ -1,85 +1,85 @@
-# 版本管理
+# Version Management
 
-本文档说明 keymaster 的版本管理策略以及如何选择和使用不同版本的文档。
+This document explains keymaster's version management strategy and how to select and use documentation for different versions.
 
-## 📦 当前版本
+## 📦 Current Versions
 
 <VersionList />
 
-> 💡 **提示**：文档站点始终显示最新版本的文档。如果你使用的是旧版本，请参考下面的版本兼容性说明。
+> 💡 **Tip**: The documentation site always displays the latest version. If you're using an older version, refer to the version compatibility information below.
 
-## 🔍 查看所有版本
+## 🔍 View All Versions
 
-### 方式一：npm 包页面
+### Method 1: npm Package Page
 
-访问以下链接查看所有已发布的版本：
+Visit the following links to view all published versions:
 
 - **Core**: https://www.npmjs.com/package/@keekuun/keymaster-core?activeTab=versions
 - **React**: https://www.npmjs.com/package/@keekuun/keymaster-react?activeTab=versions
 - **Vue**: https://www.npmjs.com/package/@keekuun/keymaster-vue?activeTab=versions
 
-在 npm 页面中，你可以：
+On the npm page, you can:
 
-- 查看所有历史版本
-- 查看每个版本的发布说明
-- 查看每个版本的依赖关系
-- 下载特定版本的包
+- View all historical versions
+- View release notes for each version
+- View dependency relationships for each version
+- Download packages for specific versions
 
-### 方式二：GitHub Releases
+### Method 2: GitHub Releases
 
-访问 [GitHub Releases](https://github.com/Keekuun/keymaster/releases) 查看：
+Visit [GitHub Releases](https://github.com/Keekuun/keymaster/releases) to view:
 
-- 详细的版本发布说明
-- 变更日志（CHANGELOG）
-- 下载源代码
+- Detailed version release notes
+- Changelog (CHANGELOG)
+- Download source code
 
-### 方式三：npm 命令行
+### Method 3: npm Command Line
 
 ```bash
-# 查看所有可用版本
+# View all available versions
 npm view @keekuun/keymaster-react versions
 
-# 查看最新版本
+# View latest version
 npm view @keekuun/keymaster-react version
 
-# 查看特定版本的详细信息
+# View detailed information for a specific version
 npm view @keekuun/keymaster-react@0.1.0
 ```
 
-## 📋 版本兼容性
+## 📋 Version Compatibility
 
-### 语义化版本
+### Semantic Versioning
 
-keymaster 遵循 [语义化版本](https://semver.org/lang/zh-CN/) 规范：
+keymaster follows [Semantic Versioning](https://semver.org/) specification:
 
-- **主版本号（Major）**：不兼容的 API 修改
-- **次版本号（Minor）**：向下兼容的功能性新增
-- **修订号（Patch）**：向下兼容的问题修正
+- **Major Version**: Incompatible API changes
+- **Minor Version**: Backward-compatible feature additions
+- **Patch Version**: Backward-compatible bug fixes
 
-### 版本兼容性矩阵
+### Version Compatibility Matrix
 
-| Core 版本 | React 版本 | Vue 版本 | 兼容性                  |
-| --------- | ---------- | -------- | ----------------------- |
-| 0.1.x     | 0.1.x      | 0.1.x    | ✅ 完全兼容             |
-| 0.2.x     | 0.1.x      | 0.1.x    | ⚠️ 可能不兼容（需检查） |
-| 0.1.x     | 0.2.x      | 0.1.x    | ⚠️ 可能不兼容（需检查） |
+| Core Version | React Version | Vue Version | Compatibility          |
+| ------------ | ------------- | ----------- | ---------------------- |
+| 0.1.x        | 0.1.x         | 0.1.x       | ✅ Fully compatible    |
+| 0.2.x        | 0.1.x         | 0.1.x       | ⚠️ May be incompatible |
+| 0.1.x        | 0.2.x         | 0.1.x       | ⚠️ May be incompatible |
 
-> ⚠️ **注意**：React 和 Vue 包都依赖 core 包。建议保持三个包的版本号一致，或至少确保依赖的 core 版本兼容。
+> ⚠️ **Note**: Both React and Vue packages depend on the core package. It's recommended to keep all three packages at the same version, or at least ensure the core version is compatible.
 
-### 检查你的版本
+### Check Your Version
 
 ```bash
-# 在项目根目录运行
+# Run in project root directory
 npm list @keekuun/keymaster-react
 npm list @keekuun/keymaster-vue
 npm list @keekuun/keymaster-core
 ```
 
-## 🔄 版本升级指南
+## 🔄 Upgrade Guide
 
-### 补丁版本升级（0.1.0 → 0.1.1）
+### Patch Version Upgrade (0.1.0 → 0.1.1)
 
-通常只包含 bug 修复，**建议立即升级**：
+Usually only contains bug fixes, **recommended to upgrade immediately**:
 
 ```bash
 npm update @keekuun/keymaster-react
@@ -87,81 +87,81 @@ npm update @keekuun/keymaster-vue
 npm update @keekuun/keymaster-core
 ```
 
-### 小版本升级（0.1.x → 0.2.x）
+### Minor Version Upgrade (0.1.x → 0.2.x)
 
-可能包含新功能，但保持向后兼容：
+May contain new features but maintains backward compatibility:
 
-1. **查看变更日志**：访问 [GitHub Releases](https://github.com/Keekuun/keymaster/releases) 查看新功能
-2. **更新依赖**：
+1. **Check Changelog**: Visit [GitHub Releases](https://github.com/Keekuun/keymaster/releases) to see new features
+2. **Update Dependencies**:
    ```bash
    npm install @keekuun/keymaster-react@latest
    npm install @keekuun/keymaster-vue@latest
    npm install @keekuun/keymaster-core@latest
    ```
-3. **测试应用**：确保所有快捷键功能正常工作
+3. **Test Application**: Ensure all shortcut functionality works correctly
 
-### 大版本升级（0.x.x → 1.0.0）
+### Major Version Upgrade (0.x.x → 1.0.0)
 
-可能包含破坏性变更，需要仔细评估：
+May contain breaking changes, requires careful evaluation:
 
-1. **阅读迁移指南**：查看 [CHANGELOG.md](https://github.com/Keekuun/keymaster/blob/main/CHANGELOG.md)
-2. **检查破坏性变更**：查看是否有 API 变更
-3. **更新代码**：根据迁移指南修改代码
-4. **全面测试**：确保所有功能正常
+1. **Read Migration Guide**: Check [CHANGELOG.md](https://github.com/Keekuun/keymaster/blob/main/CHANGELOG.md)
+2. **Check Breaking Changes**: See if there are API changes
+3. **Update Code**: Modify code according to migration guide
+4. **Comprehensive Testing**: Ensure all functionality works
 
-## 📚 文档版本说明
+## 📚 Documentation Version Notes
 
-### 文档站点版本
+### Documentation Site Version
 
-文档站点（https://keymaster-docs.vercel.app）始终显示**最新版本**的文档。
+The documentation site (https://keymaster-docs.vercel.app) always displays the **latest version** documentation.
 
-### 如果你使用的是旧版本
+### If You're Using an Older Version
 
-如果你安装的是旧版本（例如 `0.1.0`），但文档显示的是新版本（例如 `0.1.2`），请注意：
+If you've installed an older version (e.g., `0.1.0`) but the documentation shows a newer version (e.g., `0.1.2`), please note:
 
-1. **API 可能略有不同**：新版本可能添加了新功能，但旧版本可能不支持
-2. **查看对应版本的 README**：在 npm 包页面可以查看每个版本的 README
-3. **查看 GitHub 历史**：在 GitHub 中切换到对应版本的 tag，查看当时的文档
+1. **APIs may differ slightly**: New versions may add new features that older versions may not support
+2. **Check README for that version**: You can view the README for each version on the npm package page
+3. **Check GitHub history**: Switch to the corresponding version tag in GitHub to view the documentation at that time
 
-### 查看历史版本的文档
+### View Historical Version Documentation
 
-1. **GitHub Tags**：
-   - 访问 https://github.com/Keekuun/keymaster/tags
-   - 选择对应的版本 tag（例如 `v0.1.0`）
-   - 查看该版本的 README 文件
+1. **GitHub Tags**:
+   - Visit https://github.com/Keekuun/keymaster/tags
+   - Select the corresponding version tag (e.g., `v0.1.0`)
+   - View the README file for that version
 
-2. **npm 包页面**：
-   - 在 npm 包页面的版本列表中，选择特定版本
-   - 查看该版本的 README 内容
+2. **npm Package Page**:
+   - In the version list on the npm package page, select a specific version
+   - View the README content for that version
 
-## 🐛 版本相关问题
+## 🐛 Version-Related Issues
 
-### 问题 1：安装的版本与文档不匹配
+### Issue 1: Installed Version Doesn't Match Documentation
 
-**症状**：按照文档使用 API，但出现类型错误或运行时错误。
+**Symptoms**: Following the documentation to use APIs, but encountering type errors or runtime errors.
 
-**解决方案**：
+**Solution**:
 
-1. 检查你安装的版本：`npm list @keekuun/keymaster-react`
-2. 查看该版本的 README（在 npm 包页面）
-3. 或者升级到最新版本：`npm install @keekuun/keymaster-react@latest`
+1. Check your installed version: `npm list @keekuun/keymaster-react`
+2. View the README for that version (on npm package page)
+3. Or upgrade to latest version: `npm install @keekuun/keymaster-react@latest`
 
-### 问题 2：依赖版本冲突
+### Issue 2: Dependency Version Conflicts
 
-**症状**：React 包和 core 包版本不匹配。
+**Symptoms**: React package and core package versions don't match.
 
-**解决方案**：
+**Solution**:
 
 ```bash
-# 确保版本一致
+# Ensure versions are consistent
 npm install @keekuun/keymaster-core@0.1.2
 npm install @keekuun/keymaster-react@0.1.2
 npm install @keekuun/keymaster-vue@0.1.2
 ```
 
-### 问题 3：需要锁定特定版本
+### Issue 3: Need to Lock Specific Version
 
-如果你需要锁定到特定版本（例如避免自动升级）：
+If you need to lock to a specific version (e.g., to avoid automatic upgrades):
 
 ```json
 {
@@ -173,13 +173,13 @@ npm install @keekuun/keymaster-vue@0.1.2
 }
 ```
 
-## 📝 版本发布流程
+## 📝 Version Release Process
 
-关于如何发布新版本，请查看 [发布文档](./publish.md)。
+For information on how to release new versions, see the [Publish Documentation](./publish.md).
 
-## 🔗 相关链接
+## 🔗 Related Links
 
-- [npm 包页面](https://www.npmjs.com/org/keekuun)
+- [npm Package Page](https://www.npmjs.com/org/keekuun)
 - [GitHub Releases](https://github.com/Keekuun/keymaster/releases)
 - [CHANGELOG.md](https://github.com/Keekuun/keymaster/blob/main/CHANGELOG.md)
-- [语义化版本规范](https://semver.org/lang/zh-CN/)
+- [Semantic Versioning Specification](https://semver.org/)
