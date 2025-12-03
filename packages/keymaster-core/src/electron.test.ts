@@ -5,12 +5,14 @@ import {
   getElectronProcessInfo,
   getElectronVersions,
 } from '@core/electron';
+import type { ElectronWindow } from '@core/types';
 
 describe('keymaster-core electron helpers', () => {
-  const originalProcess = (window as any).process;
+  const electronWindow = window as ElectronWindow;
+  const originalProcess = electronWindow.process;
 
   beforeEach(() => {
-    (window as any).process = {
+    electronWindow.process = {
       type: 'renderer',
       versions: {
         electron: '30.0.0',
@@ -21,7 +23,7 @@ describe('keymaster-core electron helpers', () => {
   });
 
   afterEach(() => {
-    (window as any).process = originalProcess;
+    electronWindow.process = originalProcess;
   });
 
   it('detects electron renderer environment', () => {

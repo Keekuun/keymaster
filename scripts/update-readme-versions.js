@@ -48,7 +48,11 @@ readmeContent = readmeContent.replace(
 // 写回文件
 writeFileSync(readmePath, readmeContent, 'utf-8');
 
+// eslint-disable-next-line no-console
 console.log('✅ README.md 版本号已更新:');
+// eslint-disable-next-line no-console
 console.log(`   Core: v${coreVersion}`);
+// eslint-disable-next-line no-console
 console.log(`   React: v${reactVersion}`);
+// eslint-disable-next-line no-console
 console.log(`   Vue: v${vueVersion}`);
