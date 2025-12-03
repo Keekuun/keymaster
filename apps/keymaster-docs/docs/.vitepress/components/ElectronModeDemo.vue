@@ -1,39 +1,64 @@
 <template>
   <div class="electron-demo">
     <p class="electron-demo__title">
-      <strong>Electron 模式演示</strong>
+      <strong v-if="isZh">Electron 模式演示</strong>
+      <strong v-else>Electron Mode Demo</strong>
     </p>
     <p class="electron-demo__description">
-      Electron 模式适配桌面应用场景，可以通过 <code>electronHook</code> 扩展或拦截 Electron
-      特定的行为。
+      <template v-if="isZh">
+        Electron 模式适配桌面应用场景，可以通过 <code>electronHook</code> 扩展或拦截 Electron
+        特定的行为。
+      </template>
+      <template v-else>
+        Electron mode adapts to desktop application scenarios, allowing you to extend or intercept
+        Electron-specific behaviors via <code>electronHook</code>.
+      </template>
     </p>
     <div class="electron-demo__info">
       <p class="electron-demo__info-item">
-        <strong>当前环境：</strong>
-        <span>{{ isElectron ? 'Electron 环境' : '浏览器环境（仅演示）' }}</span>
+        <strong>{{ isZh ? '当前环境：' : 'Current Environment:' }}</strong>
+        <span>{{
+          isElectron
+            ? isZh
+              ? 'Electron 环境'
+              : 'Electron Environment'
+            : isZh
+              ? '浏览器环境（仅演示）'
+              : 'Browser Environment (Demo Only)'
+        }}</span>
       </p>
       <p v-if="electronInfo" class="electron-demo__info-item">
-        <strong>Electron 信息：</strong>
+        <strong>{{ isZh ? 'Electron 信息：' : 'Electron Info:' }}</strong>
         <code>{{ electronInfo }}</code>
       </p>
     </div>
     <div class="electron-demo__shortcuts">
-      <p class="electron-demo__hint">尝试以下快捷键（在 Electron 环境中会触发 hook）：</p>
+      <p class="electron-demo__hint">
+        {{
+          isZh
+            ? '尝试以下快捷键（在 Electron 环境中会触发 hook）：'
+            : 'Try these shortcuts (will trigger hook in Electron environment):'
+        }}
+      </p>
       <div class="electron-demo__shortcut-item">
-        <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> 重新加载
+        <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> {{ isZh ? '重新加载' : 'Reload' }}
       </div>
       <div class="electron-demo__shortcut-item">
-        <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> 开发者工具
+        <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> {{ isZh ? '开发者工具' : 'DevTools' }}
       </div>
     </div>
     <p class="electron-demo__status">
-      最近触发：<strong>{{ lastAction || '暂无' }}</strong>
+      <template v-if="isZh">最近触发：</template>
+      <template v-else>Last triggered:</template>
+      <strong>{{ lastAction || (isZh ? '暂无' : 'None') }}</strong>
     </p>
     <p v-if="message" class="electron-demo__message">
       {{ message }}
     </p>
     <div v-if="hookLogs.length > 0" class="electron-demo__logs">
-      <p class="electron-demo__logs-title">Hook 日志：</p>
+      <p class="electron-demo__logs-title">
+        {{ isZh ? 'Hook 日志：' : 'Hook Logs:' }}
+      </p>
       <ul class="electron-demo__logs-list">
         <li v-for="(log, index) in hookLogs" :key="index">
           {{ log }}
@@ -44,9 +69,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+import { useRoute } from 'vitepress';
 import { registerKeyBinding } from '@keekuun/keymaster-react';
 import { isElectronEnvironment, getElectronProcessInfo } from '@keekuun/keymaster-core';
+
+const route = useRoute();
+const isZh = computed(() => route.path.startsWith('/zh/'));
 
 const isElectron = ref(false);
 const electronInfo = ref('');
@@ -90,7 +119,7 @@ onMounted(() => {
   cleanupReload = registerKeyBinding(
     'ctrl+alt+r',
     () => {
-      showAction('🔄 重新加载（Electron 模式）');
+      showAction(isZh.value ? '🔄 重新加载（Electron 模式）' : '🔄 Reload (Electron Mode)');
       if (isElectron.value && (window as any).electron?.ipcRenderer) {
         (window as any).electron.ipcRenderer.send('shortcut:reload');
       }
@@ -98,7 +127,9 @@ onMounted(() => {
     {
       electronMode: true,
       electronHook: ({ parsed, processInfo, versions }) => {
-        const log = `[electronHook] 快捷键: ${parsed.key}, 进程: ${processInfo?.type || 'unknown'}, Electron版本: ${versions?.electron || 'N/A'}`;
+        const log = isZh.value
+          ? `[electronHook] 快捷键: ${parsed.key}, 进程: ${processInfo?.type || 'unknown'}, Electron版本: ${versions?.electron || 'N/A'}`
+          : `[electronHook] Shortcut: ${parsed.key}, Process: ${processInfo?.type || 'unknown'}, Electron Version: ${versions?.electron || 'N/A'}`;
         addHookLog(log);
         console.log('[electronHook]', { parsed, processInfo, versions });
         return true;
@@ -109,7 +140,7 @@ onMounted(() => {
   cleanupDevTools = registerKeyBinding(
     'ctrl+shift+i',
     () => {
-      showAction('🛠️ 开发者工具（Electron 模式）');
+      showAction(isZh.value ? '🛠️ 开发者工具（Electron 模式）' : '🛠️ DevTools (Electron Mode)');
       if (isElectron.value && (window as any).electron?.ipcRenderer) {
         (window as any).electron.ipcRenderer.send('shortcut:devtools');
       }
@@ -117,7 +148,9 @@ onMounted(() => {
     {
       electronMode: true,
       electronHook: ({ parsed, processInfo, versions }) => {
-        const log = `[electronHook] 快捷键: ${parsed.key}, 进程: ${processInfo?.type || 'unknown'}`;
+        const log = isZh.value
+          ? `[electronHook] 快捷键: ${parsed.key}, 进程: ${processInfo?.type || 'unknown'}`
+          : `[electronHook] Shortcut: ${parsed.key}, Process: ${processInfo?.type || 'unknown'}`;
         addHookLog(log);
         return true;
       },

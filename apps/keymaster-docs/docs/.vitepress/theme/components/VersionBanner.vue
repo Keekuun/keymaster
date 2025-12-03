@@ -3,24 +3,48 @@
     <div class="banner-content">
       <span class="banner-icon">ℹ️</span>
       <span class="banner-text">
-        你正在查看 <strong>v{{ currentVersion }}</strong> 版本的文档。
-        <template v-if="packageName">
-          如果你使用的是其他版本，请查看
-          <a :href="npmLink" target="_blank" rel="noopener noreferrer" class="banner-link">
-            npm 上的所有版本
-          </a>
-          、
-          <a
-            href="https://github.com/Keekuun/keymaster/releases"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="banner-link"
-          >
-            GitHub 发布历史
-          </a>
-          或
-          <a href="/versions" class="banner-link"> 版本管理文档 </a>
-          。
+        <template v-if="isZh">
+          你正在查看 <strong>v{{ currentVersion }}</strong> 版本的文档。
+          <template v-if="packageName">
+            如果你使用的是其他版本，请查看
+            <a :href="npmLink" target="_blank" rel="noopener noreferrer" class="banner-link">
+              npm 上的所有版本
+            </a>
+            、
+            <a
+              href="https://github.com/Keekuun/keymaster/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="banner-link"
+            >
+              GitHub 发布历史
+            </a>
+            或
+            <a :href="versionsLink" class="banner-link"> 版本管理文档 </a>
+            。
+          </template>
+        </template>
+        <template v-else>
+          You are viewing documentation for version <strong>v{{ currentVersion }}</strong
+          >.
+          <template v-if="packageName">
+            If you are using a different version, check
+            <a :href="npmLink" target="_blank" rel="noopener noreferrer" class="banner-link">
+              all versions on npm
+            </a>
+            ,
+            <a
+              href="https://github.com/Keekuun/keymaster/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="banner-link"
+            >
+              GitHub release history
+            </a>
+            or the
+            <a :href="versionsLink" class="banner-link"> Version Management </a>
+            documentation.
+          </template>
         </template>
       </span>
     </div>
@@ -43,13 +67,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const route = useRoute();
 
+// 判断当前是否为中文路径
+const isZh = computed(() => {
+  return route.path.startsWith('/zh/');
+});
+
 const packageName = computed(() => {
   const path = route.path;
-  if (path.startsWith('/react')) {
+  if (path.startsWith('/zh/react') || path.startsWith('/react')) {
     return '@keekuun/keymaster-react';
-  } else if (path.startsWith('/vue')) {
+  } else if (path.startsWith('/zh/vue') || path.startsWith('/vue')) {
     return '@keekuun/keymaster-vue';
-  } else if (path.startsWith('/core')) {
+  } else if (path.startsWith('/zh/core') || path.startsWith('/core')) {
     return '@keekuun/keymaster-core';
   }
   return null;
@@ -71,6 +100,10 @@ const currentVersion = computed(() => {
 const npmLink = computed(() => {
   if (!packageName.value) return '';
   return `https://www.npmjs.com/package/${packageName.value}?activeTab=versions`;
+});
+
+const versionsLink = computed(() => {
+  return isZh.value ? '/zh/versions' : '/versions';
 });
 </script>
 

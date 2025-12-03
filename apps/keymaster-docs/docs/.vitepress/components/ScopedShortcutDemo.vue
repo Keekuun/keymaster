@@ -1,23 +1,41 @@
 <template>
   <div class="scoped-demo">
     <p class="scoped-demo__title">
-      <strong>作用域快捷键演示</strong>
+      <strong v-if="isZh">作用域快捷键演示</strong>
+      <strong v-else>Scoped Shortcut Demo</strong>
     </p>
     <p class="scoped-demo__description">
-      下面的编辑器区域内的快捷键只在编辑器内生效，点击外部区域后快捷键不会触发。
+      <template v-if="isZh">
+        下面的编辑器区域内的快捷键只在编辑器内生效，点击外部区域后快捷键不会触发。
+      </template>
+      <template v-else>
+        Shortcuts in the editor area below only work within the editor. Clicking outside will not
+        trigger shortcuts.
+      </template>
     </p>
     <div class="scoped-demo__editor" ref="editorRef">
       <textarea
         ref="textareaRef"
-        placeholder="点击这里聚焦，然后按 Ctrl+S 保存（只在编辑器内生效）"
+        :placeholder="
+          isZh
+            ? '点击这里聚焦，然后按 Ctrl+S 保存（只在编辑器内生效）'
+            : 'Click here to focus, then press Ctrl+S to save (only works in editor)'
+        "
         rows="4"
       />
       <p class="scoped-demo__hint">
-        提示：按 <kbd>Ctrl</kbd>+<kbd>S</kbd> 保存，按 <kbd>Ctrl</kbd>+<kbd>K</kbd> 搜索
+        <template v-if="isZh">
+          提示：按 <kbd>Ctrl</kbd>+<kbd>S</kbd> 保存，按 <kbd>Ctrl</kbd>+<kbd>K</kbd> 搜索
+        </template>
+        <template v-else>
+          Tip: Press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save, <kbd>Ctrl</kbd>+<kbd>K</kbd> to search
+        </template>
       </p>
     </div>
     <p class="scoped-demo__status">
-      最近触发：<strong>{{ lastAction || '暂无' }}</strong>
+      <template v-if="isZh">最近触发：</template>
+      <template v-else>Last triggered:</template>
+      <strong>{{ lastAction || (isZh ? '暂无' : 'None') }}</strong>
     </p>
     <p v-if="message" class="scoped-demo__message">
       {{ message }}
@@ -26,8 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+import { useRoute } from 'vitepress';
 import { registerKeyBinding } from '@keekuun/keymaster-react';
+
+const route = useRoute();
+const isZh = computed(() => route.path.startsWith('/zh/'));
 
 const editorRef = ref<HTMLDivElement | null>(null);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
@@ -56,7 +78,9 @@ onMounted(() => {
   cleanupSave = registerKeyBinding(
     'ctrl+s',
     () => {
-      showAction('✅ 保存成功（作用域内触发）');
+      showAction(
+        isZh.value ? '✅ 保存成功（作用域内触发）' : '✅ Save successful (scoped trigger)',
+      );
     },
     {
       scopedElement: editorRef.value,
@@ -67,7 +91,7 @@ onMounted(() => {
   cleanupSearch = registerKeyBinding(
     'ctrl+k',
     () => {
-      showAction('🔍 搜索（作用域内触发）');
+      showAction(isZh.value ? '🔍 搜索（作用域内触发）' : '🔍 Search (scoped trigger)');
     },
     {
       scopedElement: editorRef.value,

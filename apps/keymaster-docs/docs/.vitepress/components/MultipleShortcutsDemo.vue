@@ -1,51 +1,62 @@
 <template>
   <div class="multiple-shortcuts-demo">
     <p class="multiple-shortcuts-demo__title">
-      <strong>多个快捷键组合演示</strong>
+      <strong v-if="isZh">多个快捷键组合演示</strong>
+      <strong v-else>Multiple Shortcuts Demo</strong>
     </p>
     <p class="multiple-shortcuts-demo__description">
-      在同一个组件中可以绑定多个不同的快捷键，每个快捷键都有独立的处理逻辑。
+      <template v-if="isZh">
+        在同一个组件中可以绑定多个不同的快捷键，每个快捷键都有独立的处理逻辑。
+      </template>
+      <template v-else>
+        Multiple different shortcuts can be bound in the same component, each with independent
+        handling logic.
+      </template>
     </p>
     <div class="multiple-shortcuts-demo__shortcuts">
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>S</kbd>
-        <span>保存</span>
+        <span>{{ isZh ? '保存' : 'Save' }}</span>
       </div>
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>Z</kbd>
-        <span>撤销</span>
+        <span>{{ isZh ? '撤销' : 'Undo' }}</span>
       </div>
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
-        <span>重做</span>
+        <span>{{ isZh ? '重做' : 'Redo' }}</span>
       </div>
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>B</kbd>
-        <span>加粗</span>
+        <span>{{ isZh ? '加粗' : 'Bold' }}</span>
       </div>
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>I</kbd>
-        <span>斜体</span>
+        <span>{{ isZh ? '斜体' : 'Italic' }}</span>
       </div>
       <div class="multiple-shortcuts-demo__shortcut-item">
         <kbd>Ctrl</kbd>+<kbd>K</kbd>
-        <span>插入链接</span>
+        <span>{{ isZh ? '插入链接' : 'Insert Link' }}</span>
       </div>
     </div>
     <p class="multiple-shortcuts-demo__status">
-      最近触发：<strong>{{ lastAction || '暂无' }}</strong>
+      <template v-if="isZh">最近触发：</template>
+      <template v-else>Last triggered:</template>
+      <strong>{{ lastAction || (isZh ? '暂无' : 'None') }}</strong>
     </p>
     <p v-if="message" class="multiple-shortcuts-demo__message">
       {{ message }}
     </p>
     <div class="multiple-shortcuts-demo__history">
-      <p class="multiple-shortcuts-demo__history-title">操作历史：</p>
+      <p class="multiple-shortcuts-demo__history-title">
+        {{ isZh ? '操作历史：' : 'Action History:' }}
+      </p>
       <ul class="multiple-shortcuts-demo__history-list">
         <li v-for="(action, index) in history" :key="index">
           {{ action }}
         </li>
         <li v-if="history.length === 0" class="multiple-shortcuts-demo__history-empty">
-          暂无操作记录
+          {{ isZh ? '暂无操作记录' : 'No action records' }}
         </li>
       </ul>
     </div>
@@ -53,8 +64,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+import { useRoute } from 'vitepress';
 import { registerKeyBinding } from '@keekuun/keymaster-react';
+
+const route = useRoute();
+const isZh = computed(() => route.path.startsWith('/zh/'));
 
 const lastAction = ref('');
 const message = ref('');
@@ -86,7 +101,7 @@ onMounted(() => {
     registerKeyBinding(
       'ctrl+s',
       () => {
-        showAction('💾 保存');
+        showAction(isZh.value ? '💾 保存' : '💾 Save');
       },
       { preventDefault: true },
     ),
@@ -94,13 +109,13 @@ onMounted(() => {
 
   cleanups.push(
     registerKeyBinding('ctrl+z', () => {
-      showAction('↶ 撤销');
+      showAction(isZh.value ? '↶ 撤销' : '↶ Undo');
     }),
   );
 
   cleanups.push(
     registerKeyBinding('ctrl+shift+z', () => {
-      showAction('↷ 重做');
+      showAction(isZh.value ? '↷ 重做' : '↷ Redo');
     }),
   );
 
@@ -108,7 +123,7 @@ onMounted(() => {
     registerKeyBinding(
       'ctrl+b',
       () => {
-        showAction('**加粗**');
+        showAction(isZh.value ? '**加粗**' : '**Bold**');
       },
       { preventDefault: true },
     ),
@@ -118,7 +133,7 @@ onMounted(() => {
     registerKeyBinding(
       'ctrl+i',
       () => {
-        showAction('*斜体*');
+        showAction(isZh.value ? '*斜体*' : '*Italic*');
       },
       { preventDefault: true },
     ),
@@ -128,7 +143,7 @@ onMounted(() => {
     registerKeyBinding(
       'ctrl+k',
       () => {
-        showAction('🔗 插入链接');
+        showAction(isZh.value ? '🔗 插入链接' : '🔗 Insert Link');
       },
       { preventDefault: true, stopPropagation: true },
     ),

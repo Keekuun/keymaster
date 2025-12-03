@@ -1,34 +1,54 @@
 <template>
   <div class="manager-demo">
     <p class="manager-demo__title">
-      <strong>KeyBindingManager 演示</strong>
+      <strong v-if="isZh">KeyBindingManager 演示</strong>
+      <strong v-else>KeyBindingManager Demo</strong>
     </p>
     <p class="manager-demo__description">
-      使用 <code>KeyBindingManager</code> 可以统一管理一组相关的快捷键绑定，支持链式调用和批量清理。
+      <template v-if="isZh">
+        使用
+        <code>KeyBindingManager</code> 可以统一管理一组相关的快捷键绑定，支持链式调用和批量清理。
+      </template>
+      <template v-else>
+        Use <code>KeyBindingManager</code> to manage a group of related shortcut bindings,
+        supporting chaining and batch cleanup.
+      </template>
     </p>
     <div class="manager-demo__actions">
       <button @click="enableManager" :disabled="managerEnabled" class="manager-demo__button">
-        启用管理器
+        {{ isZh ? '启用管理器' : 'Enable Manager' }}
       </button>
       <button @click="disableManager" :disabled="!managerEnabled" class="manager-demo__button">
-        禁用管理器（清理所有绑定）
+        {{ isZh ? '禁用管理器（清理所有绑定）' : 'Disable Manager (Clear All Bindings)' }}
       </button>
     </div>
     <div v-if="managerEnabled" class="manager-demo__shortcuts">
-      <p class="manager-demo__hint">管理器已启用，尝试以下快捷键：</p>
+      <p class="manager-demo__hint">
+        {{ isZh ? '管理器已启用，尝试以下快捷键：' : 'Manager enabled, try these shortcuts:' }}
+      </p>
       <div class="manager-demo__shortcut-list">
-        <div class="manager-demo__shortcut-item"><kbd>Ctrl</kbd>+<kbd>S</kbd> 保存</div>
-        <div class="manager-demo__shortcut-item"><kbd>Ctrl</kbd>+<kbd>Z</kbd> 撤销</div>
         <div class="manager-demo__shortcut-item">
-          <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> 重做
+          <kbd>Ctrl</kbd>+<kbd>S</kbd> {{ isZh ? '保存' : 'Save' }}
+        </div>
+        <div class="manager-demo__shortcut-item">
+          <kbd>Ctrl</kbd>+<kbd>Z</kbd> {{ isZh ? '撤销' : 'Undo' }}
+        </div>
+        <div class="manager-demo__shortcut-item">
+          <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> {{ isZh ? '重做' : 'Redo' }}
         </div>
       </div>
     </div>
     <p class="manager-demo__status">
-      状态：<strong>{{ managerEnabled ? '已启用' : '已禁用' }}</strong>
+      <template v-if="isZh">状态：</template>
+      <template v-else>Status:</template>
+      <strong>{{
+        managerEnabled ? (isZh ? '已启用' : 'Enabled') : isZh ? '已禁用' : 'Disabled'
+      }}</strong>
     </p>
     <p class="manager-demo__status">
-      最近触发：<strong>{{ lastAction || '暂无' }}</strong>
+      <template v-if="isZh">最近触发：</template>
+      <template v-else>Last triggered:</template>
+      <strong>{{ lastAction || (isZh ? '暂无' : 'None') }}</strong>
     </p>
     <p v-if="message" class="manager-demo__message">
       {{ message }}
@@ -37,8 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { onBeforeUnmount, ref, computed } from 'vue';
+import { useRoute } from 'vitepress';
 import { createKeyBindingManager } from '@keekuun/keymaster-react';
+
+const route = useRoute();
+const isZh = computed(() => route.path.startsWith('/zh/'));
 
 const managerEnabled = ref(false);
 const lastAction = ref('');
@@ -69,19 +93,19 @@ function enableManager() {
     .register(
       'ctrl+s',
       () => {
-        showAction('💾 保存（通过管理器）');
+        showAction(isZh.value ? '💾 保存（通过管理器）' : '💾 Save (via Manager)');
       },
       { preventDefault: true },
     )
     .register('ctrl+z', () => {
-      showAction('↶ 撤销（通过管理器）');
+      showAction(isZh.value ? '↶ 撤销（通过管理器）' : '↶ Undo (via Manager)');
     })
     .register('ctrl+shift+z', () => {
-      showAction('↷ 重做（通过管理器）');
+      showAction(isZh.value ? '↷ 重做（通过管理器）' : '↷ Redo (via Manager)');
     });
 
   managerEnabled.value = true;
-  showAction('✅ 管理器已启用');
+  showAction(isZh.value ? '✅ 管理器已启用' : '✅ Manager enabled');
 }
 
 function disableManager() {
@@ -89,7 +113,9 @@ function disableManager() {
     manager.dispose();
     manager = null;
     managerEnabled.value = false;
-    showAction('❌ 管理器已禁用，所有绑定已清理');
+    showAction(
+      isZh.value ? '❌ 管理器已禁用，所有绑定已清理' : '❌ Manager disabled, all bindings cleared',
+    );
   }
 }
 

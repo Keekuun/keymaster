@@ -73,6 +73,16 @@ keymaster/
 - **双语支持**：所有文档必须同时提供英文和中文版本
   - 英文文档：`apps/keymaster-docs/docs/`
   - 中文文档：`apps/keymaster-docs/docs/zh/`
+  - **README 文件双语**：所有 README 文件必须同时提供英文和中文版本
+    - 根目录：`README.md`（英文）、`README.zh.md`（中文）
+    - 各子包：`packages/*/README.md`（英文）、`packages/*/README.zh.md`（中文）
+    - 内容必须同步更新，保持一致性
+  - **Demo 组件多语言**：所有 Demo 组件必须支持中英文自动切换
+    - 使用 `useRoute()` 检测当前路径（`route.path.startsWith('/zh/')`）
+    - 使用 `v-if`/`v-else` 或三元表达式显示对应语言文本
+    - 所有用户可见文本（标题、描述、按钮、提示等）都必须适配中英文
+  - **主题组件多语言**：主题组件（如 `VersionBanner`）也必须支持中英文
+  - **语言检测工具**：可使用 `@theme/utils/lang.ts` 中的 `useIsZh()` 函数
 
 ### 4. 版本管理
 
@@ -111,11 +121,22 @@ keymaster/
    - 更新 API 文档（JSDoc）
    - 在文档站点添加使用示例
    - 创建交互式 Demo（如适用）
-   - 同步更新中英文文档
+     - **必须实现多语言支持**：所有 Demo 组件中的用户可见文本都要提供中英文版本
+     - 使用 `useRoute()` 检测当前语言路径（`route.path.startsWith('/zh/')`）
+     - 使用 `v-if`/`v-else` 或三元表达式切换显示
+     - JavaScript 代码中的文本（如操作反馈）也需要根据语言切换
+   - 同步更新中英文文档（Markdown 文件）
+   - **更新 README 文件（如需要）**：
+     - 如果功能变更影响使用方式、API 或安装说明，必须更新 README
+     - 同时更新英文版（`README.md`）和中文版（`README.zh.md`）
+     - 根目录和各子包的 README 都需要同步更新
+     - 使用 `pnpm update:readme` 更新版本号（发布时）
 
 6. **版本发布**
    - 更新版本号（使用 `standard-version`）
    - 更新 CHANGELOG
+   - 更新 README 版本号（使用 `pnpm update:readme`）
+   - 如有功能变更，同步更新 README 的中英文版本
    - 发布到 npm
    - 文档站点自动更新（Vercel）
 
@@ -230,6 +251,100 @@ describe('parseShortcut', () => {
 
 ## 📚 文档规范
 
+### 多语言支持规范
+
+**核心原则**：所有包含用户可见文本的组件和文档都必须支持中英文。
+
+#### Demo 组件多语言实现
+
+所有 Demo 组件（位于 `docs/.vitepress/components/`）必须实现中英文自动切换：
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vitepress';
+
+const route = useRoute();
+const isZh = computed(() => route.path.startsWith('/zh/'));
+</script>
+
+<template>
+  <div>
+    <!-- 方式 1: 使用 v-if/v-else -->
+    <h3 v-if="isZh">中文标题</h3>
+    <h3 v-else>English Title</h3>
+
+    <!-- 方式 2: 使用三元表达式 -->
+    <p>{{ isZh ? '中文描述' : 'English Description' }}</p>
+
+    <!-- JavaScript 代码中的文本也需要切换 -->
+    <button @click="handleClick">
+      {{ isZh ? '按钮' : 'Button' }}
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+function handleClick() {
+  const message = isZh.value ? '操作成功' : 'Operation successful';
+  showMessage(message);
+}
+</script>
+```
+
+**必须适配的文本类型**：
+
+- 组件标题和描述
+- 按钮文字
+- 状态提示（如"最近触发"、"暂无"等）
+- 操作反馈消息
+- 占位符文本（placeholder）
+- 提示信息（hint）
+- 错误和成功消息
+
+#### 主题组件多语言实现
+
+包含用户可见文本的主题组件（如 `VersionBanner`）也必须支持中英文，实现方式与 Demo 组件相同。
+
+纯视觉组件（如 `BackToTop`、`CustomCursor`、`VisualEffects`）如不包含文本，可忽略多语言支持。
+
+#### 文档 Markdown 多语言
+
+- 英文文档：`apps/keymaster-docs/docs/`
+- 中文文档：`apps/keymaster-docs/docs/zh/`
+- 两个目录下的文件结构必须保持一致
+- 内容必须同步更新
+
+#### README 文件多语言
+
+**根目录 README**：
+
+- 英文版：`README.md`
+- 中文版：`README.zh.md`
+- 两个文件必须同步更新，内容保持一致
+
+**子包 README**：
+
+- 每个子包（`keymaster-core`、`keymaster-react`、`keymaster-vue`）都有：
+  - 英文版：`packages/*/README.md`
+  - 中文版：`packages/*/README.zh.md`
+- 所有 README 文件必须同步更新
+
+**更新时机**：
+
+- 功能变更影响使用方式时
+- API 变更时
+- 安装或配置说明变更时
+- 版本发布时（使用 `pnpm update:readme` 更新版本号）
+- 添加新特性或修复重要问题时
+
+**更新要求**：
+
+- 必须同时更新英文和中文版本
+- 确保两个版本的内容一致
+- 保持格式和结构的一致性
+- 每次项目更新时，评估是否需要更新 README
+
 ### 文档站点结构
 
 ```
@@ -262,6 +377,26 @@ apps/keymaster-docs/docs/
    - 在文档中通过 `<ComponentName />` 引用
    - Demo 应该展示实际使用场景
    - **注意**：Demo 组件放在 `docs/.vitepress/components/`，主题组件（如 BackToTop、CustomCursor）放在 `theme/components/`
+   - **多语言支持（必需）**：
+     - 所有 Demo 组件必须支持中英文自动切换
+     - 使用 `useRoute()` 和 `computed(() => route.path.startsWith('/zh/'))` 检测当前语言
+     - 所有用户可见文本（标题、描述、按钮、状态提示、操作反馈等）都必须提供中英文版本
+     - 使用 `v-if`/`v-else` 或三元表达式 `{{ isZh ? '中文' : 'English' }}` 显示对应语言
+     - 示例代码：
+
+       ```vue
+       <script setup lang="ts">
+       import { computed } from 'vue';
+       import { useRoute } from 'vitepress';
+
+       const route = useRoute();
+       const isZh = computed(() => route.path.startsWith('/zh/'));
+       </script>
+
+       <template>
+         <p>{{ isZh ? '中文文本' : 'English Text' }}</p>
+       </template>
+       ```
 
 3. **版本信息**
    - 使用 `<VersionBanner />` 显示当前版本
@@ -345,6 +480,8 @@ pnpm update:readme     # 更新 README 中的版本号
 
 5. **版本发布**
    - 使用 `pnpm release` 升级 patch 版本
+   - 更新 README 版本号（使用 `pnpm update:readme`）
+   - 如有功能变更，同步更新 README 的中英文版本
    - 发布到 npm
 
 ---
@@ -387,21 +524,49 @@ pnpm update:readme     # 更新 README 中的版本号
 ### 添加新 Demo
 
 1. 在 `docs/.vitepress/components/` 创建 Vue 组件（Demo 组件）
-2. 在 `docs/.vitepress/theme/index.ts` 中使用相对路径导入：
+2. **实现多语言支持（必需）**：
+
+   ```vue
+   <script setup lang="ts">
+   import { computed } from 'vue';
+   import { useRoute } from 'vitepress';
+
+   const route = useRoute();
+   const isZh = computed(() => route.path.startsWith('/zh/'));
+   </script>
+
+   <template>
+     <div>
+       <h3>{{ isZh ? '中文标题' : 'English Title' }}</h3>
+       <p>{{ isZh ? '中文描述' : 'English Description' }}</p>
+       <button>{{ isZh ? '按钮' : 'Button' }}</button>
+     </div>
+   </template>
+   ```
+
+   - 所有用户可见文本（标题、描述、按钮、状态提示、操作反馈等）都必须提供中英文版本
+   - 使用 `v-if`/`v-else` 或三元表达式 `{{ isZh ? '中文' : 'English' }}` 切换语言
+   - 在 JavaScript 代码中的文本（如 `showAction()` 函数）也需要根据语言切换
+
+3. 在 `docs/.vitepress/theme/index.ts` 中使用相对路径导入：
    ```typescript
    import VueShortcutDemo from '../components/VueShortcutDemo.vue';
    ```
-3. 在 `enhanceApp` 中注册组件
-4. 在文档中使用 `<ComponentName />` 引用
+4. 在 `enhanceApp` 中注册组件
+5. 在文档中使用 `<ComponentName />` 引用
 
 ### 添加新主题组件
 
 1. 在 `docs/.vitepress/theme/components/` 创建 Vue 组件（主题组件）
-2. 在 `docs/.vitepress/theme/index.ts` 中使用相对路径导入：
+2. **实现多语言支持（如组件包含用户可见文本）**：
+   - 如果组件包含用户可见文本（如 `VersionBanner`），必须支持中英文
+   - 使用与 Demo 组件相同的方式检测语言
+   - 如果组件不包含文本（如纯视觉组件），可忽略多语言支持
+3. 在 `docs/.vitepress/theme/index.ts` 中使用相对路径导入：
    ```typescript
    import BackToTop from './components/BackToTop.vue';
    ```
-3. 如需全局使用，在 `Layout()` 中渲染或在 `enhanceApp` 中注册
+4. 如需全局使用，在 `Layout()` 中渲染或在 `enhanceApp` 中注册
 
 ---
 
@@ -413,6 +578,9 @@ pnpm update:readme     # 更新 README 中的版本号
 - ❌ 破坏性变更不升级主版本号
 - ❌ 跳过测试直接提交代码
 - ❌ 只更新英文或中文文档（必须双语同步）
+- ❌ 只更新英文或中文 README（必须双语同步）
+- ❌ 功能变更后不更新 README（影响使用方式的变更必须更新 README）
+- ❌ Demo 组件或主题组件缺少多语言支持（包含用户可见文本的组件必须支持中英文）
 - ❌ 使用 `any` 类型（除非绝对必要）
 
 ### 推荐做法
@@ -421,6 +589,9 @@ pnpm update:readme     # 更新 README 中的版本号
 - ✅ 保持三个包版本同步
 - ✅ 所有公开 API 都有 JSDoc 注释
 - ✅ 重要功能提供交互式 Demo
+- ✅ Demo 组件和主题组件（包含文本的）都支持中英文自动切换
+- ✅ 每次项目更新时，评估并更新相关文档和 README
+- ✅ README 文件保持中英文版本同步更新
 - ✅ 遵循现有的代码风格和架构
 
 ---
@@ -449,4 +620,4 @@ pnpm update:readme     # 更新 README 中的版本号
 
 ---
 
-**最后更新**: 2024-12（项目 v0.4.1 阶段）
+**最后更新**: 2025-12（项目 v0.4.1 阶段）

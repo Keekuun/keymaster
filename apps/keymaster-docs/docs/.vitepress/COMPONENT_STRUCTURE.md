@@ -94,11 +94,13 @@ import BackToTop from './components/BackToTop.vue';
 1. 在 `docs/.vitepress/components/` 创建 Vue 组件文件
 2. 在 `docs/.vitepress/theme/index.ts` 中：
    - 使用相对路径 `../components/` 导入组件（VitePress 中别名导入可能不稳定）
+
    ```typescript
    import NewDemo from '../components/NewDemo.vue';
    ```
 
    - 在 `enhanceApp` 中注册组件
+
 3. 在文档中使用 `<ComponentName />` 引用
 
 ### 添加新主题组件
