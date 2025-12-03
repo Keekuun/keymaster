@@ -13,9 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue';
+import { useRoute } from 'vitepress';
 
 const particlesCanvas = ref<HTMLCanvasElement | null>(null);
+const route = useRoute();
 let animationId: number | null = null;
 let particles: Array<{
   x: number;
@@ -25,6 +27,7 @@ let particles: Array<{
   radius: number;
   opacity: number;
 }> = [];
+let cleanup: (() => void) | undefined;
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -153,18 +156,58 @@ function initParticles() {
     window.removeEventListener('resize', resizeCanvas);
     if (animationId !== null) {
       cancelAnimationFrame(animationId);
+      animationId = null;
     }
   };
 }
 
-let cleanup: (() => void) | undefined;
+function startAnimation() {
+  // 如果已经有动画在运行，先清理
+  if (cleanup) {
+    cleanup();
+    cleanup = undefined;
+  }
+
+  // 等待 DOM 更新后初始化
+  nextTick(() => {
+    if (particlesCanvas.value) {
+      cleanup = initParticles();
+    }
+  });
+}
+
+// 监听 canvas ref 的变化，确保 canvas 存在时动画运行
+watch(
+  particlesCanvas,
+  (newVal) => {
+    if (newVal && !cleanup) {
+      // canvas 存在且动画未启动时，启动动画
+      startAnimation();
+    }
+  },
+  { immediate: true },
+);
+
+// 监听路由变化，确保路由切换后动画继续运行
+watch(
+  () => route.path,
+  () => {
+    // 路由变化时，如果 canvas 存在，重新启动动画
+    if (particlesCanvas.value) {
+      startAnimation();
+    }
+  },
+);
 
 onMounted(() => {
-  cleanup = initParticles();
+  // 组件挂载时启动动画
+  startAnimation();
 });
 
 onBeforeUnmount(() => {
-  if (cleanup) cleanup();
+  if (cleanup) {
+    cleanup();
+  }
 });
 </script>
 
@@ -176,7 +219,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1; /* 确保在所有内容后面 */
   overflow: hidden;
 }
 

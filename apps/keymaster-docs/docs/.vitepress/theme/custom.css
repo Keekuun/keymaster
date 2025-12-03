@@ -6,12 +6,33 @@
 
 /* 确保内容在视觉效果之上 */
 .vp-doc,
-.VPNav,
-.VPSidebar,
 .VPContent,
 main {
   position: relative;
   z-index: 1;
+}
+
+/* 顶部导航栏和侧边栏使用半透明背景，让粒子动画显示 */
+.VPNav {
+  position: relative;
+  z-index: 1;
+  background-color: color-mix(in srgb, var(--vp-c-bg) 90%, transparent) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.VPSidebar {
+  position: relative;
+  z-index: 1;
+  background-color: color-mix(in srgb, var(--vp-c-bg) 90%, transparent) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* 深色模式下调整透明度 */
+:deep(.dark) .VPNav,
+:deep(.dark) .VPSidebar {
+  background-color: color-mix(in srgb, var(--vp-c-bg) 92%, transparent) !important;
 }
 
 /* 为页面添加微妙的彩色背景渐变 */
