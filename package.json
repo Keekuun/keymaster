@@ -10,7 +10,7 @@
     "lint:fix": "pnpm -r run lint:fix && pnpm lint:fix:root",
     "lint:fix:root": "eslint . --fix",
     "test": "pnpm -r run test:run",
-    "format": "prettier --check .",
+    "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepare": "husky install",
     "docs:dev": "pnpm --filter keymaster-docs run docs:dev",
