@@ -6,3 +6,4 @@ export * from '@core/types';
 export * from '@core/constants';
 export * from '@core/parser';
 export * from '@core/electron';
+export * from '@core/manager';

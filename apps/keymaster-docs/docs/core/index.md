@@ -25,7 +25,9 @@ The core module's design goals are:
 │ • Type Definitions (types.ts)      │
 │ • Shortcut Parser (parser.ts)       │
 │ • Electron Support (electron.ts)    │
-│ • Constants (constants.ts)           │
+│ • Constants (constants.ts)          │
+│ • KeyBindingManager (manager.ts)    │
+│ • Utility Functions (manager.ts)    │
 └─────────────────────────────────────┘
            │              │
            ▼              ▼
@@ -189,6 +191,176 @@ import { getElectronVersions } from '@keekuun/keymaster-core';
 const versions = getElectronVersions();
 // { electron: '30.0.0', node: '20.0.0', chrome: '124.0.0' }
 ```
+
+### KeyBindingManager
+
+The `KeyBindingManager` class allows you to manage a group of related shortcut bindings. It's framework-agnostic and can be used independently in any JavaScript/TypeScript project.
+
+**Note**: To use `KeyBindingManager`, you need to provide a registration function that matches your framework or custom implementation.
+
+#### Basic Usage
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+// Create manager instance - no registration function needed!
+const manager = new KeyBindingManager();
+
+// Chain register multiple shortcuts
+manager
+  .register('ctrl+s', () => console.log('Save'))
+  .register('ctrl+z', () => console.log('Undo'))
+  .register('ctrl+shift+z', () => console.log('Redo'));
+
+// Clean up all bindings
+manager.dispose();
+```
+
+#### Advanced Usage with Options
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+const manager = new KeyBindingManager();
+
+// Register with options (scoped element, prevent default, etc.)
+const editorElement = document.getElementById('editor');
+manager
+  .register('ctrl+s', () => console.log('Save'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+  })
+  .register('ctrl+k', () => console.log('Search'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+    stopPropagation: true,
+  });
+```
+
+#### Custom Registration Function (Optional)
+
+If you want to use a custom registration function (e.g., from React/Vue packages), you can pass it as a parameter:
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+import { registerKeyBinding } from '@keekuun/keymaster-react';
+
+// Use React's registration function for better framework integration
+const manager = new KeyBindingManager(registerKeyBinding);
+manager.register('ctrl+s', () => console.log('Save')).register('ctrl+z', () => console.log('Undo'));
+```
+
+#### Using with React/Vue
+
+When using with React or Vue, you can use the framework-specific `createKeyBindingManager`:
+
+```typescript
+// React
+import { createKeyBindingManager } from '@keekuun/keymaster-react';
+const manager = createKeyBindingManager();
+
+// Vue
+import { createKeyBindingManager } from '@keekuun/keymaster-vue';
+const manager = createKeyBindingManager();
+```
+
+#### API
+
+- `register(shortcut, handler, options?)`: Register a shortcut binding, returns `this` for chaining
+- `dispose()`: Clean up all registered bindings
+- `getBindingCount()`: Get the number of currently registered bindings
+
+### Utility Functions
+
+#### `isValidShortcut(shortcut: string): boolean`
+
+Check if a shortcut string format is valid:
+
+```typescript
+import { isValidShortcut } from '@keekuun/keymaster-core';
+
+isValidShortcut('ctrl+s'); // true
+isValidShortcut('invalid'); // false
+isValidShortcut('ctrl'); // false (missing main key)
+```
+
+#### `formatShortcut(shortcut: string): string`
+
+Format a shortcut string (normalize case and spacing):
+
+```typescript
+import { formatShortcut } from '@keekuun/keymaster-core';
+
+formatShortcut('Ctrl+S'); // 'ctrl+s'
+formatShortcut('ctrl + shift + z'); // 'ctrl+shift+z'
+```
+
+## Build Formats
+
+The core package supports multiple build formats for different use cases:
+
+- **ES Module** (`dist/index.js`): For modern bundlers (Vite, Webpack, Rollup) and ES module environments
+- **CommonJS** (`dist/index.cjs`): For Node.js and CommonJS environments
+- **UMD** (`dist/index.umd.js`): For browser `<script>` tags and CDN usage
+
+> **Important**: UMD format is **only available for `@keekuun/keymaster-core`**. React and Vue packages (`@keekuun/keymaster-react` and `@keekuun/keymaster-vue`) do not provide UMD builds because they require framework environments (React/Vue) and are typically used with modern bundlers.
+
+### Using UMD Build (Core Package Only)
+
+You can use the UMD build directly in the browser without any build tools:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Keymaster Core UMD Example</title>
+  </head>
+  <body>
+    <!-- Load via unpkg CDN -->
+    <script src="https://unpkg.com/@keekuun/keymaster-core/dist/index.umd.js"></script>
+    <!-- Or via jsdelivr CDN -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@keekuun/keymaster-core/dist/index.umd.js"></script> -->
+
+    <script>
+      // Access via global variable KeymasterCore
+      const { KeyBindingManager, parseShortcut, isValidShortcut, formatShortcut } = KeymasterCore;
+
+      // Use KeyBindingManager - no registration function needed!
+      const manager = new KeyBindingManager();
+      manager
+        .register(
+          'ctrl+s',
+          () => {
+            console.log('Save triggered');
+            alert('Save!');
+          },
+          { preventDefault: true },
+        )
+        .register('ctrl+z', () => {
+          console.log('Undo triggered');
+          alert('Undo!');
+        });
+
+      console.log('Shortcuts registered. Try Ctrl+S or Ctrl+Z');
+    </script>
+  </body>
+</html>
+```
+
+**Use Cases for UMD:**
+
+- Quick prototypes and demos without build tools
+- Legacy projects that don't use modern bundlers
+- CDN-based deployments
+- Standalone JavaScript applications
+- Learning and experimentation
+
+**Limitations:**
+
+- No TypeScript type checking in browser environment
+- Requires manual dependency management
+- Not recommended for production React/Vue applications (use npm packages with bundlers instead)
+- React/Vue packages are not available in UMD format
 
 ## Usage Examples
 

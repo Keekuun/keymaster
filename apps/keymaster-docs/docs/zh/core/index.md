@@ -26,6 +26,8 @@
 │ • 快捷键解析器 (parser.ts)           │
 │ • Electron 支持 (electron.ts)        │
 │ • 常量定义 (constants.ts)            │
+│ • KeyBindingManager (manager.ts)     │
+│ • 工具函数 (manager.ts)              │
 └─────────────────────────────────────┘
            │              │
            ▼              ▼
@@ -166,6 +168,183 @@ if (processInfo) {
   console.log('Electron 版本:', processInfo.versions?.electron);
 }
 ```
+
+### KeyBindingManager
+
+`KeyBindingManager` 类允许你管理一组相关的快捷键绑定。它是框架无关的，可以在任何 JavaScript/TypeScript 项目中独立使用。
+
+**注意**：要使用 `KeyBindingManager`，你需要提供一个注册函数，该函数匹配你的框架或自定义实现。
+
+#### 基础用法
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+// 创建管理器实例 - 无需提供注册函数！
+const manager = new KeyBindingManager();
+
+// 链式注册多个快捷键
+manager
+  .register('ctrl+s', () => console.log('保存'))
+  .register('ctrl+z', () => console.log('撤销'))
+  .register('ctrl+shift+z', () => console.log('重做'));
+
+// 清理所有绑定
+manager.dispose();
+```
+
+#### 高级用法（带选项）
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+const manager = new KeyBindingManager();
+
+// 注册时使用选项（作用域元素、阻止默认行为等）
+const editorElement = document.getElementById('editor');
+manager
+  .register('ctrl+s', () => console.log('保存'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+  })
+  .register('ctrl+k', () => console.log('搜索'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+    stopPropagation: true,
+  });
+```
+
+#### 自定义注册函数（可选）
+
+如果你想使用自定义注册函数（例如来自 React/Vue 包），可以将其作为参数传递：
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+import { registerKeyBinding } from '@keekuun/keymaster-react';
+
+// 使用 React 的注册函数以获得更好的框架集成
+const manager = new KeyBindingManager(registerKeyBinding);
+manager.register('ctrl+s', () => console.log('保存')).register('ctrl+z', () => console.log('撤销'));
+```
+
+// 链式注册多个快捷键
+manager
+.register('ctrl+s', () => console.log('保存'))
+.register('ctrl+z', () => console.log('撤销'))
+.register('ctrl+shift+z', () => console.log('重做'));
+
+// 清理所有绑定
+manager.dispose();
+
+````
+
+#### 与 React/Vue 一起使用
+
+当与 React 或 Vue 一起使用时，可以使用框架特定的 `createKeyBindingManager`：
+
+```typescript
+// React
+import { createKeyBindingManager } from '@keekuun/keymaster-react';
+const manager = createKeyBindingManager();
+
+// Vue
+import { createKeyBindingManager } from '@keekuun/keymaster-vue';
+const manager = createKeyBindingManager();
+````
+
+#### API
+
+- `register(shortcut, handler, options?)`: 注册一个快捷键绑定，返回 `this` 以支持链式调用
+- `dispose()`: 清理所有已注册的绑定
+- `getBindingCount()`: 获取当前已注册的绑定数量
+
+### 工具函数
+
+#### `isValidShortcut(shortcut: string): boolean`
+
+检查快捷键字符串格式是否有效：
+
+```typescript
+import { isValidShortcut } from '@keekuun/keymaster-core';
+
+isValidShortcut('ctrl+s'); // true
+isValidShortcut('invalid'); // false
+isValidShortcut('ctrl'); // false (缺少主键)
+```
+
+#### `formatShortcut(shortcut: string): string`
+
+格式化快捷键字符串（统一大小写和空格）：
+
+```typescript
+import { formatShortcut } from '@keekuun/keymaster-core';
+
+formatShortcut('Ctrl+S'); // 'ctrl+s'
+formatShortcut('ctrl + shift + z'); // 'ctrl+shift+z'
+```
+
+## 构建格式
+
+核心包支持多种构建格式，适用于不同的使用场景：
+
+- **ES Module** (`dist/index.js`): 适用于现代打包工具（Vite、Webpack、Rollup）和 ES 模块环境
+- **CommonJS** (`dist/index.cjs`): 适用于 Node.js 和 CommonJS 环境
+- **UMD** (`dist/index.umd.js`): 适用于浏览器 `<script>` 标签和 CDN 使用
+
+> **重要提示**：UMD 格式**仅适用于 `@keekuun/keymaster-core`**。React 和 Vue 包（`@keekuun/keymaster-react` 和 `@keekuun/keymaster-vue`）不提供 UMD 构建，因为它们需要框架环境（React/Vue），通常与现代打包工具一起使用。
+
+### 使用 UMD 构建（仅核心包）
+
+你可以直接在浏览器中使用 UMD 构建，无需任何打包工具：
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Keymaster Core UMD 示例</title>
+  </head>
+  <body>
+    <!-- 通过 unpkg CDN 加载 -->
+    <script src="https://unpkg.com/@keekuun/keymaster-core/dist/index.umd.js"></script>
+    <!-- 或通过 jsdelivr CDN -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@keekuun/keymaster-core/dist/index.umd.js"></script> -->
+
+    <script>
+      // 通过全局变量 KeymasterCore 访问
+      const { KeyBindingManager, parseShortcut, isValidShortcut, formatShortcut } = KeymasterCore;
+
+      // 使用 KeyBindingManager - 无需提供注册函数！
+      const manager = new KeyBindingManager();
+      manager
+        .register('ctrl+s', () => {
+          console.log('保存触发');
+          alert('保存！');
+        })
+        .register('ctrl+z', () => {
+          console.log('撤销触发');
+          alert('撤销！');
+        });
+
+      console.log('快捷键已注册。尝试按 Ctrl+S 或 Ctrl+Z');
+    </script>
+  </body>
+</html>
+```
+
+**UMD 使用场景：**
+
+- 无需打包工具的快速原型和演示
+- 不使用现代打包工具的遗留项目
+- 基于 CDN 的部署
+- 独立的 JavaScript 应用
+- 学习和实验
+
+**限制：**
+
+- 浏览器环境中无法进行 TypeScript 类型检查
+- 需要手动管理依赖
+- 不推荐用于生产环境的 React/Vue 应用（应使用 npm 包配合打包工具）
+- React/Vue 包不提供 UMD 格式
 
 ## 使用示例
 

@@ -18,6 +18,8 @@ keymaster core module, providing shared type definitions, parsers, and utility f
 - **Event Matcher**: Determines if keyboard events match expected shortcut combinations
 - **Scope Checking**: Verifies if events occur within specific element scopes
 - **Electron Support**: Detects and handles special requirements of Electron environments
+- **KeyBindingManager**: Framework-agnostic shortcut binding manager for managing groups of shortcuts
+- **Utility Functions**: `isValidShortcut()` and `formatShortcut()` for shortcut validation and formatting
 
 ## Installation
 
@@ -156,6 +158,92 @@ if (processInfo) {
 }
 ```
 
+### KeyBindingManager
+
+The `KeyBindingManager` class allows you to manage a group of related shortcut bindings. It's framework-agnostic and can be used independently in any JavaScript/TypeScript project.
+
+**Note**: To use `KeyBindingManager`, you need to provide a registration function that matches your framework or custom implementation.
+
+#### Basic Usage
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+// Create manager instance - no registration function needed!
+const manager = new KeyBindingManager();
+
+// Chain register multiple shortcuts
+manager
+  .register('ctrl+s', () => console.log('Save'))
+  .register('ctrl+z', () => console.log('Undo'))
+  .register('ctrl+shift+z', () => console.log('Redo'));
+
+// Clean up all bindings
+manager.dispose();
+```
+
+#### Advanced Usage with Options
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+
+const manager = new KeyBindingManager();
+
+// Register with options (scoped element, prevent default, etc.)
+const editorElement = document.getElementById('editor');
+manager
+  .register('ctrl+s', () => console.log('Save'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+  })
+  .register('ctrl+k', () => console.log('Search'), {
+    scopedElement: editorElement,
+    preventDefault: true,
+    stopPropagation: true,
+  });
+```
+
+#### Custom Registration Function (Optional)
+
+If you want to use a custom registration function (e.g., from React/Vue packages), you can pass it as a parameter:
+
+```typescript
+import { KeyBindingManager } from '@keekuun/keymaster-core';
+import { registerKeyBinding } from '@keekuun/keymaster-react';
+
+// Use React's registration function for better framework integration
+const manager = new KeyBindingManager(registerKeyBinding);
+manager.register('ctrl+s', () => console.log('Save')).register('ctrl+z', () => console.log('Undo'));
+```
+
+#### Using with React/Vue
+
+When using with React or Vue, you can use the framework-specific `createKeyBindingManager`:
+
+```typescript
+// React
+import { createKeyBindingManager } from '@keekuun/keymaster-react';
+const manager = createKeyBindingManager();
+
+// Vue
+import { createKeyBindingManager } from '@keekuun/keymaster-vue';
+const manager = createKeyBindingManager();
+```
+
+#### Utility Functions
+
+```typescript
+import { isValidShortcut, formatShortcut } from '@keekuun/keymaster-core';
+
+// Validate shortcut format
+isValidShortcut('ctrl+s'); // true
+isValidShortcut('invalid'); // false
+
+// Format shortcut string
+formatShortcut('Ctrl+S'); // 'ctrl+s'
+formatShortcut('ctrl + shift + z'); // 'ctrl+shift+z'
+```
+
 ### Constants
 
 ```typescript
@@ -205,12 +293,66 @@ function validateShortcut(shortcut: string): boolean {
 }
 ```
 
+## Build Formats
+
+The core package supports multiple build formats for different use cases:
+
+- **ES Module** (`dist/index.js`): For modern bundlers and ES module environments
+- **CommonJS** (`dist/index.cjs`): For Node.js and CommonJS environments
+- **UMD** (`dist/index.umd.js`): For browser `<script>` tags and CDN usage (core package only)
+
+### UMD Usage (Core Package Only)
+
+> **Note**: UMD format is only available for `@keekuun/keymaster-core`. React and Vue packages (`@keekuun/keymaster-react` and `@keekuun/keymaster-vue`) do not provide UMD builds as they require framework environments and are typically used with modern bundlers.
+
+You can use the UMD build directly in the browser for the core package:
+
+```html
+<!-- Via unpkg CDN -->
+<script src="https://unpkg.com/@keekuun/keymaster-core/dist/index.umd.js"></script>
+<!-- Or via jsdelivr CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@keekuun/keymaster-core/dist/index.umd.js"></script>
+<script>
+  // Access via global variable KeymasterCore
+  const { KeyBindingManager, parseShortcut, isValidShortcut, formatShortcut } = KeymasterCore;
+
+  // Example: Use KeyBindingManager with your own registration function
+  function myRegisterKeyBinding(shortcut, handler, options) {
+    const listener = (event) => {
+      // Your custom matching logic
+      handler(event);
+    };
+    window.addEventListener('keydown', listener);
+    return () => window.removeEventListener('keydown', listener);
+  }
+
+  const manager = new KeyBindingManager(myRegisterKeyBinding);
+  manager
+    .register('ctrl+s', () => console.log('Save'))
+    .register('ctrl+z', () => console.log('Undo'));
+</script>
+```
+
+**Use Cases for UMD:**
+
+- Quick prototypes and demos without build tools
+- Legacy projects that don't use modern bundlers
+- CDN-based deployments
+- Standalone JavaScript applications
+
+**Limitations:**
+
+- No TypeScript type checking in browser environment
+- Requires manual dependency management
+- Not recommended for production React/Vue applications (use npm packages instead)
+
 ## Design Principles
 
 1. **Type Safety**: All functions and types have complete TypeScript type definitions
 2. **Framework Agnostic**: Core module doesn't depend on any UI framework (React/Vue)
 3. **Extensibility**: Provides unified base capabilities for React and Vue versions
 4. **Zero Dependencies**: Core module only depends on browser native APIs
+5. **Standalone Usable**: Can be used independently in any JavaScript/TypeScript project
 
 ## Version Compatibility
 

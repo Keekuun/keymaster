@@ -20,8 +20,19 @@ export default defineConfig({
     lib: {
       entry: 'src/index.ts',
       name: 'KeymasterCore',
-      fileName: 'index',
-      formats: ['es', 'cjs'],
+      fileName: (format) => {
+        if (format === 'umd') {
+          return 'index.umd.js';
+        }
+        return format === 'es' ? 'index.js' : 'index.cjs';
+      },
+      formats: ['es', 'cjs', 'umd'],
+    },
+    rollupOptions: {
+      output: {
+        // UMD 格式需要全局变量名
+        globals: {},
+      },
     },
   },
   test: {

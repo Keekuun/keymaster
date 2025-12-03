@@ -7,6 +7,8 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
   "exports": {
     ".": {
       "import": {
@@ -16,6 +18,9 @@
       "require": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.cjs"
+      },
+      "umd": {
+        "default": "./dist/index.umd.js"
       }
     },
     "./package.json": "./package.json"
