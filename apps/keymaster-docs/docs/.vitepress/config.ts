@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress';
-import path from 'node:path';
+import react from '@vitejs/plugin-react';
 import { versions } from './theme/utils/versions';
 
 const reactVersion = versions.react;
@@ -9,16 +9,7 @@ const coreVersion = versions.core;
 // keymaster 文档站点基础配置（自动从包中读取版本号，支持多语言）
 export default defineConfig({
   vite: {
-    resolve: {
-      alias: {
-        '@packages': path.resolve(__dirname, '../../../../packages'),
-        '@packages/*': path.resolve(__dirname, '../../../../packages/*'),
-        '@theme': path.resolve(__dirname, '../.vitepress/theme'),
-        '@theme/*': path.resolve(__dirname, '../.vitepress/theme/*'),
-        '@docs': path.resolve(__dirname, '..'),
-        '@docs/*': path.resolve(__dirname, '../*'),
-      },
-    },
+    plugins: [react()],
   },
   title: 'keymaster',
   description: 'Modern keyboard shortcut library for React/Vue based on keymaster',

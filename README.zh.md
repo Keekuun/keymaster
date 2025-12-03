@@ -176,10 +176,10 @@ useEditorKeyBindingVue(
 #### 文档站点
 
 - 在线文档：[https://keymaster-docs.vercel.app/](https://keymaster-docs.vercel.app/)
-  - React 文档：`/react/`
-  - Vue 文档：`/vue/`
-  - Core 文档：`/core/`
-  - 版本管理说明：`/versions/`
+  - React 文档：[https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)
+  - Vue 文档：[https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)
+  - Core 文档：[https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
+  - 版本管理说明：[https://keymaster-docs.vercel.app/versions](https://keymaster-docs.vercel.app/versions)
 
 #### 包依赖关系
 

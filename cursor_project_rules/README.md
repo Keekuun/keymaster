@@ -78,7 +78,8 @@ keymaster/
     - 各子包：`packages/*/README.md`（英文）、`packages/*/README.zh.md`（中文）
     - 内容必须同步更新，保持一致性
   - **Demo 组件多语言**：所有 Demo 组件必须支持中英文自动切换
-    - 使用 `useRoute()` 检测当前路径（`route.path.startsWith('/zh/')`）
+    - Vue 组件：使用 `useRoute()` 检测当前路径（`route.path.startsWith('/zh/')`）
+    - React 组件：通过 `isZh` prop 接收语言信息（由 `ReactWrapper` 自动传递）
     - 使用 `v-if`/`v-else` 或三元表达式显示对应语言文本
     - 所有用户可见文本（标题、描述、按钮、提示等）都必须适配中英文
   - **主题组件多语言**：主题组件（如 `VersionBanner`）也必须支持中英文
@@ -98,104 +99,64 @@ keymaster/
 ### 新增功能步骤
 
 1. **需求分析**
-   - 明确功能需求和使用场景
-   - 确定是否需要修改 core、react、vue 或全部
-   - 评估对现有 API 的影响
+   - 确定功能属于哪个包（core/react/vue）
+   - 评估是否需要修改核心逻辑
+   - 考虑向后兼容性
 
-2. **核心实现（如需要）**
-   - 在 `keymaster-core` 中实现核心逻辑
-   - 添加类型定义（`types.ts`）
-   - 编写单元测试（`*.test.ts`）
-   - 确保导出到 `index.ts`
+2. **代码实现**
+   - 核心逻辑优先在 `keymaster-core` 中实现
+   - React/Vue 包只做框架适配
+   - 确保类型定义完整
 
-3. **框架适配**
-   - 在 `keymaster-react` 中添加 React Hook（如需要）
-   - 在 `keymaster-vue` 中添加 Vue Composition API（如需要）
-   - 确保使用 core 模块的共享逻辑
+3. **测试编写**
+   - 为核心逻辑编写单元测试
+   - 确保测试覆盖所有分支
 
-4. **测试验证**
-   - 运行 `pnpm test` 确保所有测试通过
-   - 在文档站点的 Demo 中验证功能
-
-5. **文档更新**
+4. **文档更新**
    - 更新 API 文档（JSDoc）
-   - 在文档站点添加使用示例
-   - 创建交互式 Demo（如适用）
-     - **必须实现多语言支持**：所有 Demo 组件中的用户可见文本都要提供中英文版本
-     - 使用 `useRoute()` 检测当前语言路径（`route.path.startsWith('/zh/')`）
-     - 使用 `v-if`/`v-else` 或三元表达式切换显示
-     - JavaScript 代码中的文本（如操作反馈）也需要根据语言切换
-   - 同步更新中英文文档（Markdown 文件）
-   - **更新 README 文件（如需要）**：
-     - 如果功能变更影响使用方式、API 或安装说明，必须更新 README
-     - 同时更新英文版（`README.md`）和中文版（`README.zh.md`）
-     - 根目录和各子包的 README 都需要同步更新
-     - 使用 `pnpm update:readme` 更新版本号（发布时）
+   - 更新使用示例
+   - 如有必要，创建交互式 Demo
+   - **必须同时更新英文和中文文档**
+
+5. **README 更新**
+   - 如有功能变更影响使用方式，更新 README
+   - **必须同时更新英文和中文 README**
 
 6. **版本发布**
-   - 更新版本号（使用 `standard-version`）
-   - 更新 CHANGELOG
-   - 更新 README 版本号（使用 `pnpm update:readme`）
-   - 如有功能变更，同步更新 README 的中英文版本
+   - 使用 `pnpm release` 升级版本
+   - 使用 `pnpm update:readme` 更新 README 版本号
    - 发布到 npm
-   - 文档站点自动更新（Vercel）
-
-### 代码优化步骤
-
-1. **性能优化**
-   - 使用性能分析工具识别瓶颈
-   - 优化事件监听器注册/注销逻辑
-   - 减少不必要的计算和内存分配
-
-2. **代码重构**
-   - 提取公共逻辑到 core 模块
-   - 消除重复代码
-   - 改进类型定义和接口设计
-
-3. **测试补充**
-   - 为重构后的代码补充测试用例
-   - 确保测试覆盖率不降低
-
-4. **文档同步**
-   - 更新相关文档以反映优化后的实现
 
 ---
 
-## 📝 代码规范
+## 📝 API 设计规范
 
-### TypeScript
+### 函数命名
 
-- 使用严格的 TypeScript 配置（`strict: true`）
-- 避免使用 `any`，优先使用 `unknown` 或具体类型
-- 使用 `interface` 定义对象类型，使用 `type` 定义联合类型或工具类型
-- 导出类型时使用 `export type` 或 `export interface`
+- **注册函数**：`registerKeyBinding`, `registerVueKeyBinding`
+- **Hook 函数**：`useKeyBinding`, `useScopedKeyBinding`
+- **工具函数**：`parseShortcut`, `isMatchingShortcut`
+- **类型定义**：使用 PascalCase，如 `KeymasterHandler`, `KeymasterBindingOptions`
 
-### 命名规范
+### 参数设计
 
-- **函数/变量**：使用 camelCase（如 `registerKeyBinding`）
-- **类型/接口**：使用 PascalCase（如 `KeymasterHandler`）
-- **常量**：使用 UPPER_SNAKE_CASE（如 `MODIFIER_KEYS`）
-- **文件**：使用 kebab-case（如 `key-binding.ts`）
+- **快捷键字符串**：统一使用小写，`+` 分隔，如 `"ctrl+s"`, `"cmd+k"`
+- **选项对象**：使用可选参数对象，便于扩展
+- **返回值**：注册函数返回清理函数 `() => void`
 
-### 注释规范
-
-- **JSDoc**：所有公开 API 必须包含 JSDoc 注释
-- **示例**：复杂逻辑必须包含注释说明
-- **TODO**：使用 `// TODO: 描述` 标记待办事项
-
-### 示例：函数注释
+### 示例：API 设计
 
 ````typescript
 /**
- * 注册键盘快捷键绑定
+ * 注册键盘快捷键绑定。
  *
- * @param shortcut - 快捷键字符串，如 'ctrl+s', 'cmd+k'
- * @param handler - 事件处理函数
- * @param options - 可选的绑定选项（作用域、编辑器模式等）
- * @returns 清理函数，调用后取消绑定
+ * @param shortcut 快捷键字符串，如 "ctrl+s", "cmd+k"
+ * @param handler 事件处理函数
+ * @param options 可选的绑定选项（作用域、编辑器模式等）
+ * @returns 返回清理函数，用于取消绑定
  *
  * @example
- * ```ts
+ * ```typescript
  * const cleanup = registerKeyBinding('ctrl+s', (event) => {
  *   event.preventDefault();
  *   console.log('Save');
@@ -259,6 +220,8 @@ describe('parseShortcut', () => {
 
 所有 Demo 组件（位于 `docs/.vitepress/components/`）必须实现中英文自动切换：
 
+**Vue 组件示例**：
+
 ```vue
 <script setup lang="ts">
 import { computed } from 'vue';
@@ -292,6 +255,33 @@ function handleClick() {
 </script>
 ```
 
+**React 组件示例**：
+
+```tsx
+import React from 'react';
+
+interface DemoProps {
+  isZh?: boolean;
+}
+
+export default function Demo({ isZh = false }: DemoProps) {
+  return (
+    <div>
+      <h3>{isZh ? '中文标题' : 'English Title'}</h3>
+      <p>{isZh ? '中文描述' : 'English Description'}</p>
+      <button
+        onClick={() => {
+          const message = isZh ? '操作成功' : 'Operation successful';
+          showMessage(message);
+        }}
+      >
+        {isZh ? '按钮' : 'Button'}
+      </button>
+    </div>
+  );
+}
+```
+
 **必须适配的文本类型**：
 
 - 组件标题和描述
@@ -300,7 +290,6 @@ function handleClick() {
 - 操作反馈消息
 - 占位符文本（placeholder）
 - 提示信息（hint）
-- 错误和成功消息
 
 #### 主题组件多语言实现
 
@@ -342,61 +331,64 @@ function handleClick() {
 
 - 必须同时更新英文和中文版本
 - 确保两个版本的内容一致
-- 保持格式和结构的一致性
-- 每次项目更新时，评估是否需要更新 README
 
-### 文档站点结构
+---
 
-```
-apps/keymaster-docs/docs/
-├── index.md              # 英文首页
-├── react/
-│   └── index.md          # React 文档
-├── vue/
-│   └── index.md          # Vue 文档
-├── core/
-│   └── index.md          # Core 文档
-└── zh/                   # 中文文档（相同结构）
-    ├── index.md
-    ├── react/
-    ├── vue/
-    └── core/
-```
+## 📖 文档站点开发
 
-### 文档内容要求
+### 文档结构
 
-1. **API 文档**
-   - 参数说明（类型、是否必需、默认值）
+文档站点使用 VitePress，支持多语言：
+
+- **英文文档**：`apps/keymaster-docs/docs/`
+- **中文文档**：`apps/keymaster-docs/docs/zh/`
+
+### 文档页面要求
+
+1. **API 说明**
+   - 功能描述
+   - 参数说明
    - 返回值说明
    - 使用示例（代码块）
    - 注意事项和最佳实践
 
 2. **交互式 Demo**
-   - 使用 Vue 组件创建 Demo（放在 `docs/.vitepress/components/`）
-   - 在 `theme/index.ts` 中使用相对路径 `../components/` 导入（VitePress 中别名导入可能不稳定）
-   - 在文档中通过 `<ComponentName />` 引用
+   - **框架对应关系（重要）**：
+     - **React 文档**（`/react/` 或 `/zh/react/`）：必须使用 React 组件实现的 Demo
+     - **Vue 文档**（`/vue/` 或 `/zh/vue/`）：必须使用 Vue 组件实现的 Demo
+     - 通过 `AutoDemoWrapper` 组件自动根据路由选择对应框架的 Demo
+   - **Demo 组件位置**：
+     - Vue 版本：`docs/.vitepress/components/`（Vue 组件，如 `ScopedShortcutDemo.vue`）
+     - React 版本：`docs/.vitepress/components/react/`（React TSX 组件 + Vue 包装器，如 `ScopedShortcutDemo.tsx` + `ScopedShortcutDemoWrapper.vue`）
+   - **组件注册**：
+     - 在 `theme/index.ts` 中使用 `AutoDemoWrapper` 注册，自动根据路由选择版本
+     - 示例：
+
+       ```typescript
+       import { h } from 'vue';
+       import AutoDemoWrapper from '../components/AutoDemoWrapper.vue';
+       import ScopedShortcutDemo from '../components/ScopedShortcutDemo.vue';
+       import ScopedShortcutDemoWrapper from '../components/react/ScopedShortcutDemoWrapper.vue';
+
+       app.component('ScopedShortcutDemo', () =>
+         h(AutoDemoWrapper, {
+           vueComponent: ScopedShortcutDemo,
+           reactComponent: ScopedShortcutDemoWrapper,
+         }),
+       );
+       ```
+   - **在文档中使用**：
+     - 在文档中通过 `<ComponentName />` 引用，无需关心框架
+     - 系统会根据当前文档路径自动选择对应框架的 Demo
    - Demo 应该展示实际使用场景
    - **注意**：Demo 组件放在 `docs/.vitepress/components/`，主题组件（如 BackToTop、CustomCursor）放在 `theme/components/`
    - **多语言支持（必需）**：
      - 所有 Demo 组件必须支持中英文自动切换
-     - 使用 `useRoute()` 和 `computed(() => route.path.startsWith('/zh/'))` 检测当前语言
+     - Vue 组件：使用 `useRoute()` 和 `computed(() => route.path.startsWith('/zh/'))` 检测当前语言
+     - React 组件：通过 `isZh` prop 接收语言信息（由 `ReactWrapper` 自动传递）
      - 所有用户可见文本（标题、描述、按钮、状态提示、操作反馈等）都必须提供中英文版本
-     - 使用 `v-if`/`v-else` 或三元表达式 `{{ isZh ? '中文' : 'English' }}` 显示对应语言
-     - 示例代码：
-
-       ```vue
-       <script setup lang="ts">
-       import { computed } from 'vue';
-       import { useRoute } from 'vitepress';
-
-       const route = useRoute();
-       const isZh = computed(() => route.path.startsWith('/zh/'));
-       </script>
-
-       <template>
-         <p>{{ isZh ? '中文文本' : 'English Text' }}</p>
-       </template>
-       ```
+     - Vue 组件使用 `v-if`/`v-else` 或三元表达式 `{{ isZh ? '中文' : 'English' }}`
+     - React 组件使用三元表达式或条件渲染 `{isZh ? '中文' : 'English'}`
 
 3. **版本信息**
    - 使用 `<VersionBanner />` 显示当前版本
@@ -477,6 +469,7 @@ pnpm update:readme     # 更新 README 中的版本号
 
 4. **文档更新**
    - 如有必要，更新文档说明
+   - **必须同时更新英文和中文文档**
 
 5. **版本发布**
    - 使用 `pnpm release` 升级 patch 版本
@@ -496,15 +489,33 @@ pnpm update:readme     # 更新 README 中的版本号
 
 用于在文档中展示功能示例的交互式组件：
 
-- `ReactShortcutDemo` - React 基础示例
-- `VueShortcutDemo` - Vue 基础示例
-- `ScopedShortcutDemo` - 作用域绑定示例
-- `EditorModeDemo` - 编辑器模式示例
-- `MultipleShortcutsDemo` - 多快捷键示例
-- `KeyBindingManagerDemo` - 快捷键管理器示例
-- `ElectronModeDemo` - Electron 模式示例
+**框架对应关系**：
 
-**注意**：Demo 组件放在 `docs/.vitepress/components/` 目录下，在 `theme/index.ts` 中使用相对路径 `../components/` 导入（VitePress 中别名导入可能不稳定）。
+- **React 文档**（`/react/` 或 `/zh/react/`）：使用 React 组件实现的 Demo
+- **Vue 文档**（`/vue/` 或 `/zh/vue/`）：使用 Vue 组件实现的 Demo
+- 通过 `AutoDemoWrapper` 组件自动根据路由选择对应框架的 Demo
+
+**组件结构**：
+
+- Vue 版本组件：`docs/.vitepress/components/`（如 `VueShortcutDemo.vue`、`ScopedShortcutDemo.vue`）
+- React 版本组件：`docs/.vitepress/components/react/`（如 `ReactShortcutDemo.tsx` + `ReactShortcutDemoWrapper.vue`）
+
+**现有 Demo 组件**：
+
+- `ReactShortcutDemo` - React/Vue 基础示例（根据文档路径自动选择）
+- `VueShortcutDemo` - Vue 基础示例（仅用于 Vue 文档）
+- `ScopedShortcutDemo` - 作用域绑定示例（根据文档路径自动选择）
+- `EditorModeDemo` - 编辑器模式示例（根据文档路径自动选择）
+- `MultipleShortcutsDemo` - 多快捷键示例（根据文档路径自动选择）
+- `KeyBindingManagerDemo` - 快捷键管理器示例（根据文档路径自动选择）
+- `ElectronModeDemo` - Electron 模式示例（Vue 版本）
+
+**注意**：
+
+- Demo 组件放在 `docs/.vitepress/components/` 目录下
+- React 版本 Demo 放在 `docs/.vitepress/components/react/` 子目录
+- 在 `theme/index.ts` 中使用 `AutoDemoWrapper` 注册，自动根据路由选择版本
+- 使用相对路径 `../components/` 导入（VitePress 中别名导入可能不稳定）
 
 #### 主题组件（位于 `apps/keymaster-docs/docs/.vitepress/theme/components/`）
 
@@ -523,7 +534,11 @@ pnpm update:readme     # 更新 README 中的版本号
 
 ### 添加新 Demo
 
-1. 在 `docs/.vitepress/components/` 创建 Vue 组件（Demo 组件）
+**重要**：新增 Demo 时必须同时创建 Vue 版本和 React 版本，确保 React 文档使用 React 组件，Vue 文档使用 Vue 组件。
+
+#### 1. 创建 Vue 版本 Demo（用于 Vue 文档）
+
+1. 在 `docs/.vitepress/components/` 创建 Vue 组件（如 `NewDemo.vue`）
 2. **实现多语言支持（必需）**：
 
    ```vue
@@ -548,12 +563,64 @@ pnpm update:readme     # 更新 README 中的版本号
    - 使用 `v-if`/`v-else` 或三元表达式 `{{ isZh ? '中文' : 'English' }}` 切换语言
    - 在 JavaScript 代码中的文本（如 `showAction()` 函数）也需要根据语言切换
 
-3. 在 `docs/.vitepress/theme/index.ts` 中使用相对路径导入：
-   ```typescript
-   import VueShortcutDemo from '../components/VueShortcutDemo.vue';
+#### 2. 创建 React 版本 Demo（用于 React 文档）
+
+1. 在 `docs/.vitepress/components/react/` 创建 React TSX 组件（如 `NewDemo.tsx`）
+2. **实现多语言支持（必需）**：
+   - 通过 `isZh` prop 接收语言信息（由 `ReactWrapper` 自动传递）
+   - 使用三元表达式或条件渲染显示对应语言文本
+   - 示例：
+
+     ```tsx
+     interface NewDemoProps {
+       isZh?: boolean;
+     }
+
+     export default function NewDemo({ isZh = false }: NewDemoProps) {
+       return (
+         <div>
+           <h3>{isZh ? '中文标题' : 'English Title'}</h3>
+           <p>{isZh ? '中文描述' : 'English Description'}</p>
+         </div>
+       );
+     }
+     ```
+3. 创建对应的 CSS 文件（如 `NewDemo.css`）
+4. 创建 Vue 包装器组件（如 `NewDemoWrapper.vue`）：
+   ```vue
+   <template>
+     <ReactWrapper :component="NewDemo" />
+   </template>
+   <script setup lang="ts">
+   import ReactWrapper from './ReactWrapper.vue';
+   import NewDemo from './NewDemo';
+   </script>
    ```
-4. 在 `enhanceApp` 中注册组件
-5. 在文档中使用 `<ComponentName />` 引用
+
+#### 3. 注册组件（自动选择版本）
+
+在 `docs/.vitepress/theme/index.ts` 中使用 `AutoDemoWrapper` 注册，自动根据路由选择版本：
+
+```typescript
+import { h } from 'vue';
+import AutoDemoWrapper from '../components/AutoDemoWrapper.vue';
+import NewDemoVue from '../components/NewDemo.vue';
+import NewDemoWrapper from '../components/react/NewDemoWrapper.vue';
+
+app.component('NewDemo', () =>
+  h(AutoDemoWrapper, {
+    vueComponent: NewDemoVue,
+    reactComponent: NewDemoWrapper,
+  }),
+);
+```
+
+#### 4. 在文档中使用
+
+在文档中通过 `<ComponentName />` 引用，系统会根据当前文档路径自动选择对应框架的 Demo：
+
+- React 文档（`/react/` 或 `/zh/react/`）：自动使用 React 版本
+- Vue 文档（`/vue/` 或 `/zh/vue/`）：自动使用 Vue 版本
 
 ### 添加新主题组件
 
@@ -581,6 +648,8 @@ pnpm update:readme     # 更新 README 中的版本号
 - ❌ 只更新英文或中文 README（必须双语同步）
 - ❌ 功能变更后不更新 README（影响使用方式的变更必须更新 README）
 - ❌ Demo 组件或主题组件缺少多语言支持（包含用户可见文本的组件必须支持中英文）
+- ❌ React 文档使用 Vue 组件 Demo，或 Vue 文档使用 React 组件 Demo（必须使用对应框架的组件）
+- ❌ 新增 Demo 时只创建 Vue 版本或只创建 React 版本（必须同时创建两个版本）
 - ❌ 使用 `any` 类型（除非绝对必要）
 
 ### 推荐做法
@@ -590,6 +659,7 @@ pnpm update:readme     # 更新 README 中的版本号
 - ✅ 所有公开 API 都有 JSDoc 注释
 - ✅ 重要功能提供交互式 Demo
 - ✅ Demo 组件和主题组件（包含文本的）都支持中英文自动切换
+- ✅ React 文档使用 React 组件 Demo，Vue 文档使用 Vue 组件 Demo（通过 AutoDemoWrapper 自动选择）
 - ✅ 每次项目更新时，评估并更新相关文档和 README
 - ✅ README 文件保持中英文版本同步更新
 - ✅ 遵循现有的代码风格和架构
@@ -611,13 +681,6 @@ pnpm update:readme     # 更新 README 中的版本号
 
 ## 🔄 更新日志
 
-本文档会随着项目发展持续更新。主要更新场景：
-
-- 新增功能特性时，更新相关开发流程
-- 优化代码架构时，更新架构说明
-- 改进开发工具时，更新工具和脚本说明
-- 发现最佳实践时，更新推荐做法
-
----
-
-**最后更新**: 2025-12（项目 v0.4.1 阶段）
+- **2024-01-XX**: 添加 React Demo 组件支持，React 文档使用 React 组件，Vue 文档使用 Vue 组件
+- **2024-01-XX**: 添加多语言支持规范，要求所有 Demo 和主题组件支持中英文
+- **2024-01-XX**: 添加 README 文件双语同步要求

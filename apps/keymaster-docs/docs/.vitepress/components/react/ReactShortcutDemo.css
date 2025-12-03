@@ -1,0 +1,30 @@
+.shortcut-demo {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  background-color: var(--vp-c-bg-soft);
+}
+
+.shortcut-demo__title {
+  margin: 0 0 8px;
+}
+
+.shortcut-demo__status {
+  margin: 0 0 4px;
+}
+
+.shortcut-demo__message {
+  margin: 0;
+  color: var(--vp-c-brand-1);
+}
+
+.shortcut-demo kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 0 2px;
+  border-radius: 4px;
+  border: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg-alt);
+  font-size: 12px;
+}

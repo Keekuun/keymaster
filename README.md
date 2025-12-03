@@ -176,10 +176,10 @@ The current monorepo contains the following sub-packages:
 #### Documentation Site
 
 - Online Documentation: [https://keymaster-docs.vercel.app/](https://keymaster-docs.vercel.app/)
-  - React Documentation: `/react/`
-  - Vue Documentation: `/vue/`
-  - Core Documentation: `/core/`
-  - Version Management: `/versions/`
+  - React Documentation: [https://keymaster-docs.vercel.app/react/](https://keymaster-docs.vercel.app/react/)
+  - Vue Documentation: [https://keymaster-docs.vercel.app/vue/](https://keymaster-docs.vercel.app/vue/)
+  - Core Documentation: [https://keymaster-docs.vercel.app/core/](https://keymaster-docs.vercel.app/core/)
+  - Version Management: [https://keymaster-docs.vercel.app/versions](https://keymaster-docs.vercel.app/versions)
 
 #### Package Dependencies
 

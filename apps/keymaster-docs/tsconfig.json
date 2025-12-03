@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -12,12 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["es2015", "dom"],
     "baseUrl": ".",
-    "paths": {
-      "@docs/*": ["./docs/*"],
-      "@theme/*": ["./docs/.vitepress/theme/*"],
-      "@theme": ["./docs/.vitepress/theme"],
-      "@packages/*": ["../../../../packages/*"]
-    },
     "types": ["vite/client", "node"]
   },
   "include": ["docs/**/*", "env.d.ts"],

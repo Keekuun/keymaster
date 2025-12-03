@@ -1,0 +1,98 @@
+.manager-demo {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  background-color: var(--vp-c-bg-soft);
+}
+
+.manager-demo__title {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.manager-demo__description {
+  margin: 0 0 12px;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+}
+
+.manager-demo__description code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--vp-c-bg-alt);
+  font-size: 13px;
+}
+
+.manager-demo__actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.manager-demo__button {
+  padding: 6px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background-color: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.manager-demo__button:hover:not(:disabled) {
+  background-color: var(--vp-c-bg-alt);
+  border-color: var(--vp-c-brand-1);
+}
+
+.manager-demo__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.manager-demo__shortcuts {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background-color: var(--vp-c-bg);
+}
+
+.manager-demo__hint {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+
+.manager-demo__shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manager-demo__shortcut-item {
+  font-size: 14px;
+  color: var(--vp-c-text-1);
+}
+
+.manager-demo__status {
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+
+.manager-demo__message {
+  margin: 4px 0 0;
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.manager-demo kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 0 2px;
+  border-radius: 4px;
+  border: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg-alt);
+  font-size: 12px;
+}

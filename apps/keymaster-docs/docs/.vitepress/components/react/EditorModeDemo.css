@@ -1,0 +1,72 @@
+.editor-mode-demo {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  background-color: var(--vp-c-bg-soft);
+}
+
+.editor-mode-demo__title {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.editor-mode-demo__description {
+  margin: 0 0 12px;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+}
+
+.editor-mode-demo__container {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 12px;
+  background-color: var(--vp-c-bg);
+}
+
+.editor-mode-demo__container textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  resize: vertical;
+  background-color: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-1);
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.editor-mode-demo__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.editor-mode-demo__action-item {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+.editor-mode-demo__status {
+  margin: 12px 0 4px;
+  font-size: 14px;
+}
+
+.editor-mode-demo__message {
+  margin: 4px 0 0;
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.editor-mode-demo kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 0 2px;
+  border-radius: 4px;
+  border: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg-alt);
+  font-size: 12px;
+}
