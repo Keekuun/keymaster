@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/Keekuun/keymaster/compare/v0.4.1...v0.4.2) (2025-12-03)
+
+### Features
+
+- **core:** add KeyBindingManager and utility functions ([4e0c334](https://github.com/Keekuun/keymaster/commit/4e0c33469148f052e110c8ba0b7d4fa8211211a8))
+- **docs:** implement i18n support for demo and theme components ([d9dd4c9](https://github.com/Keekuun/keymaster/commit/d9dd4c9ee4f7206de7749847646bf407e2a7a1f8))
+
+### Bug Fixes
+
+- **version:** correctly detect version paths with includes instead of startsWith ([f542968](https://github.com/Keekuun/keymaster/commit/f542968e4f4176b725b8d8cecfc457eee7c86efb))
+- **visual-effects:** improve canvas animation lifecycle and styling ([975f113](https://github.com/Keekuun/keymaster/commit/975f1131ab3ee47aefee105c3996a92696a68c8d))
+
 ### [0.4.1](https://github.com/Keekuun/keymaster/compare/v0.4.0...v0.4.1) (2025-12-02)
 
 ### Features
