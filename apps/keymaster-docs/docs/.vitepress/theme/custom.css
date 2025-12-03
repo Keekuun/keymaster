@@ -202,3 +202,11 @@ body {
     padding: 2.4rem 1.4rem;
   }
 }
+
+/* 移动端导航展开时，确保 VPNavScreen 有可用高度（兼容部分浏览器 height 计算为 0 的问题） */
+@media (max-width: 768px) {
+  .VPNavScreen {
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+}

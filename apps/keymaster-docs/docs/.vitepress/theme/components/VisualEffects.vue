@@ -55,6 +55,11 @@ function initParticles() {
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
+  // 如果画布尺寸为 0（某些移动端菜单折叠 / 初始布局场景），直接跳过，避免 NaN
+  if (canvas.width <= 0 || canvas.height <= 0) {
+    return;
+  }
+
   // 创建粒子
   const particleCount = Math.min(50, Math.floor((canvas.width * canvas.height) / 15000));
   particles = [];
@@ -94,9 +99,11 @@ function initParticles() {
         { r: 59, g: 130, b: 246 }, // 亮蓝色
       ];
 
-      // 根据粒子位置选择颜色（创建渐变效果）
-      const colorIndex = Math.floor((particle.x / canvas.width) * colors.length) % colors.length;
-      const color = colors[colorIndex];
+      // 根据粒子位置选择颜色（创建渐变效果），防止 canvas.width 为 0 导致 NaN
+      const baseWidth = canvas.width || window.innerWidth || 1;
+      const colorRatio = Math.max(0, Math.min(1, particle.x / baseWidth));
+      const colorIndex = Math.floor(colorRatio * colors.length) % colors.length;
+      const color = colors[colorIndex] || colors[0];
 
       // 绘制粒子（使用渐变色，提高透明度）
       ctx.beginPath();
@@ -124,9 +131,10 @@ function initParticles() {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 150) {
-          const otherColorIndex =
-            Math.floor((other.x / canvas.width) * colors.length) % colors.length;
-          const otherColor = colors[otherColorIndex];
+          const baseWidth2 = canvas.width || window.innerWidth || 1;
+          const otherRatio = Math.max(0, Math.min(1, other.x / baseWidth2));
+          const otherColorIndex = Math.floor(otherRatio * colors.length) % colors.length;
+          const otherColor = colors[otherColorIndex] || colors[0];
 
           // 创建渐变连线
           const lineGradient = ctx.createLinearGradient(particle.x, particle.y, other.x, other.y);

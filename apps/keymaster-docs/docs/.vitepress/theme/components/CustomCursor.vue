@@ -56,7 +56,17 @@ function animate() {
 }
 
 function handleMouseEnter(e: MouseEvent) {
-  const target = e.target as HTMLElement;
+  const rawTarget = e.target as EventTarget | null;
+
+  // 某些场景下（如文档根节点、window）target 不是 HTMLElement，需要防御
+  if (!(rawTarget instanceof HTMLElement)) {
+    cursorDot.value?.classList.remove('cursor-hover');
+    cursorOutline.value?.classList.remove('cursor-hover');
+    showKeyboardIcon.value = false;
+    return;
+  }
+
+  const target = rawTarget as HTMLElement;
 
   // 检查是否是链接、按钮或可交互元素
   const isInteractive =

@@ -377,6 +377,7 @@ export default function Demo({ isZh = false }: DemoProps) {
          }),
        );
        ```
+
    - **在文档中使用**：
      - 在文档中通过 `<ComponentName />` 引用，无需关心框架
      - 系统会根据当前文档路径自动选择对应框架的 Demo
@@ -585,6 +586,7 @@ pnpm update:readme     # 更新 README 中的版本号
        );
      }
      ```
+
 3. 创建对应的 CSS 文件（如 `NewDemo.css`）
 4. 创建 Vue 包装器组件（如 `NewDemoWrapper.vue`）：
    ```vue
