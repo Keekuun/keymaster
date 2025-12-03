@@ -40,8 +40,8 @@ jobs:
       - name: Check formatting
         run: pnpm format:check
 
-      - name: Run tests
-        run: pnpm test
-
       - name: Build
         run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
