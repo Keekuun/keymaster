@@ -1,12 +1,14 @@
 import DefaultTheme from 'vitepress/theme';
 import { h } from 'vue';
-import VueShortcutDemo from './components/VueShortcutDemo.vue';
-import ReactShortcutDemo from './components/ReactShortcutDemo.vue';
-import ScopedShortcutDemo from './components/ScopedShortcutDemo.vue';
-import EditorModeDemo from './components/EditorModeDemo.vue';
-import MultipleShortcutsDemo from './components/MultipleShortcutsDemo.vue';
-import KeyBindingManagerDemo from './components/KeyBindingManagerDemo.vue';
-import ElectronModeDemo from './components/ElectronModeDemo.vue';
+// Demo 组件（放在 docs/.vitepress/components/）
+import VueShortcutDemo from '../components/VueShortcutDemo.vue';
+import ReactShortcutDemo from '../components/ReactShortcutDemo.vue';
+import ScopedShortcutDemo from '../components/ScopedShortcutDemo.vue';
+import EditorModeDemo from '../components/EditorModeDemo.vue';
+import MultipleShortcutsDemo from '../components/MultipleShortcutsDemo.vue';
+import KeyBindingManagerDemo from '../components/KeyBindingManagerDemo.vue';
+import ElectronModeDemo from '../components/ElectronModeDemo.vue';
+// 主题组件（放在 theme/components/）
 import VersionSelector from './components/VersionSelector.vue';
 import VersionBanner from './components/VersionBanner.vue';
 import VersionText from './components/VersionText.vue';
