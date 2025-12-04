@@ -1,6 +1,6 @@
 {
   "name": "@keekuun/keymaster-core",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "private": false,
   "description": "keymaster 核心模块（React 和 Vue 共享的类型、解析器和工具函数）",
   "license": "MIT",
