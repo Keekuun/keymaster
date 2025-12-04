@@ -51,17 +51,10 @@
     "test:run": "vitest run"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "dependencies": {
     "@keekuun/keymaster-core": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@vitejs/plugin-react-swc": "^3.0.0",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0"
   }
 }

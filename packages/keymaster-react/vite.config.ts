@@ -1,12 +1,15 @@
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import dts from 'vite-plugin-dts';
 
 // React 版 keymaster 库的 Vite 配置，使用 lib 模式输出 ES 与 CJS 两种格式。
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      jsxRuntime: 'automatic',
+      jsxImportSource: 'react',
+    }),
     dts({
       outDir: 'dist',
       include: ['src/**/*'],
@@ -36,13 +39,7 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     globals: true,
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
   },
 });

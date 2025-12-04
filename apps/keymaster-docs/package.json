@@ -15,14 +15,9 @@
     "@keekuun/keymaster-core": "workspace:*",
     "@keekuun/keymaster-react": "workspace:*",
     "@keekuun/keymaster-vue": "workspace:*",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "vitepress": "^1.3.0",
-    "vue": "^3.4.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@vitejs/plugin-react": "^5.1.1"
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.25"
   }
 }
