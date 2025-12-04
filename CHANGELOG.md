@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/Keekuun/keymaster/compare/v0.4.2...v0.4.4) (2025-12-04)
+
+### Features
+
+- **docs:** add React demo components with auto framework selection ([382d49d](https://github.com/Keekuun/keymaster/commit/382d49dda66c48f38540a1a789943cec39d8a42a))
+
+### Bug Fixes
+
+- **docs:** fix docs site mobile menu ([b50efee](https://github.com/Keekuun/keymaster/commit/b50efeea7c8070c988aa9cb8b08816599b9db725))
+
 ### [0.4.3](https://github.com/Keekuun/keymaster/compare/v0.4.2...v0.4.3) (2025-12-03)
 
 ### Features
